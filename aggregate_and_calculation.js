@@ -16,10 +16,8 @@ function aggregateByMonth(monthsAgo) {
   const phantomJsKey = settingSheet.getRange("phantom_js_key").getValue();
 
   // aggregate する対象の月日を取得する
-  const {aggregateYearStack, aggregateMonthStack} = getAggregateYearMonths(settingSheet);
-  const aggregateMonthLength = aggregateMonthStack.length;
-  const targetYear = aggregateYearStack[aggregateMonthLength - 1 - monthsAgo];
-  const targetMonth = aggregateMonthStack[aggregateMonthLength - 1 - monthsAgo];
+  const {targetYear, targetMonth} = getAggregateTargetYearAndMonth(settingSheet, monthsAgo);
+  console.log("targetYear, targetMonth: " + targetYear + ", " + targetMonth);
   
   // aggregate 対象 pfm アカウントの id / pass リストを取得
   const {aggregateIdStack, aggregatePassStack} = getAggregateIdPasses(settingSheet);
@@ -30,11 +28,11 @@ function aggregateByMonth(monthsAgo) {
     // スクレイピング job をキックする
     const targetId = aggregateIdStack[i];
     const targetPass = aggregatePassStack[i];
-    console.log("scrapeCashFlowDataDetail: start");
+    console.log("scrapeCashFlowDataDetail: start: targetId: " + targetId);
     const rawData = scrapeCashFlowDataDetail(targetId, targetPass, phantomJsKey, targetYear, targetMonth);
     console.log("scrapeCashFlowDataDetail: done");
 
-    // rawData が想定通り取得出来ているかを確認する
+    // rawData が想定通り取得出来ているかを確認する TODO: 月初の0件明細エラー対応
     if(!validateRawData(settingSheet, rawData)){
       console.error("failed to validateRawData: rawData: " + rawData);
       throw new Error("failed to validateRawData");
@@ -43,7 +41,7 @@ function aggregateByMonth(monthsAgo) {
     
     // 月別に用意された貼り付け対象シートに raw データを貼り付ける
     const aggregateSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(pasteTargetSheetName);
-    const pasteTargetCell = aggregateSheet.getRange("A" + (i + 2));
+    const pasteTargetCell = aggregateSheet.getRange("A" + (i + 2)); // TODO: 列アドレスの直書きを回避
     // raw データの更新有無を判定し、更新有りなら貼り付ける
     if(isUpdatedRawData(rawData, pasteTargetCell)){
       pasteTargetCell.setValue(rawData);
@@ -52,6 +50,16 @@ function aggregateByMonth(monthsAgo) {
       console.log("rawData is not updated");
     }
   }
+}
+
+// aggregate 対象の year (yyyy) おもよ month (MM) を取得する
+function getAggregateTargetYearAndMonth(settingSheet, monthsAgo){
+  const {aggregateYearStack, aggregateMonthStack} = getAggregateYearMonths(settingSheet);
+  const aggregateMonthLength = aggregateMonthStack.length;
+  const targetYear = aggregateYearStack[aggregateMonthLength - 1 - monthsAgo];
+  const targetMonth = aggregateMonthStack[aggregateMonthLength - 1 - monthsAgo];
+
+  return {targetYear, targetMonth};
 }
 
 // rawData に更新があるかを判定する
@@ -68,61 +76,33 @@ function validateRawData(settingSheet, rawData){
   return rawData.indexOf(rawDataHeadPattern) == 0;
 }
 
+// カラムにおいて、ヘッダー行と空白行を切り捨てた値の配列を返す
+function getColumnValues(columnRows){
+  const headerOmittedRows = columnRows.slice(1);
+  return headerOmittedRows.map(r => r[0]).filter(v => v != "");
+}
+
 // aggregate する対象の id と pass を stack させた配列を返す
 function getAggregateIdPasses(settingSheet){
-  // 空白行以降の行を切り捨てた配列を作り、返す
-  const aggregateIds = settingSheet.getRange("pfm_id").getValues();
-  const aggregatePasses = settingSheet.getRange("pfm_pass").getValues();
-
-  const aggregateIdStack = [];
-  const aggregatePassStack = [];
-  let i = 1;
-  while(true){
-    let currentId = aggregateIds[i][0];
-    let currentPass = aggregatePasses[i][0];
-    
-    if(currentId == "" || currentPass == ""){
-      break;
-    }
-
-    aggregateIdStack.push(currentId);
-    aggregatePassStack.push(currentPass);
-    i++;
-  }
+  const aggregateIdStack = getColumnValues(settingSheet.getRange("pfm_id").getValues());
+  const aggregatePassStack = getColumnValues(settingSheet.getRange("pfm_pass").getValues());
 
   return {aggregateIdStack, aggregatePassStack};
 }
 
 // aggregate する対象の year と month を stack させた配列を返す
 function getAggregateYearMonths(settingSheet){
-  // 空白行以降の行を切り捨てた配列を作り、返す
-  const aggregateYears = settingSheet.getRange("aggregate_year").getValues();
-  const aggregateMonths = settingSheet.getRange("aggregate_month").getValues();
-
-  const aggregateYearStack = [];
-  const aggregateMonthStack = [];
-  let i = 1;
-  while(true){
-    let currentYear = aggregateYears[i][0];
-    let currentMonth = aggregateMonths[i][0];
-    
-    if(currentYear == "" || currentMonth == ""){
-      break;
-    }
-
-    aggregateYearStack.push(currentYear);
-    aggregateMonthStack.push(currentMonth);
-    i++;
-  }
+  const aggregateYearStack = getColumnValues(settingSheet.getRange("aggregate_year").getValues());
+  const aggregateMonthStack = getColumnValues(settingSheet.getRange("aggregate_month").getValues());
 
   return {aggregateYearStack, aggregateMonthStack};
 }
 
 // 指定された id/pass に紐づく pfm アカウントの、指定月の明細を取得して返す
 function scrapeCashFlowDataDetail(loginId, loginPassword, phantomJsKey, targetYear, targetMonth) {
-  var scrapeUrl = "https://moneyforward.com/cf/csv?from=" + targetYear + "%2F" + targetMonth + "%2F25&month=" + targetMonth + "&year=" + targetYear;
+  let scrapeUrl = "https://moneyforward.com/cf/csv?from=" + targetYear + "%2F" + targetMonth + "%2F25&month=" + targetMonth + "&year=" + targetYear;
 
-  var payloadDetail = {
+  let payloadDetail = {
     "url": 'https://moneyforward.com/cf',
     "renderType": 'plainText',
     "outputAsJson": true,
@@ -181,7 +161,7 @@ function executeUpdateAggregateYearMonthList(){
   // 本日が月初めの場合: aggregate_year / aggregate_month のリストの末尾に本日の月日を追加する
   console.log("isTodayMonthlyStart: true");
   
-  // リスト末尾のセル、およびその一つ後ろのセル (= push する対象のセル) を取得を取得しておく
+  // リスト末尾のセル、およびその一つ後ろのセル (= push する対象のセル) を取得しておく
   const {aggregateMonthStack} = getAggregateYearMonths(settingSheet);
   const stackedMonthLength = aggregateMonthStack.length;
   const lastCellYear = settingSheet.getRange("aggregate_year").getCell(stackedMonthLength + 1, 1);
@@ -228,7 +208,7 @@ function executeCreateSheetByMonth(){
 
   // シートが既にコピー済みか否かを判定
   const currentYearMonth = Utilities.formatDate(new Date(), "Asia/Tokyo", "yyyyMM");
-  const newSheetName = "ag_" + currentYearMonth;
+  const newSheetName = "ag_" + currentYearMonth; // TODO: 対象シートの prefix を setting から動的に取得し、複数シートに対応する
   const existingNewSheet = currentSpreadSheet.getSheetByName(newSheetName);
   if(existingNewSheet){
     console.log("newSheet is already created: sheet create skipped: newSheetName: " + newSheetName);
@@ -250,12 +230,12 @@ function executeCheckSheetMaintenanceStatus(){
   
   // 休日カレンダーのメンテナンス要否を確認する
   // (現状数年分作っているが、時期が来て足さないといけなくなったタイミングで通知を飛ばす ※祝日のフラグを手入力する以外は関数の拡張のみ)
-  const isCalenderNeedsMaitenance = settingSheet.getRange("is_calender_needs_maitenance").getValue() == 1;
-  if(isCalenderNeedsMaitenance){
-    console.log("isCalenderNeedsMaitenance: true: notified to slack");
+  const isCalenderNeedsMaintenance = settingSheet.getRange("is_calender_needs_maitenance").getValue() == 1;
+  if(isCalenderNeedsMaintenance){
+    console.log("isCalenderNeedsMaintenance: true: notified to slack");
     // TODO: slack 通知
   } else {
-    console.log("isCalenderNeedsMaitenance: false");
+    console.log("isCalenderNeedsMaintenance: false");
   }
 
   // 月初めの日 (基本だが25日、その日が休日だと営業日ベースに前倒しさせた日) の設定が正しいか確認する
@@ -284,15 +264,12 @@ function calcDailySummary(monthsAgo){
   const settingSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("settings");
 
   // 集計対象月を取得する
-  const {aggregateYearStack, aggregateMonthStack} = getAggregateYearMonths(settingSheet);
-  const aggregateMonthLength = aggregateMonthStack.length;
-  const targetYear = aggregateYearStack[aggregateMonthLength - 1 - monthsAgo];
-  const targetMonth = aggregateMonthStack[aggregateMonthLength - 1 - monthsAgo];
+  const {targetYear, targetMonth} = getAggregateTargetYearAndMonth(settingSheet, monthsAgo);
   console.log("targetYear, targetMonth: " + targetYear + ", " + targetMonth);
 
   // 集計対象月の明細データを hash の配列に parse する
   const targetAggreSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("ag_" + targetYear + targetMonth);
-  const allRowsData = targetAggreSheet.getRange("V2").getValue();
+  const allRowsData = targetAggreSheet.getRange("V2").getValue(); // TODO: 列アドレスの直書きを回避
   const aggregatedDetails = allRowsData.split("¥n").map(
     row => {
       const rowElems = row.split("#&#");
