@@ -59,7 +59,7 @@ function getNextYearMonth(targetYear, targetMonth){
 function getTrimmedColumnValues(sheet, columnRangeName){
   return sheet.getRange(columnRangeName).getValues()
     .map(r => r[0]) // 各行の値を取り出す
-    .filter(v => v != "") // 空白行を除外する
+    .filter(v => v !== "") // 空白行を除外する (0 がセットされているセルを空白行扱いして除いてしまうため、厳密不等価演算子を使う)
     .slice(1); // ヘッダー行を除外する
 }
 
