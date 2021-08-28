@@ -19,20 +19,26 @@ function executeCreateSheetByMonth(){
   // 本日が月初め日の前日の場合: 当月分のシートを tmp シートからコピーして追加
   console.log("isTomorrowMonthlyStart: true");
 
-  // シートが既にコピー済みか否かを判定
-  const currentYearMonth = getCurrentYyyy() + getCurrentMm();
-  const newSheetName = "ag_" + currentYearMonth; // TODO: 対象シートの prefix を setting から動的に取得し、複数シートに対応する
-  const existingNewSheet = currentSpreadSheet.getSheetByName(newSheetName);
-  if(existingNewSheet){
-    console.log("newSheet is already created: sheet create skipped: newSheetName: " + newSheetName);
-    return;
-  }
+  getTrimmedColumnValues(settingSheet, "create_target_sheet_prefix").forEach(
+    sheetPrefix => {
+      console.log("start newSheet create: sheetPrefix: " + sheetPrefix);
 
-  // コピー未済の場合、当月分のシートをコピーして追加
-  console.log("newSheet is not created yet");
+      // シートが既にコピー済みか否かを判定
+      const currentYearMonth = getCurrentYyyy() + getCurrentMm();
+      const newSheetName = sheetPrefix + currentYearMonth;
+      const existingNewSheet = currentSpreadSheet.getSheetByName(newSheetName);
+      if(existingNewSheet){
+        console.log("newSheet is already created: sheet create skipped: newSheetName: " + newSheetName);
+        return;
+      }
 
-  const tmpSheet = currentSpreadSheet.getSheetByName("ag_tmp"); // TODO: 動的制御化
-  const copiedNewSheet = tmpSheet.copyTo(currentSpreadSheet);
-  copiedNewSheet.setName(newSheetName);
-  console.log("newSheet is created: sheet name: " + newSheetName);
+      // コピー未済の場合、当月分のシートをコピーして追加
+      console.log("newSheet is not created yet");
+
+      const tmpSheet = currentSpreadSheet.getSheetByName(sheetPrefix + "_tmp");
+      const copiedNewSheet = tmpSheet.copyTo(currentSpreadSheet);
+      copiedNewSheet.setName(newSheetName);
+      console.log("newSheet is created: sheet name: " + newSheetName);
+    }
+  );
 }

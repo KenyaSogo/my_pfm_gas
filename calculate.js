@@ -45,7 +45,7 @@ function calcAndExportDailySummaryByCategory(aggregatedDetails, targetYear, targ
   const summaryByCategoryAndDates = summaryAmountByCategoryAndDate(summaryByCategoryTargetDates, summaryByCategoryTargetDetails);
   console.log("summaryAmountByCategoryAndDate finished: length: " + summaryByCategoryAndDates.length);
   // 集計結果明細を出力対象シートに貼り付ける
-  pasteDailyCalcResultByEachMonth(targetYear, targetMonth, summaryByCategoryAndDates, "calc_dc");
+  pasteDailyCalcResultByEachMonth(targetYear, targetMonth, summaryByCategoryAndDates, "calc_dc"); // TODO: 直書き回避
   console.log("end calcAndExportDailySummaryByCategory");
 }
 
@@ -66,7 +66,7 @@ function calcAndExportDailyBalanceTotalAsset(settingSheet, aggregatedDetails, ta
   const updatedTotalAssetBalanceAtMonthEnd = updateTargetMonthEndBalance(totalAssetBalanceByDates, previousMonthEndBalanceTotalAsset, settingSheet, targetYear, targetMonth, "asset_total_end_balance");
   console.log("total asset end balance updated: updatedTotalAssetBalanceAtMonthEnd: " + updatedTotalAssetBalanceAtMonthEnd);
   // 集計結果明細を出力対象シートに貼り付ける
-  pasteDailyCalcResultByEachMonth(targetYear, targetMonth, totalAssetBalanceByDates, "calc_dab");
+  pasteDailyCalcResultByEachMonth(targetYear, targetMonth, totalAssetBalanceByDates, "calc_dab"); // TODO: 直書き回避
   console.log("end calcAndExportDailyBalanceTotalAsset");
 }
 
@@ -87,7 +87,7 @@ function calcAndExportDailyBalanceCash(settingSheet, aggregatedDetails, targetYe
   const updatedCashBalanceAtMonthEnd = updateTargetMonthEndBalance(cashBalanceByDates, previousMonthEndBalanceCash, settingSheet, targetYear, targetMonth, "cash_end_balance");
   console.log("cash end balance updated: updatedCashBalanceAtMonthEnd: " + updatedCashBalanceAtMonthEnd);
   // 集計結果明細を出力対象シートに貼り付ける
-  pasteDailyCalcResultByEachMonth(targetYear, targetMonth, cashBalanceByDates, "calc_dcb");
+  pasteDailyCalcResultByEachMonth(targetYear, targetMonth, cashBalanceByDates, "calc_dcb"); // TODO: 直書き回避
   console.log("end calcAndExportDailyBalanceCash");
 }
 
