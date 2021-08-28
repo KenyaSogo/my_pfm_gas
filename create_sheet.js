@@ -25,7 +25,7 @@ function executeCreateSheetByMonth(){
 
       // シートが既にコピー済みか否かを判定
       const currentYearMonth = getCurrentYyyy() + getCurrentMm();
-      const newSheetName = sheetPrefix + currentYearMonth;
+      const newSheetName = sheetPrefix + "_" + currentYearMonth;
       const existingNewSheet = currentSpreadSheet.getSheetByName(newSheetName);
       if(existingNewSheet){
         console.log("newSheet is already created: sheet create skipped: newSheetName: " + newSheetName);
