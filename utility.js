@@ -25,6 +25,11 @@ function getMmFrom(date){
   return Utilities.formatDate(date, "Asia/Tokyo", "MM");
 }
 
+// Date の n ヶ月前を返す
+function getDateMonthsAgoFrom(date, agoNum){
+  return new Date(date.getFullYear(), date.getMonth() - agoNum, 1);
+}
+
 // Date の前月を返す
 function getPreviousMonthDate(date){
   return new Date(date.getFullYear(), date.getMonth() - 1, 1);
@@ -33,6 +38,16 @@ function getPreviousMonthDate(date){
 // Date の翌月を返す
 function getNextMonthDate(date){
   return new Date(date.getFullYear(), date.getMonth() + 1, 1);
+}
+
+// 指定月日に対して n ヶ月前の月および日を返す
+function getYearMonthMonthsAgoFrom(targetYear, targetMonth, agoNum){
+  const currentMonthDate = new Date([targetYear, targetMonth, "01"].join("/"));
+  const dateSomeMonthsAgo = getDateMonthsAgoFrom(currentMonthDate, agoNum);
+  const someMonthsAgoYyyy = getYyyyFrom(dateSomeMonthsAgo);
+  const someMonthsAgoMm = getMmFrom(dateSomeMonthsAgo);
+
+  return {someMonthsAgoYyyy, someMonthsAgoMm};
 }
 
 // 指定月日に対して前月の月および日を返す

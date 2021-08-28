@@ -245,7 +245,7 @@ function fetchAggregatedDetails(targetYear, targetMonth) {
   );
 }
 
-// 保有金融機関表を取得して返す
+// 保有金融機関表を取得して返す TODO: configuration.js への移管
 let assetConfigs;
 function getAssetConfigs(settingSheet){
   if(assetConfigs){
@@ -266,7 +266,7 @@ function getAssetConfigs(settingSheet){
   return assetConfigs;
 }
 
-// 月末残高表を取得して返す
+// 月末残高表を取得して返す TODO: configuration.js への移管
 let endBalances;
 function fetchEndBalances(settingSheet){
   if(endBalances){
