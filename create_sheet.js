@@ -19,26 +19,57 @@ function executeCreateSheetByMonth(){
   // 本日が月初め日の前日の場合: 当月分のシートを tmp シートからコピーして追加
   console.log("isTomorrowMonthlyStart: true");
 
-  getTrimmedColumnValues(settingSheet, "create_target_sheet_prefix").forEach(
-    sheetPrefix => {
-      console.log("start newSheet create: sheetPrefix: " + sheetPrefix);
+  getCreateTargetSheetConfig(settingSheet).forEach(
+    sheetConfig => {
+      const sheetPrefix = sheetConfig.createTargetSheetPrefix;
+      const needsNextMonth = sheetConfig.needsNextMonth;
+      console.log("start newSheet create: sheetPrefix, needsNextMonth: " + sheetPrefix + ", " + needsNextMonth);
 
-      // シートが既にコピー済みか否かを判定
       const currentYearMonth = getCurrentYyyy() + getCurrentMm();
-      const newSheetName = sheetPrefix + "_" + currentYearMonth;
-      const existingNewSheet = currentSpreadSheet.getSheetByName(newSheetName);
-      if(existingNewSheet){
-        console.log("newSheet is already created: sheet create skipped: newSheetName: " + newSheetName);
-        return;
+      createSheetAtTargetMonth(currentYearMonth, sheetPrefix, currentSpreadSheet);
+
+      // 翌月分も作る必要があるシートの場合、翌月分も作成する
+      if(needsNextMonth == 1){
+        const {nextMonthYyyy, nextMonthMm} = getNextYearMonth(getCurrentYyyy(), getCurrentMm());
+        const nextYearMonth = nextMonthYyyy + nextMonthMm;
+        createSheetAtTargetMonth(nextYearMonth, sheetPrefix, currentSpreadSheet);
       }
+    }
+  );
+}
 
-      // コピー未済の場合、当月分のシートをコピーして追加
-      console.log("newSheet is not created yet");
+// 対象月のシートを作成する
+function createSheetAtTargetMonth(targetYearMonth, sheetPrefix, targetSpreadSheet){
+  console.log("start createSheetAtTargetMonth: targetYearMonth: " + targetYearMonth);
 
-      const tmpSheet = currentSpreadSheet.getSheetByName(sheetPrefix + "_tmp");
-      const copiedNewSheet = tmpSheet.copyTo(currentSpreadSheet);
-      copiedNewSheet.setName(newSheetName);
-      console.log("newSheet is created: sheet name: " + newSheetName);
+  const newSheetName = sheetPrefix + "_" + targetYearMonth;
+
+  // シートが既にコピー済みか否かを判定
+  const existingNewSheet = targetSpreadSheet.getSheetByName(newSheetName);
+  if(existingNewSheet){
+    console.log("newSheet is already created: sheet create skipped: newSheetName: " + newSheetName);
+    return;
+  }
+
+  // コピー未済の場合、当月分のシートをコピーして追加
+  console.log("newSheet is not created yet");
+
+  const tmpSheet = targetSpreadSheet.getSheetByName(sheetPrefix + "_tmp");
+  const copiedNewSheet = tmpSheet.copyTo(targetSpreadSheet);
+  copiedNewSheet.setName(newSheetName);
+  console.log("newSheet is created: sheet name: " + newSheetName);
+}
+
+// 作成対象シートの定義表を取得する
+function getCreateTargetSheetConfig(settingSheet){
+  const prefixes = getTrimmedColumnValues(settingSheet, "create_target_sheet_prefix");
+  const needsNextMonths = getTrimmedColumnValues(settingSheet, "needs_next_month");
+  return getIntRangeFromZero(prefixes.length).map(
+    i => {
+      return {
+        createTargetSheetPrefix: prefixes[i],
+        needsNextMonth: needsNextMonths[i],
+      };
     }
   );
 }
