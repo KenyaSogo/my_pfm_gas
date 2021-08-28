@@ -8,6 +8,7 @@ function executeCalcDailySummaryCurrentMonth(){
 // 最新月の前月分の日次集計を行う
 function executeCalcDailySummaryPreviousMonth(){
   calcDailySummary(1);
+  calcDailySummary(0); // 最新月分も洗い替えておく
 }
 
 // 指定月の日次集計を行う
