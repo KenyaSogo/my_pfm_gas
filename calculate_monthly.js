@@ -157,8 +157,29 @@ function calcMonthlySummary(monthsAgo){
       return getMatchedSummaryByCategory(c, reSummaryByCategoryLargeClasses, targetYear, targetMonth);
     }
   ).filter(e => e);
-  // TODO: 残項目の集計, 検算 -> error (収支合計の突合), export
-  console.log(reSummaryWithUndefinedLargeCategories);
+  // 収支合計を集計する
+  const reSummaryForAllCategories = getOrderedCategoryConfigs().map(
+    c => {
+      // 収支合計の場合、総合計項目 (収入総合計と支出総合計) を合算して、金額を求める
+      if(c.middleCategoryName == "収支合計"){
+        // 集計対象明細を収集する
+        const summariesAtSummaryOfCategoryLargeClass = reSummaryWithUndefinedLargeCategories.filter(s => s.middleCategoryName == "総合計");
+        // 対象明細の金額を集計して返す
+        return getMonthlySummaryFromCategoryConfig(targetYear, targetMonth, c, sumAmountFromDetails(summariesAtSummaryOfCategoryLargeClass));
+      }
+      // その他の項目の場合、項目別集計結果をそのままマッピングする
+      return getMatchedSummaryByCategory(c, reSummaryWithUndefinedLargeCategories, targetYear, targetMonth);
+    }
+  ).filter(e => e);
+  // 金額を検算する
+  const calculatedTotalAmount = reSummaryForAllCategories.find(s => s.largeCategoryName == "全体").amount;
+  const expectedTotalAmount = sumAmountFromDetails(summaryByCategories);
+  if(calculatedTotalAmount != expectedTotalAmount){
+    console.error("failed to validate calculatedTotalAmount: expected, got: " + expectedTotalAmount + ", " + calculatedTotalAmount);
+    throw new Error("failed to validate calculatedTotalAmount");
+  }
+  // TODO: export
+  console.log(reSummaryForAllCategories); // TODO: delete
   console.log("end monthly summary by category");
 }
 
