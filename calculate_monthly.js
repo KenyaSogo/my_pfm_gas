@@ -60,16 +60,16 @@ function calcMonthlySummary(monthsAgo){
           .find(s => s.largeCategoryName == c.largeCategoryName && s.middleCategoryName == "小計")
           .amount
         // 該当大項目の定義済み中項目の合計値を求める
-        const sumAmountByLargeCategoryDefined = sumAmountFromDetails(
+        const sumAmountAtMiddleCategoryDefined = sumAmountFromDetails(
           reSummaryByLargeCategories
             .filter(s => s.largeCategoryName == c.largeCategoryName && s.middleCategoryName != "小計"));
         // 上記の差額から未定義(中項目)の金額を求める
-        const sumAmountByLargeCategoryUndefined = sumAmountByLargeCategory - sumAmountByLargeCategoryDefined;
+        const sumAmountAtMiddleCategoryUndefined = sumAmountByLargeCategory - sumAmountAtMiddleCategoryDefined;
         // 結果明細にマップして返す (0円の場合は skip する)
-        if(sumAmountByLargeCategoryUndefined == 0){
+        if(sumAmountAtMiddleCategoryUndefined == 0){
           return null;
         }
-        return getMonthlySummaryFromCategoryConfig(targetYear, targetMonth, c, sumAmountByLargeCategoryUndefined);
+        return getMonthlySummaryFromCategoryConfig(targetYear, targetMonth, c, sumAmountAtMiddleCategoryUndefined);
       }
       // その他の項目の場合、項目別集計結果をそのままマッピングする
       return getMatchedSummaryByCategory(c, reSummaryByLargeCategories, targetYear, targetMonth);
@@ -88,16 +88,73 @@ function calcMonthlySummary(monthsAgo){
         const categoriesInTargetMiddleClass = getOrderedCategoryConfigs()
           .filter(r => r.categoryMiddleClassName == c.largeCategoryName)
           .map(r => r.largeCategoryName + ">>" + r.middleCategoryName);
-        const sumAmountByCategoryMiddleClass = sumAmountFromDetails(reSummaryWithUndefinedMiddleCategories
-          .filter(s => categoriesInTargetMiddleClass.includes(s.largeCategoryName + ">>" + s.middleCategoryName)));
+        const sumAmountByCategoryMiddleClass = sumAmountFromDetails(
+          reSummaryWithUndefinedMiddleCategories
+            .filter(s => categoriesInTargetMiddleClass.includes(s.largeCategoryName + ">>" + s.middleCategoryName)));
         return getMonthlySummaryFromCategoryConfig(targetYear, targetMonth, c, sumAmountByCategoryMiddleClass);
       }
       // その他の項目の場合、項目別集計結果をそのままマッピングする
       return getMatchedSummaryByCategory(c, reSummaryWithUndefinedMiddleCategories, targetYear, targetMonth);
     }
   ).filter(e => e);
+  // 総合計 (収入合計、支出合計の粒度) を集計する
+  const reSummaryByCategoryLargeClasses = getOrderedCategoryConfigs().map(
+    c => {
+      // 今回は集計対象外とする項目について skip
+      if(["収支合計", "未定義(収入)", "未定義(支出)"].includes(c.middleCategoryName)){
+        return null;
+      }
+      // 総合計項目の場合、紐付く項目別明細を集計する
+      if(c.middleCategoryName == "総合計"){
+        if(c.largeCategoryName == "収入"){
+          // 項目別集計明細のうち、金額が正のものを収入とみなして金額を集計する
+          return getMonthlySummaryFromCategoryConfig(targetYear, targetMonth, c,
+            sumAmountFromDetails(summaryByCategories.filter(s => s.amount > 0)));
+        } else if(c.largeCategoryName == "支出"){
+          // 項目別集計明細のうち、金額が負のものを支出とみなして金額を集計する
+          return getMonthlySummaryFromCategoryConfig(targetYear, targetMonth, c,
+            sumAmountFromDetails(summaryByCategories.filter(s => s.amount < 0)));
+        }
+      }
+      // その他の項目の場合、項目別集計結果をそのままマッピングする
+      return getMatchedSummaryByCategory(c, reSummaryByCategoryMiddleClasses, targetYear, targetMonth);
+    }
+  ).filter(e => e);
+  // config で未定義の大項目がある場合を考慮して、未定義(大項目)を集計
+  const reSummaryWithUndefinedLargeCategories = getOrderedCategoryConfigs().map(
+    c => {
+      // 今回は集計対象外とする項目について skip
+      if(["収支合計"].includes(c.middleCategoryName)){
+        return null;
+      }
+      // 未定義(大項目)の場合、収入もしくは支出の総合計から定義済み大項目の合計値を差し引いて、金額を求める
+      if(c.middleCategoryName == "未定義(大項目)"){
+        // 収入/支出の総合計を取得
+        const targetCategoryLargeClass = c.largeCategoryName == "未定義収入" ? "収入" : "支出";
+        const sumAmountAtTargetCategoryLargeClass = reSummaryByCategoryLargeClasses
+          .find(s => s.largeCategoryName == targetCategoryLargeClass && s.middleCategoryName == "総合計")
+          .amount
+        // 収入/支出における定義済み大項目の合計値を集計
+        const largeCategoryDefinedCategories = getOrderedCategoryConfigs()
+          .filter(r => r.categoryLargeClassName == targetCategoryLargeClass && r.middleCategoryName != "未定義(大項目)")
+          .map(r => r.largeCategoryName + ">>" + r.middleCategoryName);
+        const sumAmountAtLargeCategoryDefined = sumAmountFromDetails(
+          reSummaryByCategoryLargeClasses
+            .filter(s => largeCategoryDefinedCategories.includes(s.largeCategoryName + ">>" + s.middleCategoryName)))
+        // 上記の差額から未定義(大項目)の金額を求める
+        const sumAmountAtLargeCategoryUndefined = sumAmountAtTargetCategoryLargeClass - sumAmountAtLargeCategoryDefined;
+        // 結果明細にマップして返す (0円の場合は skip する)
+        if(sumAmountAtLargeCategoryUndefined == 0){
+          return null;
+        }
+        return getMonthlySummaryFromCategoryConfig(targetYear, targetMonth, c, sumAmountAtLargeCategoryUndefined);
+      }
+      // その他の項目の場合、項目別集計結果をそのままマッピングする
+      return getMatchedSummaryByCategory(c, reSummaryByCategoryLargeClasses, targetYear, targetMonth);
+    }
+  ).filter(e => e);
   // TODO: 残項目の集計, 検算 -> error (収支合計の突合), export
-  console.log(reSummaryByCategoryMiddleClasses);
+  console.log(reSummaryWithUndefinedLargeCategories);
   console.log("end monthly summary by category");
 }
 
