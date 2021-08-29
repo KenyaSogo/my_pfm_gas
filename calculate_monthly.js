@@ -75,12 +75,33 @@ function calcMonthlySummary(monthsAgo){
       return getMatchedSummaryByCategory(c, reSummaryByLargeCategories, targetYear, targetMonth);
     }
   ).filter(e => e);
+  // 合計 (変動費、固定費等の粒度) を集計する
+  const reSummaryByCategoryMiddleClasses = getOrderedCategoryConfigs().map(
+    c => {
+      // 今回は集計対象外とする項目について skip
+      if(["収支合計", "総合計", "未定義(収入)", "未定義(支出)"].includes(c.middleCategoryName)){
+        return null;
+      }
+      // 合計項目の場合、紐付く小計項目を集計する
+      if(c.middleCategoryName == "合計"){
+        // 集計対象の項目を収集する
+        const categoriesInTargetMiddleClass = getOrderedCategoryConfigs()
+          .filter(r => r.categoryMiddleClassName == c.largeCategoryName)
+          .map(r => r.largeCategoryName + ">>" + r.middleCategoryName);
+        const sumAmountByCategoryMiddleClass = sumAmountFromDetails(reSummaryWithUndefinedMiddleCategories
+          .filter(s => categoriesInTargetMiddleClass.includes(s.largeCategoryName + ">>" + s.middleCategoryName)));
+        return getMonthlySummaryFromCategoryConfig(targetYear, targetMonth, c, sumAmountByCategoryMiddleClass);
+      }
+      // その他の項目の場合、項目別集計結果をそのままマッピングする
+      return getMatchedSummaryByCategory(c, reSummaryWithUndefinedMiddleCategories, targetYear, targetMonth);
+    }
+  ).filter(e => e);
   // TODO: 残項目の集計, 検算 -> error (収支合計の突合), export
-  console.log(reSummaryWithUndefinedMiddleCategories);
+  console.log(reSummaryByCategoryMiddleClasses);
   console.log("end monthly summary by category");
 }
 
-// config の項目が一致する集計結果をマッピングして返す
+// config の項目が一致する既存集計結果をマッピングして返す
 function getMatchedSummaryByCategory(categoryConfig, summaryByCategories, targetYear, targetMonth){
   const matchedSummaryByCategory = summaryByCategories.find(s => s.largeCategoryName == categoryConfig.largeCategoryName && s.middleCategoryName == categoryConfig.middleCategoryName);
   if(matchedSummaryByCategory){
