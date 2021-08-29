@@ -178,8 +178,8 @@ function calcMonthlySummary(monthsAgo){
     console.error("failed to validate calculatedTotalAmount: expected, got: " + expectedTotalAmount + ", " + calculatedTotalAmount);
     throw new Error("failed to validate calculatedTotalAmount");
   }
+  console.log("valid: calculatedTotalAmount");
   // TODO: export
-  console.log(reSummaryForAllCategories); // TODO: delete
   console.log("end monthly summary by category");
 }
 
