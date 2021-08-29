@@ -40,6 +40,9 @@ function calcMonthlySummary(monthsAgo){
       // 小計項目の場合、大項目別に集計する
       if(c.middleCategoryName == "小計"){
         const sumAmountByCategory = sumAmountFromDetails(summaryByCategories.filter(s => s.largeCategoryName == c.largeCategoryName));
+        if(sumAmountByCategory == 0) {
+          return null;
+        }
         return getMonthlySummaryFromCategoryConfig(targetYear, targetMonth, c, sumAmountByCategory);
       }
       // その他の項目の場合、項目別集計結果をそのままマッピングする
@@ -56,9 +59,13 @@ function calcMonthlySummary(monthsAgo){
       // 未定義(中項目)項目の場合、小計から定義済み項目の合計値を差し引いて、金額を求める
       if(c.middleCategoryName == "未定義(中項目)"){
         // 該当大項目の小計を取得
-        const sumAmountByLargeCategory = reSummaryByLargeCategories
-          .find(s => s.largeCategoryName == c.largeCategoryName && s.middleCategoryName == "小計")
-          .amount
+        const summaryAtTargetLargeCategory = reSummaryByLargeCategories
+          .find(s => s.largeCategoryName == c.largeCategoryName && s.middleCategoryName == "小計");
+        // 小計が存在しないということは、該当大項目配下には1件も明細が存在しないということなので skip
+        if(summaryAtTargetLargeCategory == null){
+          return null;
+        }
+        const sumAmountByLargeCategory = summaryAtTargetLargeCategory.amount;
         // 該当大項目の定義済み中項目の合計値を求める
         const sumAmountAtMiddleCategoryDefined = sumAmountFromDetails(
           reSummaryByLargeCategories
