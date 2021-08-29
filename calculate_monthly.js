@@ -113,15 +113,11 @@ function calcMonthlySummary(monthsAgo){
       }
       // 総合計項目の場合、紐付く項目別明細を集計する
       if(c.middleCategoryName == "総合計"){
-        if(c.largeCategoryName == "収入"){
-          // 項目別集計明細のうち、金額が正のものを収入とみなして金額を集計する
-          return getMonthlySummaryFromCategoryConfig(targetYear, targetMonth, c,
-            sumAmountFromDetails(summaryByCategories.filter(s => s.amount > 0)));
-        } else if(c.largeCategoryName == "支出"){
-          // 項目別集計明細のうち、金額が負のものを支出とみなして金額を集計する
-          return getMonthlySummaryFromCategoryConfig(targetYear, targetMonth, c,
-            sumAmountFromDetails(summaryByCategories.filter(s => s.amount < 0)));
-        }
+        // 集計対象明細を収集する
+        const summariesAtTargetCategoryLargeClass = c.largeCategoryName == "収入" ? summaryByCategories.filter(s => s.amount > 0) // 収入の場合: 金額が正のものを収入とみなす
+          : c.largeCategoryName == "支出" ? summaryByCategories.filter(s => s.amount < 0) : null; // 支出の場合: 金額が負のものを支出とみなす
+        // 対象明細の金額を集計して返す
+        return getMonthlySummaryFromCategoryConfig(targetYear, targetMonth, c, sumAmountFromDetails(summariesAtTargetCategoryLargeClass));
       }
       // その他の項目の場合、項目別集計結果をそのままマッピングする
       return getMatchedSummaryByCategory(c, reSummaryByCategoryMiddleClasses, targetYear, targetMonth);
@@ -137,7 +133,8 @@ function calcMonthlySummary(monthsAgo){
       // 未定義(大項目)の場合、収入もしくは支出の総合計から定義済み大項目の合計値を差し引いて、金額を求める
       if(c.middleCategoryName == "未定義(大項目)"){
         // 収入/支出の総合計を取得
-        const targetCategoryLargeClass = c.largeCategoryName == "未定義収入" ? "収入" : "支出";
+        const targetCategoryLargeClass = c.largeCategoryName == "未定義収入" ? "収入"
+          : c.largeCategoryName == "未定義支出" ? "支出" : null;
         const sumAmountAtTargetCategoryLargeClass = reSummaryByCategoryLargeClasses
           .find(s => s.largeCategoryName == targetCategoryLargeClass && s.middleCategoryName == "総合計")
           .amount
