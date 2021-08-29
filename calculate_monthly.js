@@ -17,6 +17,7 @@ function calcMonthlySummary(monthsAgo){
   console.log("targetYear, targetMonth: " + targetYear + ", " + targetMonth);
 
   // 項目別集計の月次集計を行う
+  console.log("start monthly summary by category");
   // 集計対象月の明細データを取得する
   const targetDetails = fetchMonthlySummaryByCategoryOriginDetails(targetYear, targetMonth);
   // 明細データから項目を収集する
@@ -29,31 +30,63 @@ function calcMonthlySummary(monthsAgo){
     }
   );
   // さらに、項目を定められた順番に整えつつ再集計 (= 小計、合計、総合計の集計) する
-  const reSummaryByCategories = getOrderedCategoryConfigs().map(
+  // まずは、大項目別に小計を集計する
+  const reSummaryByLargeCategories = getOrderedCategoryConfigs().map(
     c => {
-      // 収支合計の場合
-      if(c.middleCategoryName == "収支合計"){
-        // 全ての明細を集計する
-        const sumAmountByCategory = sumAmountFromDetails(targetDetails)
+      // 今回は集計対象外とする項目について skip
+      if(["収支合計", "総合計", "合計", "未定義(収入)", "未定義(支出)", "未定義(中項目)"].includes(c.middleCategoryName)){
+        return null;
+      }
+      // 小計項目の場合、大項目別に集計する
+      if(c.middleCategoryName == "小計"){
+        const sumAmountByCategory = sumAmountFromDetails(summaryByCategories.filter(s => s.largeCategoryName == c.largeCategoryName));
         return getMonthlySummaryFromCategoryConfig(targetYear, targetMonth, c, sumAmountByCategory);
       }
-      // 総合計の集計項目の場合
-      if(c.middleCategoryName == "総合計"){
-        // config に未定義の項目が存在し得ることを考えて、それらを漏らさないよう金額の正負を元に集計する
-        if(c.largeCategoryName == "収入"){
-          // 金額が正の明細を集計する
-          const sumAmountByCategory = sumAmountFromDetails(targetDetails.filter(d => Number(d.amount) > 0))
-          return getMonthlySummaryFromCategoryConfig(targetYear, targetMonth, c, sumAmountByCategory);
-        } else if(c.largeCategoryName == "支出"){
-          // 金額が負の明細を集計する
-          const sumAmountByCategory = sumAmountFromDetails(targetDetails.filter(d => Number(d.amount) < 0))
-          return getMonthlySummaryFromCategoryConfig(targetYear, targetMonth, c, sumAmountByCategory);
-        }
-      }
-      // TODO: 続き
+      // その他の項目の場合、項目別集計結果をそのままマッピングする
+      return getMatchedSummaryByCategory(c, summaryByCategories, targetYear, targetMonth);
     }
-  );
-  console.log(reSummaryByCategories);
+  ).filter(e => e);
+  // 大項目内に config で未定義の中項目がある場合を考慮して、未定義(中項目) を集計
+  const reSummaryWithUndefinedMiddleCategories = getOrderedCategoryConfigs().map(
+    c => {
+      // 今回は集計対象外とする項目について skip
+      if(["収支合計", "総合計", "合計", "未定義(収入)", "未定義(支出)"].includes(c.middleCategoryName)){
+        return null;
+      }
+      // 未定義(中項目)項目の場合、小計から定義済み項目の合計値を差し引いて、金額を求める
+      if(c.middleCategoryName == "未定義(中項目)"){
+        // 該当大項目の小計を取得
+        const sumAmountByLargeCategory = reSummaryByLargeCategories
+          .find(s => s.largeCategoryName == c.largeCategoryName && s.middleCategoryName == "小計")
+          .amount
+        // 該当大項目の定義済み中項目の合計値を求める
+        const sumAmountByLargeCategoryDefined = sumAmountFromDetails(
+          reSummaryByLargeCategories
+            .filter(s => s.largeCategoryName == c.largeCategoryName && s.middleCategoryName != "小計"));
+        // 上記の差額から未定義(中項目)の金額を求める
+        const sumAmountByLargeCategoryUndefined = sumAmountByLargeCategory - sumAmountByLargeCategoryDefined;
+        // 結果明細にマップして返す (0円の場合は skip する)
+        if(sumAmountByLargeCategoryUndefined == 0){
+          return null;
+        }
+        return getMonthlySummaryFromCategoryConfig(targetYear, targetMonth, c, sumAmountByLargeCategoryUndefined);
+      }
+      // その他の項目の場合、項目別集計結果をそのままマッピングする
+      return getMatchedSummaryByCategory(c, reSummaryByLargeCategories, targetYear, targetMonth);
+    }
+  ).filter(e => e);
+  // TODO: 残項目の集計, 検算 -> error (収支合計の突合), export
+  console.log(reSummaryWithUndefinedMiddleCategories);
+  console.log("end monthly summary by category");
+}
+
+// config の項目が一致する集計結果をマッピングして返す
+function getMatchedSummaryByCategory(categoryConfig, summaryByCategories, targetYear, targetMonth){
+  const matchedSummaryByCategory = summaryByCategories.find(s => s.largeCategoryName == categoryConfig.largeCategoryName && s.middleCategoryName == categoryConfig.middleCategoryName);
+  if(matchedSummaryByCategory){
+    return getMonthlySummaryFromCategoryConfig(targetYear, targetMonth, categoryConfig, matchedSummaryByCategory.amount);
+  }
+  return null;
 }
 
 // 項目定義 (CategoryConfig) を元に集計結果明細を作成し返す
