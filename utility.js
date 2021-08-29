@@ -87,3 +87,10 @@ function getIntRangeFromZero(elemNum){
 function getUniqueArrayFrom(array){
   return Array.from(new Set(array));
 }
+
+// 各明細の金額を合計して返す ※details における金額項目の key は amount である必要がある
+function sumAmountFromDetails(targetDetails){
+  return targetDetails
+    .map(d => Number(d.amount))
+    .reduce((sum, amount) => sum + amount, 0);
+}

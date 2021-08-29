@@ -146,10 +146,7 @@ function summaryAmountByCategoryAndDate(targetDates, targetDetails){
       // 対象日の明細において、大項目&中項目別に集計
       return categories.map(
         c => {
-          const targetDateAndCategoryDetails = targetDateDetails.filter(d => d.largeCategoryName + ">>" + d.middleCategoryName == c);
-          const sumAmountByDateAndCategory = targetDateAndCategoryDetails
-            .map(d => Number(d.amount))
-            .reduce((sum, amount) => sum + amount, 0);
+          const sumAmountByDateAndCategory = sumAmountFromDetails(targetDateDetails.filter(d => d.largeCategoryName + ">>" + d.middleCategoryName == c));
           return {
             date:         date,                       // 日付
             categoryName: c,                          // 項目 (大項目&中項目)
@@ -166,12 +163,8 @@ function accumulateBalanceByDate(initialBalance, targetDates, targetDetails){
   let accumulatedBalance = initialBalance;
   return targetDates.map(
     date => {
-      // 対象日の明細を抽出
-      const targetDateDetails = targetDetails.filter(d => d.date == date);
       // 残高を集計
-      const sumAmountAtTargetDate = targetDateDetails
-        .map(d => Number(d.amount))
-        .reduce((sum, amount) => sum + amount, 0);
+      const sumAmountAtTargetDate = sumAmountFromDetails(targetDetails.filter(d => d.date == date));
       accumulatedBalance += sumAmountAtTargetDate;
 
       return {
