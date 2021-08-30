@@ -42,6 +42,34 @@ function getCalcMcImportAddr(){
   return calcMcImportAddr;
 }
 
+let calcDcbExportSheetPrefix;
+function getCalcDcbExportSheetPrefix(){
+  if(calcDcbExportSheetPrefix) return calcDcbExportSheetPrefix;
+  calcDcbExportSheetPrefix = getSettingSheet().getRange("calc_dcb_export_sheet_prefix").getValue();
+  return calcDcbExportSheetPrefix;
+}
+
+let calcDcbExportAddr;
+function getCalcDcbExportAddr(){
+  if(calcDcbExportAddr) return calcDcbExportAddr;
+  calcDcbExportAddr = getSettingSheet().getRange("calc_dcb_export_addr").getValue();
+  return calcDcbExportAddr;
+}
+
+let calcDabExportSheetPrefix;
+function getCalcDabExportSheetPrefix(){
+  if(calcDabExportSheetPrefix) return calcDabExportSheetPrefix;
+  calcDabExportSheetPrefix = getSettingSheet().getRange("calc_dab_export_sheet_prefix").getValue();
+  return calcDabExportSheetPrefix;
+}
+
+let calcDabExportAddr;
+function getCalcDabExportAddr(){
+  if(calcDabExportAddr) return calcDabExportAddr;
+  calcDabExportAddr = getSettingSheet().getRange("calc_dab_export_addr").getValue();
+  return calcDabExportAddr;
+}
+
 let orderedCategoryConfigs;
 function getOrderedCategoryConfigs(){
   if(orderedCategoryConfigs) return orderedCategoryConfigs;
