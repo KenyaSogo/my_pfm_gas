@@ -29,6 +29,7 @@ function calcMonthlySummary(monthsAgo){
       return getMonthlySummaryFromCategory(targetYear, targetMonth, c, sumAmountByCategory);
     }
   );
+
   // さらに、項目を定められた順番に整えつつ再集計 (= 小計、合計、総合計の集計) する
   // まずは、大項目別に小計を集計する
   const reSummaryByLargeCategories = getOrderedCategoryConfigs().map(
@@ -171,6 +172,7 @@ function calcMonthlySummary(monthsAgo){
       return getMatchedSummaryByCategory(c, reSummaryWithUndefinedLargeCategories, targetYear, targetMonth);
     }
   ).filter(e => e);
+
   // 金額を検算する
   const calculatedTotalAmount = reSummaryForAllCategories.find(s => s.largeCategoryName == "全体").amount;
   const expectedTotalAmount = sumAmountFromDetails(summaryByCategories);
@@ -179,7 +181,23 @@ function calcMonthlySummary(monthsAgo){
     throw new Error("failed to validate calculatedTotalAmount");
   }
   console.log("valid: calculatedTotalAmount");
-  // TODO: export
+
+  // 集計結果を出力対象シートに出力する
+  // 集計結果の明細を区切り文字で結合し、貼り付け用に一つの文字列にする
+  const mergedReSummaryForAllCategoriesValue = reSummaryForAllCategories.map(s => Object.values(s).join("#&#")).join("¥n");
+  // 出力対象セルを取得する
+  const pasteTargetCell = getThisSpreadSheet()
+    .getSheetByName(getCalcMcImportSheetPrefix() + "_" + targetYear + targetMonth)
+    .getRange(getCalcMcImportAddr());
+  // 対象データにつき、更新がなければ、貼り付けをスキップして終了
+  if(mergedReSummaryForAllCategoriesValue == pasteTargetCell.getValue()){
+    console.log("calc result has no update: update skipped: mergedReSummaryForAllCategoriesValue");
+    return;
+  }
+  // データを対象セルに貼り付ける
+  pasteTargetCell.setValue(mergedReSummaryForAllCategoriesValue);
+  console.log("calc result was updated: mergedReSummaryForAllCategoriesValue");
+
   console.log("end monthly summary by category");
 }
 
