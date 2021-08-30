@@ -42,6 +42,20 @@ function getCalcMcImportAddr(){
   return calcMcImportAddr;
 }
 
+let calcMcExportSheetPrefix;
+function getCalcMcExportSheetPrefix(){
+  if(calcMcExportSheetPrefix) return calcMcExportSheetPrefix;
+  calcMcExportSheetPrefix = getSettingSheet().getRange("calc_mc_export_sheet_prefix").getValue();
+  return calcMcExportSheetPrefix;
+}
+
+let calcMcExportAddr;
+function getCalcMcExportAddr(){
+  if(calcMcExportAddr) return calcMcExportAddr;
+  calcMcExportAddr = getSettingSheet().getRange("calc_mc_export_addr").getValue();
+  return calcMcExportAddr;
+}
+
 let calcDcbExportSheetPrefix;
 function getCalcDcbExportSheetPrefix(){
   if(calcDcbExportSheetPrefix) return calcDcbExportSheetPrefix;

@@ -14,14 +14,41 @@ function executeReport(){
   const {lastTotalAssetBalanceDate, lastTotalAssetBalance} = getLastDateAndTotalAssetBalanceAt(targetYear, targetMonth);
   // 対象月の先月末の総資産残高を取得する
   const {lastTotalAssetBalanceDateAtPreviousMonth, lastTotalAssetBalanceAtPreviousMonth} = getLastDateAndTotalAssetBalancePreviousMonthFrom(targetYear, targetMonth);
-  console.log("lastCashBalanceDate: " + lastCashBalanceDate);
-  console.log("lastCashBalance: " + lastCashBalance);
-  console.log("lastCashBalanceDateAtPreviousMonth: " + lastCashBalanceDateAtPreviousMonth);
-  console.log("lastCashBalanceAtPreviousMonth: " + lastCashBalanceAtPreviousMonth);
-  console.log("lastTotalAssetBalanceDate: " + lastTotalAssetBalanceDate);
-  console.log("lastTotalAssetBalance: " + lastTotalAssetBalance);
-  console.log("lastTotalAssetBalanceDateAtPreviousMonth: " + lastTotalAssetBalanceDateAtPreviousMonth);
-  console.log("lastTotalAssetBalanceAtPreviousMonth: " + lastTotalAssetBalanceAtPreviousMonth);
+
+  // 対象月の項目別月次集計結果を取得する
+  const summaryByCategoryAtCurrentMonth = extractReportInfoFromSummaryByCategory(fetchMonthlySummaryByCategory(targetYear, targetMonth));
+  // 対象月の先月分の項目別月次集計結果を取得する
+  const {previousMonthYyyy, previousMonthMm} = getPreviousYearMonth(targetYear, targetMonth);
+  const summaryByCategoryAtPreviousMonth = extractReportInfoFromSummaryByCategory(fetchMonthlySummaryByCategory(previousMonthYyyy, previousMonthMm));
+  console.log(summaryByCategoryAtCurrentMonth);
+  console.log(summaryByCategoryAtPreviousMonth);
+}
+
+function extractReportInfoFromSummaryByCategory(summaryByCategory){
+  return summaryByCategory.filter(s => ["収支合計", "総合計", "小計"].includes(s.middleCategory)).map(
+    s => {
+      return {
+        category: s.largeCategory,
+        amount:   s.amount,
+      };
+    }
+  );
+}
+
+function fetchMonthlySummaryByCategory(targetYear, targetMonth){
+  const targetSheetName = getCalcMcExportSheetPrefix() + "_" + targetYear + targetMonth;
+  const rawDetailsValue = getThisSpreadSheet().getSheetByName(targetSheetName).getRange(getCalcMcExportAddr()).getValue();
+  return rawDetailsValue.split("¥n").map(
+    row => {
+      const rowElems = row.split("#&#"); // TODO: split して二次元配列にして返すところまでを共通化する
+      return {
+        yearMonth:      rowElems[0], // 対象年月
+        largeCategory:  rowElems[1], // 大項目
+        middleCategory: rowElems[2], // 中項目
+        amount:         rowElems[3], // 金額
+      };
+    }
+  );
 }
 
 function getLastDateAndTotalAssetBalancePreviousMonthFrom(targetYear, targetMonth){
