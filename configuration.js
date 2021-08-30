@@ -14,6 +14,13 @@ function getSettingSheet(){
   return settingSheet;
 }
 
+let slackBotWebhookUrl;
+function getSlackBotWebhookUrl(){
+  if(slackBotWebhookUrl) return slackBotWebhookUrl;
+  slackBotWebhookUrl = getSettingSheet().getRange("slack_bot_webhook_url").getValue();
+  return slackBotWebhookUrl;
+}
+
 let calcDcExportSheetPrefix;
 function getCalcDcExportSheetPrefix(){
   if(calcDcExportSheetPrefix) return calcDcExportSheetPrefix;

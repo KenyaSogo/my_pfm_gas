@@ -94,3 +94,8 @@ function sumAmountFromDetails(targetDetails){
     .map(d => Number(d.amount))
     .reduce((sum, amount) => sum + amount, 0);
 }
+
+// 数値文字列を表示用の文字列に変換して返す (99999 -> ¥99,999)
+function formatNumStr(numStr){
+  return "¥" + Number(numStr).toLocaleString();
+}

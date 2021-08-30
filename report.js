@@ -9,30 +9,56 @@ function executeReport(){
   // 対象月直近日の現預金残高を取得する
   const {lastCashBalanceDate, lastCashBalance} = getLastDateAndCashBalanceAt(targetYear, targetMonth);
   // 対象月の先月末の現預金残高を取得する
-  const {lastCashBalanceDateAtPreviousMonth, lastCashBalanceAtPreviousMonth} = getLastDateAndCashBalancePreviousMonthFrom(targetYear, targetMonth);
+  const {lastCashBalanceAtPreviousMonth} = getLastDateAndCashBalancePreviousMonthFrom(targetYear, targetMonth);
   // 対象月直近日の総資産残高を取得する
   const {lastTotalAssetBalanceDate, lastTotalAssetBalance} = getLastDateAndTotalAssetBalanceAt(targetYear, targetMonth);
   // 対象月の先月末の総資産残高を取得する
-  const {lastTotalAssetBalanceDateAtPreviousMonth, lastTotalAssetBalanceAtPreviousMonth} = getLastDateAndTotalAssetBalancePreviousMonthFrom(targetYear, targetMonth);
+  const {lastTotalAssetBalanceAtPreviousMonth} = getLastDateAndTotalAssetBalancePreviousMonthFrom(targetYear, targetMonth);
 
   // 対象月の項目別月次集計結果を取得する
   const summaryByCategoryAtCurrentMonth = extractReportInfoFromSummaryByCategory(fetchMonthlySummaryByCategory(targetYear, targetMonth));
   // 対象月の先月分の項目別月次集計結果を取得する
   const {previousMonthYyyy, previousMonthMm} = getPreviousYearMonth(targetYear, targetMonth);
   const summaryByCategoryAtPreviousMonth = extractReportInfoFromSummaryByCategory(fetchMonthlySummaryByCategory(previousMonthYyyy, previousMonthMm));
-  console.log(summaryByCategoryAtCurrentMonth);
-  console.log(summaryByCategoryAtPreviousMonth);
+
+  // レポートをまとめて、slack に通知する
+  let reportMessage = "";
+  reportMessage += "# 残高の概要\n";
+  reportMessage += ("- 直近現預金残高: " + formatNumStr(lastCashBalance) + " (日付: " + lastCashBalanceDate + ") (前月末残: " + formatNumStr(lastCashBalanceAtPreviousMonth) + ")\n");
+  reportMessage += ("- 直近総資産残高: " + formatNumStr(lastTotalAssetBalance) + " (日付: " + lastTotalAssetBalanceDate + ") (前月末残: " + formatNumStr(lastTotalAssetBalanceAtPreviousMonth) + ")\n");
+  reportMessage += "\n";
+  reportMessage += "# 収支内訳の概要\n";
+  reportMessage += getMessageAmountSummaryByCategory(summaryByCategoryAtCurrentMonth, "今月");
+  reportMessage += getMessageAmountSummaryByCategory(summaryByCategoryAtPreviousMonth, "先月");
+  const options = {
+    method:      "post",
+    contentType: "application/json",
+    payload:     JSON.stringify({text: reportMessage}),
+  }
+  UrlFetchApp.fetch(getSlackBotWebhookUrl(), options);
+}
+
+function getMessageAmountSummaryByCategory(summaryByCategory, headerTitle){
+  let reportMessage = "";
+  if(summaryByCategory.length > 0){
+    reportMessage += ("## " + headerTitle + " (" + summaryByCategory[0].yearMonth + ")\n");
+    summaryByCategory.forEach(
+      s => {
+        if(s.middleCategory == "収支合計"){
+          reportMessage += ("- " + s.largeCategory + ": " + formatNumStr(s.amount) + "\n");
+        } else if(s.middleCategory == "総合計"){
+          reportMessage += ("  - " + s.largeCategory + ": " + formatNumStr(s.amount) + "\n");
+        } else if(s.middleCategory == "小計"){
+          reportMessage += ("    - " + s.largeCategory + ": " + formatNumStr(s.amount) + "\n");
+        }
+      }
+    );
+  }
+  return reportMessage;
 }
 
 function extractReportInfoFromSummaryByCategory(summaryByCategory){
-  return summaryByCategory.filter(s => ["収支合計", "総合計", "小計"].includes(s.middleCategory)).map(
-    s => {
-      return {
-        category: s.largeCategory,
-        amount:   s.amount,
-      };
-    }
-  );
+  return summaryByCategory.filter(s => ["収支合計", "総合計", "小計"].includes(s.middleCategory));
 }
 
 function fetchMonthlySummaryByCategory(targetYear, targetMonth){
