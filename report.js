@@ -1,8 +1,7 @@
 /** @OnlyCurrentDoc */
 
 function executeReport(){
-  console.log("start: execute report");
-  postSlackLoggingChannel("start: execute report");
+  postConsoleAndSlackJobStart("execute report");
 
   // 報告対象月を取得する
   const targetYear = getCurrentYyyy();
@@ -36,8 +35,7 @@ function executeReport(){
       summaryByCategoryAtCurrentMonth,
       summaryByCategoryAtPreviousMonth));
 
-  console.log("end: execute report");
-  postSlackLoggingChannel("end: execute report");
+  postConsoleAndSlackJobEnd("execute report");
 }
 
 // TODO: 以下、コメントを

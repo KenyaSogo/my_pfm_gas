@@ -5,6 +5,11 @@ function getCurrent_yyyy_MM_dd(){
   return Utilities.formatDate(new Date(), "Asia/Tokyo", "yyyy/MM/dd");
 }
 
+// 現在の時刻 (yyyy/MM/dd hh:mm:ss 形式) を返す
+function getCurrent_yyyy_mm_dd_hh_mm_ss(){
+  return Utilities.formatDate(new Date(), "Asia/Tokyo", "yyyy/MM/dd hh:mm:ss");
+}
+
 // 現在の日付の年 (yyyy 形式) を返す
 function getCurrentYyyy(){
   return getYyyyFrom(new Date());
@@ -126,4 +131,22 @@ function postSlackTo(webHookUrl, message){
     payload:     JSON.stringify({text: message}),
   };
   UrlFetchApp.fetch(webHookUrl, options);
+}
+
+// console と slack に job 開始メッセージをポストする
+function postConsoleAndSlackJobStart(message){
+  postConsoleAndSlackJobStartOrEnd("start", message);
+}
+
+// console と slack に job 終了メッセージをポストする
+function postConsoleAndSlackJobEnd(message){
+  postConsoleAndSlackJobStartOrEnd("end", message);
+}
+
+// console と slack に job 開始もしくは終了メッセージをポストする
+function postConsoleAndSlackJobStartOrEnd(startOrEndString, message){
+  const postMessageConsole = startOrEndString + ": " + message;
+  const postMessageSlack = getCurrent_yyyy_mm_dd_hh_mm_ss() + ": " + postMessageConsole;
+  console.log(postMessageConsole);
+  postSlackLoggingChannel(postMessageSlack);
 }
