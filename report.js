@@ -75,7 +75,7 @@ function getMessageAboutSummaryByCategory(summaryByCategory, headerTitle){
           reportMessage += ("- " + s.largeCategory + ": " + formatNumStr(s.amount) + "\n");
         } else if(s.middleCategory == "総合計"){
           reportMessage += ("  - " + s.largeCategory + ": " + formatNumStr(s.amount) + "\n");
-        } else if(s.middleCategory == "小計"){
+        } else if(["小計", "未定義(大項目)"].includes(s.middleCategory)){
           reportMessage += ("    - " + s.largeCategory + ": " + formatNumStr(s.amount) + "\n");
         }
       }
