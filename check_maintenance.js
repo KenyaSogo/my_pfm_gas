@@ -2,6 +2,9 @@
 
 // シートのメンテナンス状態をチェックする
 function executeCheckSheetMaintenanceStatus(){
+  console.log("start: execute check sheet maintenance status");
+  postSlackLoggingChannel("start: execute check sheet maintenance status");
+
   const settingSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("settings");
 
   // 休日カレンダーのメンテナンス要否を確認する
@@ -9,7 +12,7 @@ function executeCheckSheetMaintenanceStatus(){
   const isCalenderNeedsMaintenance = settingSheet.getRange("is_calender_needs_maitenance").getValue() == 1;
   if(isCalenderNeedsMaintenance){
     console.log("isCalenderNeedsMaintenance: true: notified to slack");
-    // TODO: slack 通知
+    postSlackLoggingChannel("is calender needs maintenance: true"); // TODO: slack 通知: メンション
   } else {
     console.log("isCalenderNeedsMaintenance: false");
   }
@@ -19,8 +22,11 @@ function executeCheckSheetMaintenanceStatus(){
   const isMonthlyStartDayInvalid = settingSheet.getRange("is_monthly_start_day_invalid").getValue() == 1;
   if(isMonthlyStartDayInvalid){
     console.log("isMonthlyStartDayInvalid: true: notified to slack");
-    // TODO: slack 通知
+    postSlackLoggingChannel("is monthly start day invalid: true"); // TODO: slack 通知: メンション
   } else {
     console.log("isMonthlyStartDayInvalid: false");
   }
+
+  console.log("end: execute check sheet maintenance status");
+  postSlackLoggingChannel("end: execute check sheet maintenance status");
 }

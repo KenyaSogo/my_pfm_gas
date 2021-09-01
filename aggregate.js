@@ -2,12 +2,24 @@
 
 // 最新月分の明細を取得する
 function executeAggregateCurrentMonth() {
+  console.log("start: execute aggregate current month");
+  postSlackLoggingChannel("start: execute aggregate current month");
+
   aggregateByMonth(0);
+
+  console.log("end: execute aggregate current month");
+  postSlackLoggingChannel("end: execute aggregate current month");
 }
 
 // 最新月の前月分の明細を取得する
 function executeAggregatePreviousMonth() {
+  console.log("start: execute aggregate previous month");
+  postSlackLoggingChannel("start: execute aggregate previous month");
+
   aggregateByMonth(1);
+
+  console.log("end: execute aggregate previous month");
+  postSlackLoggingChannel("end: execute aggregate previous month");
 }
 
 // 指定月の入出金明細を取得し、対象シートに貼り付ける
@@ -35,7 +47,7 @@ function aggregateByMonth(monthsAgo) {
       // rawData が想定通り取得出来ているかを確認する TODO: 月初の0件明細エラー対応
       if(!validateRawData(settingSheet, rawData)){
         console.error("failed to validateRawData: rawData: " + rawData);
-        throw new Error("failed to validateRawData");
+        throw new Error("failed to validateRawData"); // TODO: ここで異常終了する場合のエラーハンドリング (logging & 終了)
       }
       console.log("validateRawData: done");
 

@@ -2,13 +2,25 @@
 
 // 最新月分の日次集計を行う
 function executeCalcDailySummaryCurrentMonth(){
+  console.log("start: execute calc daily summary current month");
+  postSlackLoggingChannel("start: execute calc daily summary current month");
+
   calcDailySummary(0);
+
+  console.log("end: execute calc daily summary current month");
+  postSlackLoggingChannel("end: execute calc daily summary current month");
 }
 
 // 最新月の前月分の日次集計を行う
 function executeCalcDailySummaryPreviousMonth(){
+  console.log("start: execute calc daily summary previous month");
+  postSlackLoggingChannel("start: execute calc daily summary previous month");
+
   calcDailySummary(1);
   calcDailySummary(0); // 最新月分も洗い替えておく
+
+  console.log("end: execute calc daily summary previous month");
+  postSlackLoggingChannel("end: execute calc daily summary previous month");
 }
 
 // 指定月の日次集計を行う

@@ -37,7 +37,7 @@ function executeReport(){
       summaryByCategoryAtPreviousMonth));
 
   console.log("end: execute report");
-  postSlackLoggingChannel("end: execute report"); // TODO: 開始終了 logging 横展開
+  postSlackLoggingChannel("end: execute report");
 }
 
 // TODO: 以下、コメントを

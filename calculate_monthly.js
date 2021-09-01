@@ -2,12 +2,24 @@
 
 // 最新月分の月次集計を行う
 function executeCalcMonthlySummaryCurrentMonth(){
+  console.log("start: execute calc monthly summary current month");
+  postSlackLoggingChannel("start: execute calc monthly summary current month");
+
   calcMonthlySummary(0);
+
+  console.log("end: execute calc monthly summary current month");
+  postSlackLoggingChannel("end: execute calc monthly summary current month");
 }
 
 // 最新月の前月分の月次集計を行う
 function executeCalcMonthlySummaryPreviousMonth(){
+  console.log("start: execute calc monthly summary previous month");
+  postSlackLoggingChannel("start: execute calc monthly summary previous month");
+
   calcMonthlySummary(1);
+
+  console.log("end: execute calc monthly summary previous month");
+  postSlackLoggingChannel("end: execute calc monthly summary previous month");
 }
 
 // 指定月の月次集計を行う
