@@ -1,6 +1,9 @@
 /** @OnlyCurrentDoc */
 
 function executeReport(){
+  console.log("start: execute report");
+  postSlackLoggingChannel("start: execute report");
+
   // 報告対象月を取得する
   const targetYear = getCurrentYyyy();
   const targetMonth = getCurrentMm();
@@ -32,6 +35,9 @@ function executeReport(){
       lastTotalAssetBalanceAtPreviousMonth,
       summaryByCategoryAtCurrentMonth,
       summaryByCategoryAtPreviousMonth));
+
+  console.log("end: execute report");
+  postSlackLoggingChannel("end: execute report"); // TODO: 開始終了 logging 横展開
 }
 
 // TODO: 以下、コメントを

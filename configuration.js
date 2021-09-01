@@ -21,6 +21,13 @@ function getSlackReportingBotWebhookUrl(){
   return slackReportingBotWebhookUrl;
 }
 
+let slackLoggingBotWebhookUrl;
+function getSlackLoggingBotWebhookUrl(){
+  if(slackLoggingBotWebhookUrl) return slackLoggingBotWebhookUrl;
+  slackLoggingBotWebhookUrl = getSettingSheet().getRange("slack_logging_bot_webhook_url").getValue();
+  return slackLoggingBotWebhookUrl;
+}
+
 let calcDcExportSheetPrefix;
 function getCalcDcExportSheetPrefix(){
   if(calcDcExportSheetPrefix) return calcDcExportSheetPrefix;

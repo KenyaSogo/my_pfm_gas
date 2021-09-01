@@ -105,6 +105,11 @@ function postSlackReportingChannel(message){
   postSlackTo(getSlackReportingBotWebhookUrl(), convertSlackCodeFormatMessage(message));
 }
 
+// slack の my-pfm-dev-notif チャンネルにポストする
+function postSlackLoggingChannel(message){
+  postSlackTo(getSlackLoggingBotWebhookUrl(), convertSlackCodeFormatMessage(message));
+}
+
 // slack の code フォーマット化されたメッセージを取得する
 function convertSlackCodeFormatMessage(message){
   let formattedMessage = "```";
