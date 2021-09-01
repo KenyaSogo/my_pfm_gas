@@ -64,7 +64,7 @@ function getMessageAboutSummaryByCategory(summaryByCategory, headerTitle){
 }
 
 function extractReportInfoFromSummaryByCategory(summaryByCategory){
-  return summaryByCategory.filter(s => ["収支合計", "総合計", "小計"].includes(s.middleCategory));
+  return summaryByCategory.filter(s => ["収支合計", "総合計", "小計", "未定義(大項目)"].includes(s.middleCategory));
 }
 
 function fetchMonthlySummaryByCategory(targetYear, targetMonth){
