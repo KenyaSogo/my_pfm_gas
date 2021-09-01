@@ -22,7 +22,29 @@ function executeReport(){
   const summaryByCategoryAtPreviousMonth = extractReportInfoFromSummaryByCategory(fetchMonthlySummaryByCategory(previousMonthYyyy, previousMonthMm));
 
   // レポートをまとめて、slack に通知する
-  let reportMessage = "```";
+  postSlackReportingChannel(
+    getReportMessage(
+      lastCashBalance,
+      lastCashBalanceDate,
+      lastCashBalanceAtPreviousMonth,
+      lastTotalAssetBalance,
+      lastTotalAssetBalanceDate,
+      lastTotalAssetBalanceAtPreviousMonth,
+      summaryByCategoryAtCurrentMonth,
+      summaryByCategoryAtPreviousMonth));
+}
+
+// TODO: 以下、コメントを
+function getReportMessage(
+  lastCashBalance,
+  lastCashBalanceDate,
+  lastCashBalanceAtPreviousMonth,
+  lastTotalAssetBalance,
+  lastTotalAssetBalanceDate,
+  lastTotalAssetBalanceAtPreviousMonth,
+  summaryByCategoryAtCurrentMonth,
+  summaryByCategoryAtPreviousMonth){
+  let reportMessage = "";
   reportMessage += "# 残高の概要\n";
   reportMessage += ("- 直近現預金残高: " + formatNumStr(lastCashBalance) + "\n");
   reportMessage += ("  - (日付: " + lastCashBalanceDate + ")\n");
@@ -34,16 +56,9 @@ function executeReport(){
   reportMessage += "# 収支内訳の概要\n";
   reportMessage += getMessageAboutSummaryByCategory(summaryByCategoryAtCurrentMonth, "今月");
   reportMessage += getMessageAboutSummaryByCategory(summaryByCategoryAtPreviousMonth, "先月");
-  reportMessage += "```"
-  const options = {
-    method:      "post",
-    contentType: "application/json",
-    payload:     JSON.stringify({text: reportMessage}),
-  }
-  UrlFetchApp.fetch(getSlackBotWebhookUrl(), options); // TODO: slack 通知の util 化
+  return reportMessage;
 }
 
-// TODO: 以下、コメントを
 function getMessageAboutSummaryByCategory(summaryByCategory, headerTitle){
   let reportMessage = "";
   if(summaryByCategory.length > 0){

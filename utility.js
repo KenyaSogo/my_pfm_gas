@@ -99,3 +99,26 @@ function sumAmountFromDetails(targetDetails){
 function formatNumStr(numStr){
   return "¥" + Number(numStr).toLocaleString();
 }
+
+// slack の my-pfm-report チャンネルにポストする
+function postSlackReportingChannel(message){
+  postSlackTo(getSlackReportingBotWebhookUrl(), convertSlackCodeFormatMessage(message));
+}
+
+// slack の code フォーマット化されたメッセージを取得する
+function convertSlackCodeFormatMessage(message){
+  let formattedMessage = "```";
+  formattedMessage += message;
+  formattedMessage += "```";
+  return formattedMessage;
+}
+
+// slack の webHookUrl に対してポストする
+function postSlackTo(webHookUrl, message){
+  const options = {
+    method:      "post",
+    contentType: "application/json",
+    payload:     JSON.stringify({text: message}),
+  };
+  UrlFetchApp.fetch(webHookUrl, options);
+}

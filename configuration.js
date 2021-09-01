@@ -14,11 +14,11 @@ function getSettingSheet(){
   return settingSheet;
 }
 
-let slackBotWebhookUrl;
-function getSlackBotWebhookUrl(){
-  if(slackBotWebhookUrl) return slackBotWebhookUrl;
-  slackBotWebhookUrl = getSettingSheet().getRange("slack_bot_webhook_url").getValue();
-  return slackBotWebhookUrl;
+let slackReportingBotWebhookUrl;
+function getSlackReportingBotWebhookUrl(){
+  if(slackReportingBotWebhookUrl) return slackReportingBotWebhookUrl;
+  slackReportingBotWebhookUrl = getSettingSheet().getRange("slack_reporting_bot_webhook_url").getValue();
+  return slackReportingBotWebhookUrl;
 }
 
 let calcDcExportSheetPrefix;
