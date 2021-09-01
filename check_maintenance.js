@@ -2,8 +2,7 @@
 
 // シートのメンテナンス状態をチェックする
 function executeCheckSheetMaintenanceStatus(){
-  console.log("start: execute check sheet maintenance status");
-  postSlackLoggingChannel("start: execute check sheet maintenance status");
+  postConsoleAndSlackJobStart("execute check sheet maintenance status");
 
   const settingSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("settings");
 
@@ -27,6 +26,5 @@ function executeCheckSheetMaintenanceStatus(){
     console.log("isMonthlyStartDayInvalid: false");
   }
 
-  console.log("end: execute check sheet maintenance status");
-  postSlackLoggingChannel("end: execute check sheet maintenance status");
+  postConsoleAndSlackJobEnd("execute check sheet maintenance status");
 }

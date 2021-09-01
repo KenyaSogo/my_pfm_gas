@@ -2,8 +2,7 @@
 
 // 月別のシートを作成する
 function executeCreateSheetByMonth(){
-  console.log("start: execute create sheet by month");
-  postSlackLoggingChannel("start: execute create sheet by month");
+  postConsoleAndSlackJobStart("execute create sheet by month");
 
   const currentSpreadSheet = SpreadsheetApp.getActiveSpreadsheet();
   const settingSheet = currentSpreadSheet.getSheetByName("settings");
@@ -15,8 +14,7 @@ function executeCreateSheetByMonth(){
   // 本日が月初めの日の前日か否かを判定
   const isTomorrowMonthlyStart = settingSheet.getRange("is_tomorrow_monthly_start").getValue() == 1;
   if(!isTomorrowMonthlyStart){
-    console.log("isTomorrowMonthlyStart: false: sheet create skipped");
-    postSlackLoggingChannel("end: execute create sheet by month: sheet create skipped");
+    postConsoleAndSlackJobEnd("execute create sheet by month: isTomorrowMonthlyStart: false: sheet create skipped");
     return;
   }
 
@@ -41,8 +39,7 @@ function executeCreateSheetByMonth(){
     }
   );
 
-  console.log("end: execute create sheet by month");
-  postSlackLoggingChannel("end: execute create sheet by month");
+  postConsoleAndSlackJobEnd("execute create sheet by month");
 }
 
 // 対象月のシートを作成する

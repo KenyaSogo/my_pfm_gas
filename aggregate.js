@@ -2,24 +2,20 @@
 
 // 最新月分の明細を取得する
 function executeAggregateCurrentMonth() {
-  console.log("start: execute aggregate current month");
-  postSlackLoggingChannel("start: execute aggregate current month");
+  postConsoleAndSlackJobStart("execute aggregate current month");
 
   aggregateByMonth(0);
 
-  console.log("end: execute aggregate current month");
-  postSlackLoggingChannel("end: execute aggregate current month");
+  postConsoleAndSlackJobEnd("execute aggregate current month");
 }
 
 // 最新月の前月分の明細を取得する
 function executeAggregatePreviousMonth() {
-  console.log("start: execute aggregate previous month");
-  postSlackLoggingChannel("start: execute aggregate previous month");
+  postConsoleAndSlackJobStart("execute aggregate previous month");
 
   aggregateByMonth(1);
 
-  console.log("end: execute aggregate previous month");
-  postSlackLoggingChannel("end: execute aggregate previous month");
+  postConsoleAndSlackJobEnd("execute aggregate previous month");
 }
 
 // 指定月の入出金明細を取得し、対象シートに貼り付ける

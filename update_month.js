@@ -2,8 +2,7 @@
 
 // aggregate_year / aggregate_month のリストを更新する (これによって最新月/その前月として aggregation しに行く月の設定が切り替わる)
 function executeUpdateAggregateYearMonthList(){
-  console.log("start: execute update aggregate year month list");
-  postSlackLoggingChannel("start: execute update aggregate year month list");
+  postConsoleAndSlackJobStart("execute update aggregate year month list");
 
   const settingSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("settings");
 
@@ -34,8 +33,7 @@ function executeUpdateAggregateYearMonthList(){
   const lastYearMonth = lastCellYear.getValue() + lastCellMonth.getValue();
   const currentYearMonth = currentYear + currentMonth;
   if(lastYearMonth == currentYearMonth){
-    console.log("currentYearMonth is already pushed: push skipped");
-    postSlackLoggingChannel("end: execute update aggregate year month list: skipped");
+    postConsoleAndSlackJobEnd("execute update aggregate year month list: currentYearMonth is already pushed: push skipped");
     return;
   }
 
@@ -46,6 +44,5 @@ function executeUpdateAggregateYearMonthList(){
   pushTargetCellMonth.setValue(currentMonth);
   console.log("aggregate_year, aggregate_month: pushed to the list: year, month: " + currentYear + ", " + currentMonth);
 
-  console.log("end: execute update aggregate year month list");
-  postSlackLoggingChannel("end: execute update aggregate year month list: updated");
+  postConsoleAndSlackJobEnd("execute update aggregate year month list: updated");
 }
