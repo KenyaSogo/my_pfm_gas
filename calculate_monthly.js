@@ -20,6 +20,10 @@ function calcMonthlySummary(monthsAgo){
   console.log("start monthly summary by category");
   // 集計対象月の明細データを取得する
   const targetDetails = fetchMonthlySummaryByCategoryOriginDetails(targetYear, targetMonth);
+  if(targetDetails == null){
+    console.log("end monthly summary by category: skip summary and export: there is no data");
+    return;
+  }
   // 明細データから項目を収集する
   const targetCategories = getUniqueArrayFrom(targetDetails.map(d => d.category));
   // 項目別に明細を集計する
@@ -244,6 +248,10 @@ function getMonthlySummary(targetYear, targetMonth, largeCategoryName, middleCat
 function fetchMonthlySummaryByCategoryOriginDetails(targetYear, targetMonth){
   const dataOriginSheetName = getCalcDcExportSheetPrefix() + "_" + targetYear + targetMonth;
   const rawDetailData = getThisSpreadSheet().getSheetByName(dataOriginSheetName).getRange(getCalcDcExportAddr()).getValue();
+
+  if(rawDetailData == ""){
+    return null;
+  }
 
   return rawDetailData.split("¥n").map(
     row => {
