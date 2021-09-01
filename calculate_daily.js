@@ -6,7 +6,7 @@ function executeCalcDailySummaryCurrentMonth(){
 
   calcDailySummary(0);
 
-  postConsoleAndSlackJobEnd("execute aggregate current month");
+  postConsoleAndSlackJobEnd("execute calc daily summary current month");
 }
 
 // 最新月の前月分の日次集計を行う
