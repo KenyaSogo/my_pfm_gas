@@ -14,6 +14,7 @@ function executeUpdateAggregateYearMonthList(){
   const isTodayMonthlyStart = settingSheet.getRange("is_today_monthly_start").getValue() == 1;
   if(!isTodayMonthlyStart){
     console.log("isTodayMonthlyStart: false: push skipped");
+    postConsoleAndSlackJobEnd("execute update aggregate year month list: isTodayMonthlyStart: false: push skipped");
     return;
   }
 
