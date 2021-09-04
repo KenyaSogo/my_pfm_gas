@@ -45,8 +45,7 @@ function aggregateByMonth(monthsAgo) {
       // rawData が想定通り取得出来ているかを確認する TODO: 月初の0件明細エラー対応
       if(!validateRawData(settingSheet, rawData)){
         postConsoleAndSlackWarning("failed to validateRawData: rawData: " + rawData, false);
-        // return; // TODO: コメントアウトを外す (事由後述)
-        throw new PfmExpectedError("failed to validateRawData", true); // TODO: 削除: 本来は異常終了させないが、テストのためあえて仕込んでみている
+        return;
       }
       console.log("validateRawData: done");
 
