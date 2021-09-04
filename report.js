@@ -44,7 +44,7 @@ function doReport(){
       summaryByCategoryAtPreviousMonth));
 }
 
-// TODO: 以下、コメントを
+// レポートするメッセージを編集して返す
 function getReportMessage(
   lastCashBalance,
   lastCashBalanceDate,
@@ -69,6 +69,7 @@ function getReportMessage(
   return reportMessage;
 }
 
+// 収支内訳の概要メッセージを対象月の項目別月次集計結果をもとに編集して返す
 function getMessageAboutSummaryByCategory(summaryByCategory, headerTitle){
   let reportMessage = "";
   if(summaryByCategory.length > 0){
@@ -88,10 +89,12 @@ function getMessageAboutSummaryByCategory(summaryByCategory, headerTitle){
   return reportMessage;
 }
 
+// 項目別月次集計結果からレポーティング対象明細を抽出して返す
 function extractReportInfoFromSummaryByCategory(summaryByCategory){
   return summaryByCategory.filter(s => ["収支合計", "総合計", "小計", "未定義(大項目)"].includes(s.middleCategory));
 }
 
+// 項目別月次集計結果を取得して返す
 function fetchMonthlySummaryByCategory(targetYear, targetMonth){
   const targetSheetName = getCalcMcExportSheetPrefix() + "_" + targetYear + targetMonth;
   const rawDetailsValue = getThisSpreadSheet().getSheetByName(targetSheetName).getRange(getCalcMcExportAddr()).getValue();
@@ -108,6 +111,7 @@ function fetchMonthlySummaryByCategory(targetYear, targetMonth){
   );
 }
 
+// 指定月の前月末の、総資産残高推移の基準日と残高を取得して返す
 function getLastDateAndTotalAssetBalancePreviousMonthFrom(targetYear, targetMonth){
   const {previousMonthYyyy, previousMonthMm} = getPreviousYearMonth(targetYear, targetMonth);
   const {lastTotalAssetBalanceDate, lastTotalAssetBalance} = getLastDateAndTotalAssetBalanceAt(previousMonthYyyy, previousMonthMm);
@@ -116,6 +120,7 @@ function getLastDateAndTotalAssetBalancePreviousMonthFrom(targetYear, targetMont
   return {lastTotalAssetBalanceDateAtPreviousMonth, lastTotalAssetBalanceAtPreviousMonth};
 }
 
+// 指定月末の、総資産残高推移の基準日と残高を取得して返す
 function getLastDateAndTotalAssetBalanceAt(targetYear, targetMonth){
   const {lastDate, lastBalance} = getLastDateAndBalanceAt(targetYear, targetMonth, fetchDailyTotalAssetBalanceDetails);
   const lastTotalAssetBalanceDate = lastDate;
@@ -123,6 +128,7 @@ function getLastDateAndTotalAssetBalanceAt(targetYear, targetMonth){
   return {lastTotalAssetBalanceDate, lastTotalAssetBalance};
 }
 
+// 日次総資産残高集計結果を取得して返す
 function fetchDailyTotalAssetBalanceDetails(targetYear, targetMonth){
   const targetSheetName = getCalcDabExportSheetPrefix() + "_" + targetYear + targetMonth;
   const rawDetailsValue = getThisSpreadSheet().getSheetByName(targetSheetName).getRange(getCalcDabExportAddr()).getValue();
@@ -137,6 +143,7 @@ function fetchDailyTotalAssetBalanceDetails(targetYear, targetMonth){
   );
 }
 
+// 指定月の前月末の、現預金残高推移の基準日と残高を取得して返す
 function getLastDateAndCashBalancePreviousMonthFrom(targetYear, targetMonth){
   const {previousMonthYyyy, previousMonthMm} = getPreviousYearMonth(targetYear, targetMonth);
   const {lastCashBalanceDate, lastCashBalance} = getLastDateAndCashBalanceAt(previousMonthYyyy, previousMonthMm);
@@ -145,6 +152,7 @@ function getLastDateAndCashBalancePreviousMonthFrom(targetYear, targetMonth){
   return {lastCashBalanceDateAtPreviousMonth, lastCashBalanceAtPreviousMonth};
 }
 
+// 指定月末の、現預金残高推移の基準日と残高を取得して返す
 function getLastDateAndCashBalanceAt(targetYear, targetMonth){
   const {lastDate, lastBalance} = getLastDateAndBalanceAt(targetYear, targetMonth, fetchDailyCashBalanceDetails);
   const lastCashBalanceDate = lastDate;
@@ -152,6 +160,7 @@ function getLastDateAndCashBalanceAt(targetYear, targetMonth){
   return {lastCashBalanceDate, lastCashBalance};
 }
 
+// 指定月末の、残高推移の基準日と残高を取得して返す
 function getLastDateAndBalanceAt(targetYear, targetMonth, fetchDetailsFunc){
   const dailyBalanceDetails = fetchDetailsFunc(targetYear, targetMonth);
   const lastBalanceDetail = dailyBalanceDetails.length == 0 ? null : dailyBalanceDetails[dailyBalanceDetails.length - 1];
@@ -160,6 +169,7 @@ function getLastDateAndBalanceAt(targetYear, targetMonth, fetchDetailsFunc){
   return {lastDate, lastBalance};
 }
 
+// 日次現預金残高集計結果を取得して返す
 function fetchDailyCashBalanceDetails(targetYear, targetMonth){
   const targetSheetName = getCalcDcbExportSheetPrefix() + "_" + targetYear + targetMonth;
   const rawDetailsValue = getThisSpreadSheet().getSheetByName(targetSheetName).getRange(getCalcDcbExportAddr()).getValue();
