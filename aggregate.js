@@ -14,9 +14,11 @@ function executeAggregateCurrentMonth() {
 // 最新月の前月分の明細を取得する
 function executeAggregatePreviousMonth() {
   postConsoleAndSlackJobStart("execute aggregate previous month");
-
-  aggregateByMonth(1);
-
+  try {
+    aggregateByMonth(1);
+  } catch(error){
+    handleError(error);
+  }
   postConsoleAndSlackJobEnd("execute aggregate previous month");
 }
 

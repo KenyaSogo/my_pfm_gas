@@ -3,7 +3,15 @@
 // aggregate_year / aggregate_month のリストを更新する (これによって最新月/その前月として aggregation しに行く月の設定が切り替わる)
 function executeUpdateAggregateYearMonthList(){
   postConsoleAndSlackJobStart("execute update aggregate year month list");
+  try {
+    doUpdateAggregateYearMonthList();
+  } catch(error){
+    handleError(error);
+  }
+  postConsoleAndSlackJobEnd("execute update aggregate year month list: updated");
+}
 
+function doUpdateAggregateYearMonthList(){
   const settingSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("settings");
 
   // 現在の日付を設定
@@ -44,6 +52,4 @@ function executeUpdateAggregateYearMonthList(){
   pushTargetCellYear.setValue(currentYear);
   pushTargetCellMonth.setValue(currentMonth);
   console.log("aggregate_year, aggregate_month: pushed to the list: year, month: " + currentYear + ", " + currentMonth);
-
-  postConsoleAndSlackJobEnd("execute update aggregate year month list: updated");
 }

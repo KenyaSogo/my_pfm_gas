@@ -3,19 +3,23 @@
 // 最新月分の日次集計を行う
 function executeCalcDailySummaryCurrentMonth(){
   postConsoleAndSlackJobStart("execute calc daily summary current month");
-
-  calcDailySummary(0);
-
+  try {
+    calcDailySummary(0);
+  } catch(error){
+    handleError(error);
+  }
   postConsoleAndSlackJobEnd("execute calc daily summary current month");
 }
 
 // 最新月の前月分の日次集計を行う
 function executeCalcDailySummaryPreviousMonth(){
   postConsoleAndSlackJobStart("execute calc daily summary previous month");
-
-  calcDailySummary(1);
-  calcDailySummary(0); // 最新月分も洗い替えておく
-
+  try {
+    calcDailySummary(1);
+    calcDailySummary(0); // 最新月分も洗い替えておく
+  } catch(error){
+    handleError(error);
+  }
   postConsoleAndSlackJobEnd("execute calc daily summary previous month");
 }
 

@@ -3,18 +3,22 @@
 // 最新月分の月次集計を行う
 function executeCalcMonthlySummaryCurrentMonth(){
   postConsoleAndSlackJobStart("execute calc monthly summary current month");
-
-  calcMonthlySummary(0);
-
+  try {
+    calcMonthlySummary(0);
+  } catch(error){
+    handleError(error);
+  }
   postConsoleAndSlackJobEnd("execute calc monthly summary current month");
 }
 
 // 最新月の前月分の月次集計を行う
 function executeCalcMonthlySummaryPreviousMonth(){
   postConsoleAndSlackJobStart("execute calc monthly summary previous month");
-
-  calcMonthlySummary(1);
-
+  try {
+    calcMonthlySummary(1);
+  } catch(error){
+    handleError(error);
+  }
   postConsoleAndSlackJobEnd("execute calc monthly summary previous month");
 }
 

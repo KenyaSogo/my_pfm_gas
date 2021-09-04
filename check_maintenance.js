@@ -3,7 +3,15 @@
 // シートのメンテナンス状態をチェックする
 function executeCheckSheetMaintenanceStatus(){
   postConsoleAndSlackJobStart("execute check sheet maintenance status");
+  try {
+    doCheckSheetMaintenanceStatus();
+  } catch(error){
+    handleError(error);
+  }
+  postConsoleAndSlackJobEnd("execute check sheet maintenance status");
+}
 
+function doCheckSheetMaintenanceStatus(){
   const settingSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("settings");
 
   // 休日カレンダーのメンテナンス要否を確認する
@@ -23,6 +31,4 @@ function executeCheckSheetMaintenanceStatus(){
   } else {
     console.log("isMonthlyStartDayInvalid: false");
   }
-
-  postConsoleAndSlackJobEnd("execute check sheet maintenance status");
 }

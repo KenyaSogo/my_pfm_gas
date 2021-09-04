@@ -3,7 +3,15 @@
 // 月別のシートを作成する
 function executeCreateSheetByMonth(){
   postConsoleAndSlackJobStart("execute create sheet by month");
+  try {
+    doCreateSheetByMonth();
+  } catch(error){
+    handleError(error);
+  }
+  postConsoleAndSlackJobEnd("execute create sheet by month");
+}
 
+function doCreateSheetByMonth(){
   const currentSpreadSheet = SpreadsheetApp.getActiveSpreadsheet();
   const settingSheet = currentSpreadSheet.getSheetByName("settings");
 
@@ -38,8 +46,6 @@ function executeCreateSheetByMonth(){
       }
     }
   );
-
-  postConsoleAndSlackJobEnd("execute create sheet by month");
 }
 
 // 対象月のシートを作成する
