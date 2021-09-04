@@ -83,7 +83,7 @@ function getTrimmedColumnValues(sheet, columnRangeName){
     .slice(1); // ヘッダー行を除外する
 }
 
-// 0..elemNum の range (ex. elemNum=3 の場合 [0, 1, 2, 3]) を返す
+// 0...elemNum の range (ex. elemNum=3 の場合 [0, 1, 2]) を返す
 function getIntRangeFromZero(elemNum){
   return Array.from(Array(elemNum).keys());
 }
@@ -224,8 +224,8 @@ function getPrintErrorMessage(error){
          "[stacktrace] " + error.stack;
 }
 
-// sheet から明細を取得して明細 object の配列に parse して返す
-function fetchDetailsFromSheet(targetSheetName, targetRangeName, parseDetailFunc){
+// cell から明細を取得して明細 object の配列に parse して返す
+function fetchDetailsFromCell(targetSheetName, targetRangeName, parseDetailFunc){
   const rawDetailsValue = getThisSpreadSheet().getSheetByName(targetSheetName).getRange(targetRangeName).getValue();
   if(rawDetailsValue == ""){
     return null;
@@ -237,4 +237,15 @@ function fetchDetailsFromSheet(targetSheetName, targetRangeName, parseDetailFunc
       return parseDetailFunc(rowElems);
     }
   );
+}
+
+// 表の各列の名前から明細を取得して明細 object の配列に parse して返す
+// (各列において空白行を trim するので、終端までの行において空白行を含む列を許容しない)
+function fetchDetailsFromColumns(columnRangeNames, parseDetailFunc){
+  const colValueArrays = columnRangeNames.map(colName => getTrimmedColumnValues(getSettingSheet(), colName));
+  const rowCount = colValueArrays[0].length;
+  if(rowCount == 0){
+    return null;
+  }
+  return getIntRangeFromZero(rowCount).map(i => parseDetailFunc(colValueArrays, i));
 }

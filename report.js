@@ -96,14 +96,14 @@ function extractReportInfoFromSummaryByCategory(summaryByCategory){
 
 // 項目別月次集計結果を取得して返す
 function fetchMonthlySummaryByCategory(targetYear, targetMonth){
-  return fetchDetailsFromSheet(
+  return fetchDetailsFromCell(
     getCalcMcExportSheetPrefix() + "_" + targetYear + targetMonth,
     getCalcMcExportAddr(),
     parseMonthlySummaryByCategoryDetailFromRowElems);
 }
 
 // 項目別月次集計明細を行データ配列から object に parse して返す
-function parseMonthlySummaryByCategoryDetailFromRowElems(rowElems){
+function parseMonthlySummaryByCategoryDetailFromRowElems(rowElems){ // TODO: 無名関数にしてこの宣言を省略
   return {
     yearMonth:      rowElems[0], // 対象年月
     largeCategory:  rowElems[1], // 大項目
@@ -131,7 +131,7 @@ function getLastDateAndTotalAssetBalanceAt(targetYear, targetMonth){
 
 // 日次総資産残高集計結果を取得して返す
 function fetchDailyTotalAssetBalanceDetails(targetYear, targetMonth){
-  return fetchDetailsFromSheet(
+  return fetchDetailsFromCell(
     getCalcDabExportSheetPrefix() + "_" + targetYear + targetMonth,
     getCalcDabExportAddr(),
     parseBalanceDetailFromRowElems);
@@ -165,14 +165,14 @@ function getLastDateAndBalanceAt(targetYear, targetMonth, fetchDetailsFunc){
 
 // 日次現預金残高集計結果を取得して返す
 function fetchDailyCashBalanceDetails(targetYear, targetMonth){
-  return fetchDetailsFromSheet(
+  return fetchDetailsFromCell(
     getCalcDcbExportSheetPrefix() + "_" + targetYear + targetMonth,
     getCalcDcbExportAddr(),
     parseBalanceDetailFromRowElems);
 }
 
 // 残高を行データ配列から object に parse して返す
-function parseBalanceDetailFromRowElems(rowElems){
+function parseBalanceDetailFromRowElems(rowElems){ // TODO: 無名関数にしてこの宣言を省略
   return {
     date:    rowElems[0], // 日付
     balance: rowElems[1], // 残高

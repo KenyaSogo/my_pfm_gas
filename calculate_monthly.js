@@ -258,14 +258,14 @@ function getMonthlySummary(targetYear, targetMonth, largeCategoryName, middleCat
 
 // 集計対象月の項目別集計元データ (日次項目別集計明細) を取得する
 function fetchDailySummaryByCategoryDetails(targetYear, targetMonth){
-  return fetchDetailsFromSheet(
+  return fetchDetailsFromCell(
     getCalcDcExportSheetPrefix() + "_" + targetYear + targetMonth,
     getCalcDcExportAddr(),
     parseDailySummaryByCategoryDetailFromRowElems);
 }
 
 // 項目別日次集計明細を行データ配列から object に parse して返す
-function parseDailySummaryByCategoryDetailFromRowElems(rowElems){
+function parseDailySummaryByCategoryDetailFromRowElems(rowElems){ // TODO: 無名関数にしてこの宣言を省略
   return {
     date:     rowElems[0], // 日付
     category: rowElems[1], // 項目 (大項目>>中項目)

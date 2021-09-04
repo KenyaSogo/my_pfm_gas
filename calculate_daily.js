@@ -226,14 +226,14 @@ function extractSortedDatesFromDetails(targetDetails) {
 
 // 集計対象月の明細データを取得し、 hash の配列に parse したものを返す
 function fetchAggregatedDetails(targetYear, targetMonth) {
-  return fetchDetailsFromSheet(
+  return fetchDetailsFromCell(
     "ag_" + targetYear + targetMonth, // TODO: 直書き回避
     "V2", // TODO: 直書き回避
     parseAggregateDetailFromRowElems);
 }
 
 // aggregate 明細を行データ配列から object に parse して返す
-function parseAggregateDetailFromRowElems(rowElems){
+function parseAggregateDetailFromRowElems(rowElems){ // TODO: 無名関数にしてこの宣言を省略
   return {
     isCalcTarget:       rowElems[0], // 計算対象
     date:               rowElems[1], // 日付

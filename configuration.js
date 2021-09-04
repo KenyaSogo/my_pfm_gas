@@ -108,76 +108,62 @@ function getCalcDabExportAddr(){
 let createTargetSheetConfigs;
 function getCreateTargetSheetConfigs(){
   if(createTargetSheetConfigs) return createTargetSheetConfigs;
-
-  const prefixes = getTrimmedColumnValues(getSettingSheet(), "create_target_sheet_prefix");
-  const needsNextMonths = getTrimmedColumnValues(getSettingSheet(), "needs_next_month");
-  createTargetSheetConfigs = getIntRangeFromZero(prefixes.length).map(
-    i => {
+  createTargetSheetConfigs = fetchDetailsFromColumns(
+    ["create_target_sheet_prefix", "needs_next_month"],
+    (colValueArrays, i) => {
       return {
-        createTargetSheetPrefix: prefixes[i],
-        needsNextMonth:          needsNextMonths[i],
+        createTargetSheetPrefix: colValueArrays[0][i],
+        needsNextMonth:          colValueArrays[1][i],
       };
     }
   );
-
   return createTargetSheetConfigs;
 }
 
 let assetConfigs;
 function getAssetConfigs(){
   if(assetConfigs) return assetConfigs;
-
-  const assetNameValues = getTrimmedColumnValues(getSettingSheet(), "asset_name"); // TODO: 各列データ fetch してから parse するパターンも util 化
-  const isCashValues = getTrimmedColumnValues(getSettingSheet(), "is_cash");
-  assetConfigs = getIntRangeFromZero(assetNameValues.length).map(
-    i => {
+  assetConfigs = fetchDetailsFromColumns(
+    ["asset_name", "is_cash"],
+    (colValueArrays, i) => {
       return {
-        assetName: assetNameValues[i],
-        isCash:    isCashValues[i],
+        assetName: colValueArrays[0][i],
+        isCash:    colValueArrays[1][i],
       };
     }
   );
-
   return assetConfigs;
 }
 
 let endBalances;
 function getEndBalances(){
   if(endBalances) return endBalances;
-
-  const calcYearValues = getTrimmedColumnValues(getSettingSheet(), "calc_year");
-  const calcMonthValues = getTrimmedColumnValues(getSettingSheet(), "calc_month");
-  const cashEndBalanceValues = getTrimmedColumnValues(getSettingSheet(), "cash_end_balance");
-  const assetTotalEndBalanceValues = getTrimmedColumnValues(getSettingSheet(), "asset_total_end_balance");
-  endBalances = getIntRangeFromZero(calcYearValues.length).map(
-    i => {
+  endBalances = fetchDetailsFromColumns(
+    ["calc_year", "calc_month", "cash_end_balance", "asset_total_end_balance"],
+    (colValueArrays, i) => {
       return {
-        calcYear:             calcYearValues[i],
-        calcMonth:            calcMonthValues[i],
-        cashEndBalance:       cashEndBalanceValues[i],
-        assetTotalEndBalance: assetTotalEndBalanceValues[i],
+        calcYear:             colValueArrays[0][i],
+        calcMonth:            colValueArrays[1][i],
+        cashEndBalance:       colValueArrays[2][i],
+        assetTotalEndBalance: colValueArrays[3][i],
       };
     }
   );
-
   return endBalances;
 }
 
 let orderedCategoryConfigs;
 function getOrderedCategoryConfigs(){
   if(orderedCategoryConfigs) return orderedCategoryConfigs;
-  const orderedLargeCategories = getTrimmedColumnValues(getSettingSheet(), "ordered_large_category");
-  const orderedMiddleCategories = getTrimmedColumnValues(getSettingSheet(), "ordered_middle_category");
-  const categoryLargeClasses = getTrimmedColumnValues(getSettingSheet(), "category_large_class");
-  const categoryMiddleClasses = getTrimmedColumnValues(getSettingSheet(), "category_middle_class");
-  orderedCategoryConfigs = getIntRangeFromZero(orderedLargeCategories.length).map(
-    i => {
+  orderedCategoryConfigs = fetchDetailsFromColumns(
+    ["ordered_large_category", "ordered_middle_category", "category_large_class", "category_middle_class"],
+    (colValueArrays, i) => {
       return {
-        largeCategoryName:       orderedLargeCategories[i],
-        middleCategoryName:      orderedMiddleCategories[i],
-        categoryLargeClassName:  categoryLargeClasses[i],
-        categoryMiddleClassName: categoryMiddleClasses[i],
-      }
+        largeCategoryName:       colValueArrays[0][i],
+        middleCategoryName:      colValueArrays[1][i],
+        categoryLargeClassName:  colValueArrays[2][i],
+        categoryMiddleClassName: colValueArrays[3][i],
+      };
     }
   );
   return orderedCategoryConfigs;
