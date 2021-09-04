@@ -29,7 +29,7 @@ function doCreateSheetByMonth(){
   // 本日が月初め日の前日の場合: 当月分のシートを tmp シートからコピーして追加
   console.log("isTomorrowMonthlyStart: true");
 
-  getCreateTargetSheetConfig(settingSheet).forEach(
+  getCreateTargetSheetConfigs().forEach(
     sheetConfig => {
       const sheetPrefix = sheetConfig.createTargetSheetPrefix;
       const needsNextMonth = sheetConfig.needsNextMonth;
@@ -68,18 +68,4 @@ function createSheetAtTargetMonth(targetYearMonth, sheetPrefix, targetSpreadShee
   const copiedNewSheet = tmpSheet.copyTo(targetSpreadSheet);
   copiedNewSheet.setName(newSheetName);
   console.log("newSheet is created: sheet name: " + newSheetName);
-}
-
-// 作成対象シートの定義表を取得する TODO: config への移管
-function getCreateTargetSheetConfig(settingSheet){
-  const prefixes = getTrimmedColumnValues(settingSheet, "create_target_sheet_prefix");
-  const needsNextMonths = getTrimmedColumnValues(settingSheet, "needs_next_month");
-  return getIntRangeFromZero(prefixes.length).map(
-    i => {
-      return {
-        createTargetSheetPrefix: prefixes[i],
-        needsNextMonth: needsNextMonths[i],
-      };
-    }
-  );
 }

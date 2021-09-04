@@ -87,7 +87,7 @@ function validateRawData(settingSheet, rawData){
   return rawData.indexOf(rawDataHeadPattern) == 0;
 }
 
-// aggregate する対象の id と pass を stack させた配列を返す
+// aggregate する対象の id と pass を stack させた配列を返す TODO: config 移管、他との方式の平仄
 function getAggregateIdPasses(settingSheet){
   const aggregateIdStack = getTrimmedColumnValues(settingSheet, "pfm_id");
   const aggregatePassStack = getTrimmedColumnValues(settingSheet, "pfm_pass");
@@ -95,7 +95,7 @@ function getAggregateIdPasses(settingSheet){
   return {aggregateIdStack, aggregatePassStack};
 }
 
-// aggregate する対象の year と month を stack させた配列を返す
+// aggregate する対象の year と month を stack させた配列を返す TODO: config 移管、他との方式の平仄
 function fetchAggregateYearMonths(settingSheet){
   const aggregateYearStack = getTrimmedColumnValues(settingSheet, "aggregate_year");
   const aggregateMonthStack = getTrimmedColumnValues(settingSheet, "aggregate_month");

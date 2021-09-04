@@ -105,6 +105,64 @@ function getCalcDabExportAddr(){
   return calcDabExportAddr;
 }
 
+let createTargetSheetConfigs;
+function getCreateTargetSheetConfigs(){
+  if(createTargetSheetConfigs) return createTargetSheetConfigs;
+
+  const prefixes = getTrimmedColumnValues(getSettingSheet(), "create_target_sheet_prefix");
+  const needsNextMonths = getTrimmedColumnValues(getSettingSheet(), "needs_next_month");
+  createTargetSheetConfigs = getIntRangeFromZero(prefixes.length).map(
+    i => {
+      return {
+        createTargetSheetPrefix: prefixes[i],
+        needsNextMonth:          needsNextMonths[i],
+      };
+    }
+  );
+
+  return createTargetSheetConfigs;
+}
+
+let assetConfigs;
+function getAssetConfigs(){
+  if(assetConfigs) return assetConfigs;
+
+  const assetNameValues = getTrimmedColumnValues(getSettingSheet(), "asset_name"); // TODO: 各列データ fetch してから parse するパターンも util 化
+  const isCashValues = getTrimmedColumnValues(getSettingSheet(), "is_cash");
+  assetConfigs = getIntRangeFromZero(assetNameValues.length).map(
+    i => {
+      return {
+        assetName: assetNameValues[i],
+        isCash:    isCashValues[i],
+      };
+    }
+  );
+
+  return assetConfigs;
+}
+
+let endBalances;
+function getEndBalances(){
+  if(endBalances) return endBalances;
+
+  const calcYearValues = getTrimmedColumnValues(getSettingSheet(), "calc_year");
+  const calcMonthValues = getTrimmedColumnValues(getSettingSheet(), "calc_month");
+  const cashEndBalanceValues = getTrimmedColumnValues(getSettingSheet(), "cash_end_balance");
+  const assetTotalEndBalanceValues = getTrimmedColumnValues(getSettingSheet(), "asset_total_end_balance");
+  endBalances = getIntRangeFromZero(calcYearValues.length).map(
+    i => {
+      return {
+        calcYear:             calcYearValues[i],
+        calcMonth:            calcMonthValues[i],
+        cashEndBalance:       cashEndBalanceValues[i],
+        assetTotalEndBalance: assetTotalEndBalanceValues[i],
+      };
+    }
+  );
+
+  return endBalances;
+}
+
 let orderedCategoryConfigs;
 function getOrderedCategoryConfigs(){
   if(orderedCategoryConfigs) return orderedCategoryConfigs;

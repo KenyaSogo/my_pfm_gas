@@ -136,7 +136,7 @@ function updateTargetMonthEndBalance(accumulatedBalanceByDates, previousMonthEnd
     ? previousMonthEndBalance
     : accumulatedBalanceByDates[accumulatedBalanceByDates.length - 1].balance;
   // 対象月の末残高表における index を取得
-  const targetMonthIndexAtEndBalances = fetchEndBalances(settingSheet)
+  const targetMonthIndexAtEndBalances = getEndBalances()
     .map(b => b.calcYear + "/" + b.calcMonth)
     .indexOf(targetYear + "/" + targetMonth);
   // 該当 cell を取得し、更新する
@@ -190,9 +190,7 @@ function accumulateBalanceByDate(initialBalance, targetDates, targetDetails){
 // 前月末残高を返す
 function getPreviousMonthEndBalance(settingSheet, targetYear, targetMonth){
   const {previousMonthYyyy, previousMonthMm} = getPreviousYearMonth(targetYear, targetMonth);
-  const endBalances = fetchEndBalances(settingSheet);
-
-  return endBalances.find(b => b.calcYear == previousMonthYyyy && b.calcMonth == previousMonthMm);
+  return getEndBalances().find(b => b.calcYear == previousMonthYyyy && b.calcMonth == previousMonthMm); // TODO: settingSheet 引数を無くす
 }
 
 // 日次項目別集計の対象明細を返す
@@ -209,7 +207,7 @@ function getBalanceTotalAssetTargetDetails(aggregatedDetails){
 // 日次現預金残高集計の対象明細を返す
 function getBalanceCashTargetDetails(settingSheet, aggregatedDetails){
   // 現預金に該当する保有金融機関名を取得する
-  const assetConfigs = getAssetConfigs(settingSheet);
+  const assetConfigs = getAssetConfigs(); // TODO: settingSheet 引数を無くす
   const cashAssetNames = assetConfigs.filter(a => a.isCash == 1).map(a => a.assetName);
 
   // 明細データを集計対象のものに絞り込む ※現預金の口座に限定して動きを見るため振替も含める
@@ -248,52 +246,6 @@ function parseAggregateDetailFromRowElems(rowElems){
     isTransfer:         rowElems[8], // 振替
     uuid:               rowElems[9], // ID
   };
-}
-
-// 保有金融機関表を取得して返す TODO: configuration.js への移管
-let assetConfigs;
-function getAssetConfigs(settingSheet){
-  if(assetConfigs){
-    return assetConfigs;
-  }
-
-  const assetNameValues = getTrimmedColumnValues(settingSheet, "asset_name"); // TODO: 各列データ fetch してから parse するパターンも util 化
-  const isCashValues = getTrimmedColumnValues(settingSheet, "is_cash");
-  assetConfigs = getIntRangeFromZero(assetNameValues.length).map(
-    i => {
-      return {
-        assetName: assetNameValues[i],
-        isCash:    isCashValues[i],
-      };
-    }
-  );
-
-  return assetConfigs;
-}
-
-// 月末残高表を取得して返す TODO: configuration.js への移管
-let endBalances;
-function fetchEndBalances(settingSheet){
-  if(endBalances){
-    return endBalances;
-  }
-
-  const calcYearValues = getTrimmedColumnValues(settingSheet, "calc_year");
-  const calcMonthValues = getTrimmedColumnValues(settingSheet, "calc_month");
-  const cashEndBalanceValues = getTrimmedColumnValues(settingSheet, "cash_end_balance");
-  const assetTotalEndBalanceValues = getTrimmedColumnValues(settingSheet, "asset_total_end_balance");
-  endBalances = getIntRangeFromZero(calcYearValues.length).map(
-    i => {
-      return {
-        calcYear:             calcYearValues[i],
-        calcMonth:            calcMonthValues[i],
-        cashEndBalance:       cashEndBalanceValues[i],
-        assetTotalEndBalance: assetTotalEndBalanceValues[i],
-      };
-    }
-  );
-
-  return endBalances;
 }
 
 // 日次集計結果の calc シートへの貼り付けを行う
