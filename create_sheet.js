@@ -70,7 +70,7 @@ function createSheetAtTargetMonth(targetYearMonth, sheetPrefix, targetSpreadShee
   console.log("newSheet is created: sheet name: " + newSheetName);
 }
 
-// 作成対象シートの定義表を取得する
+// 作成対象シートの定義表を取得する TODO: config への移管
 function getCreateTargetSheetConfig(settingSheet){
   const prefixes = getTrimmedColumnValues(settingSheet, "create_target_sheet_prefix");
   const needsNextMonths = getTrimmedColumnValues(settingSheet, "needs_next_month");

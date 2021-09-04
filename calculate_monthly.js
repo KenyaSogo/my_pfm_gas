@@ -31,7 +31,7 @@ function calcMonthlySummary(monthsAgo){
   // 項目別集計の月次集計を行う
   console.log("start monthly summary by category");
   // 集計対象月の明細データを取得する
-  const targetDetails = fetchMonthlySummaryByCategoryOriginDetails(targetYear, targetMonth);
+  const targetDetails = fetchDailySummaryByCategoryDetails(targetYear, targetMonth);
   if(targetDetails == null){
     console.log("end monthly summary by category: skip summary and export: there is no data");
     return;
@@ -256,25 +256,21 @@ function getMonthlySummary(targetYear, targetMonth, largeCategoryName, middleCat
   };
 }
 
-// 集計対象月の項目別集計元データを取得する
-function fetchMonthlySummaryByCategoryOriginDetails(targetYear, targetMonth){
-  const dataOriginSheetName = getCalcDcExportSheetPrefix() + "_" + targetYear + targetMonth;
-  const rawDetailData = getThisSpreadSheet().getSheetByName(dataOriginSheetName).getRange(getCalcDcExportAddr()).getValue();
+// 集計対象月の項目別集計元データ (日次項目別集計明細) を取得する
+function fetchDailySummaryByCategoryDetails(targetYear, targetMonth){
+  return fetchDetailsFromSheet(
+    getCalcDcExportSheetPrefix() + "_" + targetYear + targetMonth,
+    getCalcDcExportAddr(),
+    parseDailySummaryByCategoryDetailFromRowElems);
+}
 
-  if(rawDetailData == ""){
-    return null;
-  }
-
-  return rawDetailData.split("¥n").map(
-    row => {
-      const rowElems = row.split("#&#");
-      return {
-        date:     rowElems[0], // 日付
-        category: rowElems[1], // 項目 (大項目>>中項目)
-        amount:   rowElems[2], // 金額
-      };
-    }
-  );
+// 項目別日次集計明細を行データ配列から object に parse して返す
+function parseDailySummaryByCategoryDetailFromRowElems(rowElems){
+  return {
+    date:     rowElems[0], // 日付
+    category: rowElems[1], // 項目 (大項目>>中項目)
+    amount:   rowElems[2], // 金額
+  };
 }
 
 // 集計対象月を返す

@@ -96,19 +96,20 @@ function extractReportInfoFromSummaryByCategory(summaryByCategory){
 
 // 項目別月次集計結果を取得して返す
 function fetchMonthlySummaryByCategory(targetYear, targetMonth){
-  const targetSheetName = getCalcMcExportSheetPrefix() + "_" + targetYear + targetMonth;
-  const rawDetailsValue = getThisSpreadSheet().getSheetByName(targetSheetName).getRange(getCalcMcExportAddr()).getValue();
-  return rawDetailsValue.split("¥n").map(
-    row => {
-      const rowElems = row.split("#&#"); // TODO: split して二次元配列にして返すところまでを共通化する
-      return {
-        yearMonth:      rowElems[0], // 対象年月
-        largeCategory:  rowElems[1], // 大項目
-        middleCategory: rowElems[2], // 中項目
-        amount:         rowElems[3], // 金額
-      };
-    }
-  );
+  return fetchDetailsFromSheet(
+    getCalcMcExportSheetPrefix() + "_" + targetYear + targetMonth,
+    getCalcMcExportAddr(),
+    parseMonthlySummaryByCategoryDetailFromRowElems);
+}
+
+// 項目別月次集計明細を行データ配列から object に parse して返す
+function parseMonthlySummaryByCategoryDetailFromRowElems(rowElems){
+  return {
+    yearMonth:      rowElems[0], // 対象年月
+    largeCategory:  rowElems[1], // 大項目
+    middleCategory: rowElems[2], // 中項目
+    amount:         rowElems[3], // 金額
+  };
 }
 
 // 指定月の前月末の、総資産残高推移の基準日と残高を取得して返す
@@ -130,17 +131,10 @@ function getLastDateAndTotalAssetBalanceAt(targetYear, targetMonth){
 
 // 日次総資産残高集計結果を取得して返す
 function fetchDailyTotalAssetBalanceDetails(targetYear, targetMonth){
-  const targetSheetName = getCalcDabExportSheetPrefix() + "_" + targetYear + targetMonth;
-  const rawDetailsValue = getThisSpreadSheet().getSheetByName(targetSheetName).getRange(getCalcDabExportAddr()).getValue();
-  return rawDetailsValue.split("¥n").map(
-    row => {
-      const rowElems = row.split("#&#");
-      return {
-        date:    rowElems[0], // 日付
-        balance: rowElems[1], // 残高
-      };
-    }
-  );
+  return fetchDetailsFromSheet(
+    getCalcDabExportSheetPrefix() + "_" + targetYear + targetMonth,
+    getCalcDabExportAddr(),
+    parseBalanceDetailFromRowElems);
 }
 
 // 指定月の前月末の、現預金残高推移の基準日と残高を取得して返す
@@ -171,15 +165,16 @@ function getLastDateAndBalanceAt(targetYear, targetMonth, fetchDetailsFunc){
 
 // 日次現預金残高集計結果を取得して返す
 function fetchDailyCashBalanceDetails(targetYear, targetMonth){
-  const targetSheetName = getCalcDcbExportSheetPrefix() + "_" + targetYear + targetMonth;
-  const rawDetailsValue = getThisSpreadSheet().getSheetByName(targetSheetName).getRange(getCalcDcbExportAddr()).getValue();
-  return rawDetailsValue.split("¥n").map(
-    row => {
-      const rowElems = row.split("#&#");
-      return {
-        date:    rowElems[0], // 日付
-        balance: rowElems[1], // 残高
-      };
-    }
-  );
+  return fetchDetailsFromSheet(
+    getCalcDcbExportSheetPrefix() + "_" + targetYear + targetMonth,
+    getCalcDcbExportAddr(),
+    parseBalanceDetailFromRowElems);
+}
+
+// 残高を行データ配列から object に parse して返す
+function parseBalanceDetailFromRowElems(rowElems){
+  return {
+    date:    rowElems[0], // 日付
+    balance: rowElems[1], // 残高
+  };
 }

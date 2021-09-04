@@ -224,3 +224,17 @@ function getPrintErrorMessage(error){
          "[stacktrace] " + error.stack;
 }
 
+// sheet から明細を取得して明細 object の配列に parse して返す
+function fetchDetailsFromSheet(targetSheetName, targetRangeName, parseDetailFunc){
+  const rawDetailsValue = getThisSpreadSheet().getSheetByName(targetSheetName).getRange(targetRangeName).getValue();
+  if(rawDetailsValue == ""){
+    return null;
+  }
+
+  return rawDetailsValue.split("¥n").map(
+    row => {
+      const rowElems = row.split("#&#");
+      return parseDetailFunc(rowElems);
+    }
+  );
+}

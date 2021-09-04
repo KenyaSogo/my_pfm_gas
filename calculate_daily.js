@@ -228,26 +228,26 @@ function extractSortedDatesFromDetails(targetDetails) {
 
 // 集計対象月の明細データを取得し、 hash の配列に parse したものを返す
 function fetchAggregatedDetails(targetYear, targetMonth) {
-  const targetAggreSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("ag_" + targetYear + targetMonth);
-  const allRowsData = targetAggreSheet.getRange("V2").getValue(); // TODO: 列アドレスの直書きを回避
+  return fetchDetailsFromSheet(
+    "ag_" + targetYear + targetMonth, // TODO: 直書き回避
+    "V2", // TODO: 直書き回避
+    parseAggregateDetailFromRowElems);
+}
 
-  return allRowsData.split("¥n").map(
-    row => {
-      const rowElems = row.split("#&#");
-      return {
-        isCalcTarget:       rowElems[0], // 計算対象
-        date:               rowElems[1], // 日付
-        contents:           rowElems[2], // 内容
-        amount:             rowElems[3], // 金額(円)
-        assetName:          rowElems[4], // 保有金融機関
-        largeCategoryName:  rowElems[5], // 大項目
-        middleCategoryName: rowElems[6], // 中項目
-        memo:               rowElems[7], // メモ
-        isTransfer:         rowElems[8], // 振替
-        uuid:               rowElems[9], // ID
-      };
-    }
-  );
+// aggregate 明細を行データ配列から object に parse して返す
+function parseAggregateDetailFromRowElems(rowElems){
+  return {
+    isCalcTarget:       rowElems[0], // 計算対象
+    date:               rowElems[1], // 日付
+    contents:           rowElems[2], // 内容
+    amount:             rowElems[3], // 金額(円)
+    assetName:          rowElems[4], // 保有金融機関
+    largeCategoryName:  rowElems[5], // 大項目
+    middleCategoryName: rowElems[6], // 中項目
+    memo:               rowElems[7], // メモ
+    isTransfer:         rowElems[8], // 振替
+    uuid:               rowElems[9], // ID
+  };
 }
 
 // 保有金融機関表を取得して返す TODO: configuration.js への移管
@@ -257,7 +257,7 @@ function getAssetConfigs(settingSheet){
     return assetConfigs;
   }
 
-  const assetNameValues = getTrimmedColumnValues(settingSheet, "asset_name");
+  const assetNameValues = getTrimmedColumnValues(settingSheet, "asset_name"); // TODO: 各列データ fetch してから parse するパターンも util 化
   const isCashValues = getTrimmedColumnValues(settingSheet, "is_cash");
   assetConfigs = getIntRangeFromZero(assetNameValues.length).map(
     i => {
