@@ -2,7 +2,15 @@
 
 function executeReport(){
   postConsoleAndSlackJobStart("execute report");
+  try {
+    doReport();
+  } catch(error){
+    handleError(error);
+  }
+  postConsoleAndSlackJobEnd("execute report");
+}
 
+function doReport(){
   // 報告対象月を取得する
   const targetYear = getCurrentYyyy();
   const targetMonth = getCurrentMm();
@@ -34,8 +42,6 @@ function executeReport(){
       lastTotalAssetBalanceAtPreviousMonth,
       summaryByCategoryAtCurrentMonth,
       summaryByCategoryAtPreviousMonth));
-
-  postConsoleAndSlackJobEnd("execute report");
 }
 
 // TODO: 以下、コメントを

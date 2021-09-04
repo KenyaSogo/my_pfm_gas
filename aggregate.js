@@ -3,9 +3,11 @@
 // 最新月分の明細を取得する
 function executeAggregateCurrentMonth() {
   postConsoleAndSlackJobStart("execute aggregate current month");
-
-  aggregateByMonth(0);
-
+  try {
+    aggregateByMonth(0);
+  } catch(error){
+    handleError(error);
+  }
   postConsoleAndSlackJobEnd("execute aggregate current month");
 }
 
@@ -42,8 +44,9 @@ function aggregateByMonth(monthsAgo) {
 
       // rawData が想定通り取得出来ているかを確認する TODO: 月初の0件明細エラー対応
       if(!validateRawData(settingSheet, rawData)){
-        console.error("failed to validateRawData: rawData: " + rawData);
-        throw new Error("failed to validateRawData"); // TODO: ここで異常終了する場合のエラーハンドリング (logging & 終了)
+        postConsoleAndSlackWarning("failed to validateRawData: rawData: " + rawData, false);
+        // return; // TODO: コメントアウトを外す (事由後述)
+        throw new PfmExpectedError("failed to validateRawData", true); // TODO: 削除: 本来は異常終了させないが、テストのためあえて仕込んでみている
       }
       console.log("validateRawData: done");
 

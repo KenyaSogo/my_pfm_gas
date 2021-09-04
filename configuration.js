@@ -28,6 +28,13 @@ function getSlackLoggingBotWebhookUrl(){
   return slackLoggingBotWebhookUrl;
 }
 
+let slackAlertBotWebhookUrl;
+function getSlackAlertBotWebhookUrl(){
+  if(slackAlertBotWebhookUrl) return slackAlertBotWebhookUrl;
+  slackAlertBotWebhookUrl = getSettingSheet().getRange("slack_alert_bot_webhook_url").getValue();
+  return slackAlertBotWebhookUrl;
+}
+
 let calcDcExportSheetPrefix;
 function getCalcDcExportSheetPrefix(){
   if(calcDcExportSheetPrefix) return calcDcExportSheetPrefix;

@@ -115,6 +115,11 @@ function postSlackLoggingChannel(message){
   postSlackTo(getSlackLoggingBotWebhookUrl(), convertSlackCodeFormatMessage(message));
 }
 
+// slack の my-pfm-dev-alert チャンネルにポストする
+function postSlackAlertChannel(message, needsMention){
+  postSlackTo(getSlackAlertBotWebhookUrl(), (needsMention ? "<!channel>\n" : "") + convertSlackCodeFormatMessage(message));
+}
+
 // slack の code フォーマット化されたメッセージを取得する
 function convertSlackCodeFormatMessage(message){
   let formattedMessage = "```";
@@ -150,3 +155,72 @@ function postConsoleAndSlackJobStartOrEnd(startOrEndString, message){
   console.log(postMessageConsole);
   postSlackLoggingChannel(postMessageSlack);
 }
+
+// ワーニングをポストする (その場で alert チャンネルに通知 / コンソールにエラー出力だけして処理を継続するもの)
+function postConsoleAndSlackWarning(message, needsMention){
+  const warningMessage = "warning: " + message;
+  const warningMessageSlack = getCurrent_yyyy_mm_dd_hh_mm_ss() + ": " + warningMessage;
+  console.error(warningMessage);
+  postSlackAlertChannel(warningMessageSlack, needsMention);
+}
+
+// 想定エラー (処理中断するが正常終了扱いにするもの)
+class PfmExpectedError extends Error {
+  constructor(message, needsMention) {
+    super(message);
+    this.name = "PfmExpectedError";
+    this.needsMention = needsMention;
+  }
+}
+
+// 想定外エラー (処理中断して異常終了扱いにするもの)
+class PfmUnexpectedError extends Error {
+  constructor(message, needsMention) {
+    super(message);
+    this.name = "PfmUnexpectedError";
+    this.needsMention = needsMention;
+  }
+}
+
+// エラーをハンドリングする
+function handleError(error){
+  // 想定エラーの場合、メッセージをポストした後そのまま抜ける
+  if(error instanceof PfmExpectedError){
+    postConsoleAndSlackExpectedError(error, error.needsMention);
+    return;
+  }
+
+  // 想定外エラーの場合、メッセージをポストした後 error を throw して異常終了させる
+  if(error instanceof PfmUnexpectedError){
+    postConsoleAndSlackUnexpectedError(error, error.needsMention);
+  } else {
+    postConsoleAndSlackUnexpectedError(error, true);
+  }
+  throw error;
+}
+
+// 想定エラーをポストする
+function postConsoleAndSlackExpectedError(error, needsMention){
+  postConsoleAndSlackError(error, true, needsMention);
+}
+
+// 想定外エラーをポストする
+function postConsoleAndSlackUnexpectedError(error, needsMention){
+  postConsoleAndSlackError(error, false, needsMention);
+}
+
+// エラーをポストする
+function postConsoleAndSlackError(error, isExpected, needsMention){
+  const errorMessage = (isExpected ? "expected" : "unexpected") + " error occurred: \n" + getPrintErrorMessage(error);
+  const errorMessageSlack = getCurrent_yyyy_mm_dd_hh_mm_ss() + ": " + errorMessage;
+  console.error(errorMessage);
+  postSlackAlertChannel(errorMessageSlack, needsMention);
+}
+
+// error 情報を出力フォーマットに整形して返す
+function getPrintErrorMessage(error){
+  return "[name]       " + error.name + "\n" +
+         "[message]    " + error.message + "\n" +
+         "[stacktrace] " + error.stack;
+}
+
