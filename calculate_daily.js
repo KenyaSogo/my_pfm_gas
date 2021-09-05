@@ -256,7 +256,7 @@ function pasteDailyCalcResult(summaryByDates, targetYear, targetMonth, isEarlier
   const mergedSummaryByDatesValue = summaryByDates.map(s => Object.values(s).join("#&#")).join("¥n");
 
   // 貼り付け対象のセルを取得
-  const targetCalcSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetPrefix + "_" + targetYear + targetMonth); // TODO: sheet 作成 job に追加
+  const targetCalcSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetPrefix + "_" + targetYear + targetMonth);
   const pasteTargetCell = targetCalcSheet.getRange(isEarlier ? "A3" : "A2"); // TODO: アドレス直書きの廃止
 
   // 対象データにつき、更新がなければ、貼り付けをスキップして終了
