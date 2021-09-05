@@ -14,6 +14,13 @@ function getSettingSheet(){
   return settingSheet;
 }
 
+let phantomJsKey
+function getPhantomJsKey(){
+  if(phantomJsKey) return phantomJsKey;
+  phantomJsKey = getSettingSheet().getRange("phantom_js_key").getValue();
+  return phantomJsKey;
+}
+
 let slackReportingBotWebhookUrl;
 function getSlackReportingBotWebhookUrl(){
   if(slackReportingBotWebhookUrl) return slackReportingBotWebhookUrl;

@@ -25,10 +25,8 @@ function executeCalcDailySummaryPreviousMonth(){
 
 // 指定月の日次集計を行う
 function calcDailySummary(monthsAgo){
-  const settingSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("settings");
-
   // 集計対象月を取得する
-  const {targetYear, targetMonth} = getAggregateTargetYearAndMonth(settingSheet, monthsAgo);
+  const {targetYear, targetMonth} = getAggregateTargetYearAndMonth(monthsAgo);
   console.log("targetYear, targetMonth: " + targetYear + ", " + targetMonth);
 
   // 集計対象月の明細データを取得する
@@ -36,10 +34,10 @@ function calcDailySummary(monthsAgo){
   console.log("fetch and parse aggregatedDetails finished: length: " + aggregatedDetails.length);
 
   // 日次現預金残高集計を行い、結果シートに出力する
-  calcAndExportDailyBalanceCash(settingSheet, aggregatedDetails, targetYear, targetMonth);
+  calcAndExportDailyBalanceCash(aggregatedDetails, targetYear, targetMonth);
 
   // 日次総資産残高集計を行い、結果シートに出力する
-  calcAndExportDailyBalanceTotalAsset(settingSheet, aggregatedDetails, targetYear, targetMonth);
+  calcAndExportDailyBalanceTotalAsset(aggregatedDetails, targetYear, targetMonth);
 
   // 日次項目別集計を行い、結果シートに出力する
   calcAndExportDailySummaryByCategory(aggregatedDetails, targetYear, targetMonth);
@@ -62,7 +60,7 @@ function calcAndExportDailySummaryByCategory(aggregatedDetails, targetYear, targ
 }
 
 // 日次総資産残高集計を行い、結果シートに出力する
-function calcAndExportDailyBalanceTotalAsset(settingSheet, aggregatedDetails, targetYear, targetMonth){
+function calcAndExportDailyBalanceTotalAsset(aggregatedDetails, targetYear, targetMonth){
   // 明細データのうち全金融機関分の入出金を集計し、日次の全資産分の残高推移を求める
   console.log("start calcAndExportDailyBalanceTotalAsset");
   // 集計対象明細を取得
@@ -70,12 +68,12 @@ function calcAndExportDailyBalanceTotalAsset(settingSheet, aggregatedDetails, ta
   // 集計対象の日付を収集
   const balanceTotalAssetTargetDates = extractSortedDatesFromDetails(balanceTotalAssetTargetDetails);
   // 前月末残高を取得する
-  const previousMonthEndBalanceTotalAsset = Number(getPreviousMonthEndBalance(settingSheet, targetYear, targetMonth).assetTotalEndBalance);
+  const previousMonthEndBalanceTotalAsset = Number(getPreviousMonthEndBalance(targetYear, targetMonth).assetTotalEndBalance);
   // 日次で総資産残高を集計
   const totalAssetBalanceByDates = accumulateBalanceByDate(previousMonthEndBalanceTotalAsset, balanceTotalAssetTargetDates, balanceTotalAssetTargetDetails);
   console.log("calc totalAssetBalanceByDates finished: length: " + totalAssetBalanceByDates.length);
   // 対象月の末残高設定を更新する
-  const updatedTotalAssetBalanceAtMonthEnd = updateTargetMonthEndBalance(totalAssetBalanceByDates, previousMonthEndBalanceTotalAsset, settingSheet, targetYear, targetMonth, "asset_total_end_balance");
+  const updatedTotalAssetBalanceAtMonthEnd = updateTargetMonthEndBalance(totalAssetBalanceByDates, previousMonthEndBalanceTotalAsset, targetYear, targetMonth, "asset_total_end_balance"); // TODO: 直書き回避
   console.log("total asset end balance updated: updatedTotalAssetBalanceAtMonthEnd: " + updatedTotalAssetBalanceAtMonthEnd);
   // 集計結果明細を出力対象シートに貼り付ける
   pasteDailyCalcResultByEachMonth(targetYear, targetMonth, totalAssetBalanceByDates, "calc_dab"); // TODO: 直書き回避
@@ -83,20 +81,20 @@ function calcAndExportDailyBalanceTotalAsset(settingSheet, aggregatedDetails, ta
 }
 
 // 日次現預金残高集計を行い、結果シートに出力する
-function calcAndExportDailyBalanceCash(settingSheet, aggregatedDetails, targetYear, targetMonth){
+function calcAndExportDailyBalanceCash(aggregatedDetails, targetYear, targetMonth){
   // 明細データのうち現預金の入出金を集計し、日次の残高推移を求める
   console.log("start calcAndExportDailyBalanceCash");
   // 集計対象明細を取得
-  const balanceCashTargetDetails = getBalanceCashTargetDetails(settingSheet, aggregatedDetails);
+  const balanceCashTargetDetails = getBalanceCashTargetDetails(aggregatedDetails);
   // 集計対象の日付を収集
   const balanceCashTargetDates = extractSortedDatesFromDetails(balanceCashTargetDetails);
   // 前月末残高を取得する
-  const previousMonthEndBalanceCash = Number(getPreviousMonthEndBalance(settingSheet, targetYear, targetMonth).cashEndBalance);
+  const previousMonthEndBalanceCash = Number(getPreviousMonthEndBalance(targetYear, targetMonth).cashEndBalance);
   // 日次で現預金残高を集計
   const cashBalanceByDates = accumulateBalanceByDate(previousMonthEndBalanceCash, balanceCashTargetDates, balanceCashTargetDetails);
   console.log("calc cashBalanceByDates finished: length: " + cashBalanceByDates.length);
   // 対象月の末残高設定を更新する
-  const updatedCashBalanceAtMonthEnd = updateTargetMonthEndBalance(cashBalanceByDates, previousMonthEndBalanceCash, settingSheet, targetYear, targetMonth, "cash_end_balance");
+  const updatedCashBalanceAtMonthEnd = updateTargetMonthEndBalance(cashBalanceByDates, previousMonthEndBalanceCash, targetYear, targetMonth, "cash_end_balance"); // TODO: 直書き回避
   console.log("cash end balance updated: updatedCashBalanceAtMonthEnd: " + updatedCashBalanceAtMonthEnd);
   // 集計結果明細を出力対象シートに貼り付ける
   pasteDailyCalcResultByEachMonth(targetYear, targetMonth, cashBalanceByDates, "calc_dcb"); // TODO: 直書き回避
@@ -130,7 +128,7 @@ function pasteDailyCalcResultByEachMonth(targetYear, targetMonth, dailyCalcResul
 }
 
 // 対象月の末残高レコードを更新する
-function updateTargetMonthEndBalance(accumulatedBalanceByDates, previousMonthEndBalance, settingSheet, targetYear, targetMonth, targetRangeName){
+function updateTargetMonthEndBalance(accumulatedBalanceByDates, previousMonthEndBalance, targetYear, targetMonth, targetRangeName){
   // 対象月の末残高を取得
   const balanceAtMonthEnd = accumulatedBalanceByDates.length == 0
     ? previousMonthEndBalance
@@ -140,7 +138,7 @@ function updateTargetMonthEndBalance(accumulatedBalanceByDates, previousMonthEnd
     .map(b => b.calcYear + "/" + b.calcMonth)
     .indexOf(targetYear + "/" + targetMonth);
   // 該当 cell を取得し、更新する
-  settingSheet.getRange(targetRangeName)
+  getSettingSheet().getRange(targetRangeName)
     .getCell(targetMonthIndexAtEndBalances + 2, 1) // getCell は 1 始まりなので +1, また該当 range にはヘッダー行が含まれるのでその分も +1
     .setValue(balanceAtMonthEnd);
 
@@ -188,9 +186,9 @@ function accumulateBalanceByDate(initialBalance, targetDates, targetDetails){
 }
 
 // 前月末残高を返す
-function getPreviousMonthEndBalance(settingSheet, targetYear, targetMonth){
+function getPreviousMonthEndBalance(targetYear, targetMonth){
   const {previousMonthYyyy, previousMonthMm} = getPreviousYearMonth(targetYear, targetMonth);
-  return getEndBalances().find(b => b.calcYear == previousMonthYyyy && b.calcMonth == previousMonthMm); // TODO: settingSheet 引数を無くす
+  return getEndBalances().find(b => b.calcYear == previousMonthYyyy && b.calcMonth == previousMonthMm);
 }
 
 // 日次項目別集計の対象明細を返す
@@ -205,9 +203,9 @@ function getBalanceTotalAssetTargetDetails(aggregatedDetails){
 }
 
 // 日次現預金残高集計の対象明細を返す
-function getBalanceCashTargetDetails(settingSheet, aggregatedDetails){
+function getBalanceCashTargetDetails(aggregatedDetails){
   // 現預金に該当する保有金融機関名を取得する
-  const assetConfigs = getAssetConfigs(); // TODO: settingSheet 引数を無くす
+  const assetConfigs = getAssetConfigs();
   const cashAssetNames = assetConfigs.filter(a => a.isCash == 1).map(a => a.assetName);
 
   // 明細データを集計対象のものに絞り込む ※現預金の口座に限定して動きを見るため振替も含める
@@ -254,7 +252,7 @@ function pasteDailyCalcResult(summaryByDates, targetYear, targetMonth, isEarlier
   const mergedSummaryByDatesValue = summaryByDates.map(s => Object.values(s).join("#&#")).join("¥n");
 
   // 貼り付け対象のセルを取得
-  const targetCalcSheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(sheetPrefix + "_" + targetYear + targetMonth);
+  const targetCalcSheet = getThisSpreadSheet().getSheetByName(sheetPrefix + "_" + targetYear + targetMonth);
   const pasteTargetCell = targetCalcSheet.getRange(isEarlier ? "A3" : "A2"); // TODO: アドレス直書きの廃止
 
   // 対象データにつき、更新がなければ、貼り付けをスキップして終了

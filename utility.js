@@ -242,7 +242,7 @@ function fetchDetailsFromCell(targetSheetName, targetRangeName, parseDetailFunc)
 // 表の各列の名前から明細を取得して明細 object の配列に parse して返す
 // (各列において空白行を trim するので、終端までの行において空白行を含む列を許容しない)
 function fetchDetailsFromColumns(columnRangeNames, parseDetailFunc){
-  const colValueArrays = columnRangeNames.map(colName => getTrimmedColumnValues(getSettingSheet(), colName));
+  const colValueArrays = columnRangeNames.map(colName => getTrimmedColumnValues(getSettingSheet(), colName)); // TODO: setting sheet 決め打ちになっちゃってる
   const rowCount = colValueArrays[0].length;
   if(rowCount == 0){
     return null;
