@@ -261,16 +261,14 @@ function fetchDailySummaryByCategoryDetails(targetYear, targetMonth){
   return fetchDetailsFromCell(
     getCalcDcExportSheetPrefix() + "_" + targetYear + targetMonth,
     getCalcDcExportAddr(),
-    parseDailySummaryByCategoryDetailFromRowElems);
-}
-
-// 項目別日次集計明細を行データ配列から object に parse して返す
-function parseDailySummaryByCategoryDetailFromRowElems(rowElems){ // TODO: 無名関数にしてこの宣言を省略
-  return {
-    date:     rowElems[0], // 日付
-    category: rowElems[1], // 項目 (大項目>>中項目)
-    amount:   rowElems[2], // 金額
-  };
+    rowElems => {
+      return {
+        date:     rowElems[0], // 日付
+        category: rowElems[1], // 項目 (大項目>>中項目)
+        amount:   rowElems[2], // 金額
+      };
+    }
+  );
 }
 
 // 集計対象月を返す

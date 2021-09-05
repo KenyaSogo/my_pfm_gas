@@ -99,17 +99,15 @@ function fetchMonthlySummaryByCategory(targetYear, targetMonth){
   return fetchDetailsFromCell(
     getCalcMcExportSheetPrefix() + "_" + targetYear + targetMonth,
     getCalcMcExportAddr(),
-    parseMonthlySummaryByCategoryDetailFromRowElems);
-}
-
-// 項目別月次集計明細を行データ配列から object に parse して返す
-function parseMonthlySummaryByCategoryDetailFromRowElems(rowElems){ // TODO: 無名関数にしてこの宣言を省略
-  return {
-    yearMonth:      rowElems[0], // 対象年月
-    largeCategory:  rowElems[1], // 大項目
-    middleCategory: rowElems[2], // 中項目
-    amount:         rowElems[3], // 金額
-  };
+    rowElems => {
+      return {
+        yearMonth:      rowElems[0], // 対象年月
+        largeCategory:  rowElems[1], // 大項目
+        middleCategory: rowElems[2], // 中項目
+        amount:         rowElems[3], // 金額
+      };
+    }
+  );
 }
 
 // 指定月の前月末の、総資産残高推移の基準日と残高を取得して返す
@@ -134,7 +132,13 @@ function fetchDailyTotalAssetBalanceDetails(targetYear, targetMonth){
   return fetchDetailsFromCell(
     getCalcDabExportSheetPrefix() + "_" + targetYear + targetMonth,
     getCalcDabExportAddr(),
-    parseBalanceDetailFromRowElems);
+    rowElems => {
+      return {
+        date:    rowElems[0], // 日付
+        balance: rowElems[1], // 残高
+      };
+    }
+  );
 }
 
 // 指定月の前月末の、現預金残高推移の基準日と残高を取得して返す
@@ -168,13 +172,11 @@ function fetchDailyCashBalanceDetails(targetYear, targetMonth){
   return fetchDetailsFromCell(
     getCalcDcbExportSheetPrefix() + "_" + targetYear + targetMonth,
     getCalcDcbExportAddr(),
-    parseBalanceDetailFromRowElems);
-}
-
-// 残高を行データ配列から object に parse して返す
-function parseBalanceDetailFromRowElems(rowElems){ // TODO: 無名関数にしてこの宣言を省略
-  return {
-    date:    rowElems[0], // 日付
-    balance: rowElems[1], // 残高
-  };
+    rowElems => {
+      return {
+        date:    rowElems[0], // 日付
+        balance: rowElems[1], // 残高
+      };
+    }
+  );
 }

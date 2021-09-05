@@ -229,23 +229,21 @@ function fetchAggregatedDetails(targetYear, targetMonth) {
   return fetchDetailsFromCell(
     "ag_" + targetYear + targetMonth, // TODO: 直書き回避
     "V2", // TODO: 直書き回避
-    parseAggregateDetailFromRowElems);
-}
-
-// aggregate 明細を行データ配列から object に parse して返す
-function parseAggregateDetailFromRowElems(rowElems){ // TODO: 無名関数にしてこの宣言を省略
-  return {
-    isCalcTarget:       rowElems[0], // 計算対象
-    date:               rowElems[1], // 日付
-    contents:           rowElems[2], // 内容
-    amount:             rowElems[3], // 金額(円)
-    assetName:          rowElems[4], // 保有金融機関
-    largeCategoryName:  rowElems[5], // 大項目
-    middleCategoryName: rowElems[6], // 中項目
-    memo:               rowElems[7], // メモ
-    isTransfer:         rowElems[8], // 振替
-    uuid:               rowElems[9], // ID
-  };
+    rowElems => {
+      return {
+        isCalcTarget:       rowElems[0], // 計算対象
+        date:               rowElems[1], // 日付
+        contents:           rowElems[2], // 内容
+        amount:             rowElems[3], // 金額(円)
+        assetName:          rowElems[4], // 保有金融機関
+        largeCategoryName:  rowElems[5], // 大項目
+        middleCategoryName: rowElems[6], // 中項目
+        memo:               rowElems[7], // メモ
+        isTransfer:         rowElems[8], // 振替
+        uuid:               rowElems[9], // ID
+      };
+    }
+  );
 }
 
 // 日次集計結果の calc シートへの貼り付けを行う
