@@ -199,6 +199,23 @@ function handleError(error){
   throw error;
 }
 
+function testAlert(){
+  postConsoleAndSlackJobStart("test alert");
+  try {
+    // warning
+    // postConsoleAndSlackWarning("test: warning", true);
+    // expected error
+    // throw new PfmExpectedError("test: expected error", true);
+    // unexpected error
+    // throw new PfmUnexpectedError("test: unexpected error", false);
+    // exception
+    const hoge = undefined[0];
+  } catch(error){
+    handleError(error);
+  }
+  postConsoleAndSlackJobEnd("test alert");
+}
+
 // 想定エラーをポストする
 function postConsoleAndSlackExpectedError(error, needsMention){
   postConsoleAndSlackError(error, true, needsMention);
