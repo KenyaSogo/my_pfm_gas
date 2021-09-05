@@ -133,6 +133,83 @@ function getAggreImportAddrCol(){
   return aggreImportAddrCol;
 }
 
+let calcDcImportSheetPrefix;
+function getCalcDcImportSheetPrefix(){
+  if(calcDcImportSheetPrefix) return calcDcImportSheetPrefix;
+  calcDcImportSheetPrefix = getSettingSheet().getRange("calc_dc_import_sheet_prefix").getValue();
+  return calcDcImportSheetPrefix;
+}
+
+let calcDcImportAddrBeforeClosingDay;
+function getCalcDcImportAddrBeforeClosingDay(){
+  if(calcDcImportAddrBeforeClosingDay) return calcDcImportAddrBeforeClosingDay;
+  calcDcImportAddrBeforeClosingDay = getSettingSheet().getRange("calc_dc_import_addr_before_closing_day").getValue();
+  return calcDcImportAddrBeforeClosingDay;
+}
+
+let calcDcImportAddrAfterClosingDay;
+function getCalcDcImportAddrAfterClosingDay(){
+  if(calcDcImportAddrAfterClosingDay) return calcDcImportAddrAfterClosingDay;
+  calcDcImportAddrAfterClosingDay = getSettingSheet().getRange("calc_dc_import_addr_after_closing_day").getValue();
+  return calcDcImportAddrAfterClosingDay;
+}
+
+let calcDabImportSheetPrefix;
+function getCalcDabImportSheetPrefix(){
+  if(calcDabImportSheetPrefix) return calcDabImportSheetPrefix;
+  calcDabImportSheetPrefix = getSettingSheet().getRange("calc_dab_import_sheet_prefix").getValue();
+  return calcDabImportSheetPrefix;
+}
+
+let calcDabImportAddrBeforeClosingDay;
+function getCalcDabImportAddrBeforeClosingDay(){
+  if(calcDabImportAddrBeforeClosingDay) return calcDabImportAddrBeforeClosingDay;
+  calcDabImportAddrBeforeClosingDay = getSettingSheet().getRange("calc_dab_import_addr_before_closing_day").getValue();
+  return calcDabImportAddrBeforeClosingDay;
+}
+
+let calcDabImportAddrAfterClosingDay;
+function getCalcDabImportAddrAfterClosingDay(){
+  if(calcDabImportAddrAfterClosingDay) return calcDabImportAddrAfterClosingDay;
+  calcDabImportAddrAfterClosingDay = getSettingSheet().getRange("calc_dab_import_addr_after_closing_day").getValue();
+  return calcDabImportAddrAfterClosingDay;
+}
+
+let calcDcbImportSheetPrefix;
+function getCalcDcbImportSheetPrefix(){
+  if(calcDcbImportSheetPrefix) return calcDcbImportSheetPrefix;
+  calcDcbImportSheetPrefix = getSettingSheet().getRange("calc_dcb_import_sheet_prefix").getValue();
+  return calcDcbImportSheetPrefix;
+}
+
+let calcDcbImportAddrBeforeClosingDay;
+function getCalcDcbImportAddrBeforeClosingDay(){
+  if(calcDcbImportAddrBeforeClosingDay) return calcDcbImportAddrBeforeClosingDay;
+  calcDcbImportAddrBeforeClosingDay = getSettingSheet().getRange("calc_dcb_import_addr_before_closing_day").getValue();
+  return calcDcbImportAddrBeforeClosingDay;
+}
+
+let calcDcbImportAddrAfterClosingDay;
+function getCalcDcbImportAddrAfterClosingDay(){
+  if(calcDcbImportAddrAfterClosingDay) return calcDcbImportAddrAfterClosingDay;
+  calcDcbImportAddrAfterClosingDay = getSettingSheet().getRange("calc_dcb_import_addr_after_closing_day").getValue();
+  return calcDcbImportAddrAfterClosingDay;
+}
+
+let aggreExportSheetPrefix;
+function getAggreExportSheetPrefix(){
+  if(aggreExportSheetPrefix) return aggreExportSheetPrefix;
+  aggreExportSheetPrefix = getSettingSheet().getRange("aggre_export_sheet_prefix").getValue();
+  return aggreExportSheetPrefix;
+}
+
+let aggreExportAddr;
+function getAggreExportAddr(){
+  if(aggreExportAddr) return aggreExportAddr;
+  aggreExportAddr = getSettingSheet().getRange("aggre_export_addr").getValue();
+  return aggreExportAddr;
+}
+
 let isCalenderNeedsMaintenance;
 function getIsCalenderNeedsMaintenance(){
   if(isCalenderNeedsMaintenance) return isCalenderNeedsMaintenance;
@@ -145,6 +222,20 @@ function getIsMonthlyStartDayInvalid(){
   if(isMonthlyStartDayInvalid) return isMonthlyStartDayInvalid;
   isMonthlyStartDayInvalid = getSettingSheet().getRange("is_monthly_start_day_invalid").getValue();
   return isMonthlyStartDayInvalid;
+}
+
+let assetTotalEndBalanceRange;
+function getAssetTotalEndBalanceRange(){
+  if(assetTotalEndBalanceRange) return assetTotalEndBalanceRange;
+  assetTotalEndBalanceRange = getSettingSheet().getRange("asset_total_end_balance");
+  return assetTotalEndBalanceRange;
+}
+
+let cashEndBalanceRange;
+function getCashEndBalanceRange(){
+  if(cashEndBalanceRange) return cashEndBalanceRange;
+  cashEndBalanceRange = getSettingSheet().getRange("cash_end_balance");
+  return cashEndBalanceRange;
 }
 
 let createTargetSheetConfigs;

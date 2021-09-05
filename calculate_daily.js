@@ -55,7 +55,13 @@ function calcAndExportDailySummaryByCategory(aggregatedDetails, targetYear, targ
   const summaryByCategoryAndDates = summaryAmountByCategoryAndDate(summaryByCategoryTargetDates, summaryByCategoryTargetDetails);
   console.log("summaryAmountByCategoryAndDate finished: length: " + summaryByCategoryAndDates.length);
   // 集計結果明細を出力対象シートに貼り付ける
-  pasteDailyCalcResultByEachMonth(targetYear, targetMonth, summaryByCategoryAndDates, "calc_dc"); // TODO: 直書き回避
+  pasteDailyCalcResultByEachMonth(
+    targetYear,
+    targetMonth,
+    summaryByCategoryAndDates,
+    getCalcDcImportSheetPrefix(),
+    getCalcDcImportAddrBeforeClosingDay(),
+    getCalcDcImportAddrAfterClosingDay());
   console.log("end calcAndExportDailySummaryByCategory");
 }
 
@@ -73,10 +79,16 @@ function calcAndExportDailyBalanceTotalAsset(aggregatedDetails, targetYear, targ
   const totalAssetBalanceByDates = accumulateBalanceByDate(previousMonthEndBalanceTotalAsset, balanceTotalAssetTargetDates, balanceTotalAssetTargetDetails);
   console.log("calc totalAssetBalanceByDates finished: length: " + totalAssetBalanceByDates.length);
   // 対象月の末残高設定を更新する
-  const updatedTotalAssetBalanceAtMonthEnd = updateTargetMonthEndBalance(totalAssetBalanceByDates, previousMonthEndBalanceTotalAsset, targetYear, targetMonth, "asset_total_end_balance"); // TODO: 直書き回避
+  const updatedTotalAssetBalanceAtMonthEnd = updateTargetMonthEndBalance(totalAssetBalanceByDates, previousMonthEndBalanceTotalAsset, targetYear, targetMonth, getAssetTotalEndBalanceRange());
   console.log("total asset end balance updated: updatedTotalAssetBalanceAtMonthEnd: " + updatedTotalAssetBalanceAtMonthEnd);
   // 集計結果明細を出力対象シートに貼り付ける
-  pasteDailyCalcResultByEachMonth(targetYear, targetMonth, totalAssetBalanceByDates, "calc_dab"); // TODO: 直書き回避
+  pasteDailyCalcResultByEachMonth(
+    targetYear,
+    targetMonth,
+    totalAssetBalanceByDates,
+    getCalcDabImportSheetPrefix(),
+    getCalcDabImportAddrBeforeClosingDay(),
+    getCalcDabImportAddrAfterClosingDay());
   console.log("end calcAndExportDailyBalanceTotalAsset");
 }
 
@@ -94,15 +106,21 @@ function calcAndExportDailyBalanceCash(aggregatedDetails, targetYear, targetMont
   const cashBalanceByDates = accumulateBalanceByDate(previousMonthEndBalanceCash, balanceCashTargetDates, balanceCashTargetDetails);
   console.log("calc cashBalanceByDates finished: length: " + cashBalanceByDates.length);
   // 対象月の末残高設定を更新する
-  const updatedCashBalanceAtMonthEnd = updateTargetMonthEndBalance(cashBalanceByDates, previousMonthEndBalanceCash, targetYear, targetMonth, "cash_end_balance"); // TODO: 直書き回避
+  const updatedCashBalanceAtMonthEnd = updateTargetMonthEndBalance(cashBalanceByDates, previousMonthEndBalanceCash, targetYear, targetMonth, getCashEndBalanceRange());
   console.log("cash end balance updated: updatedCashBalanceAtMonthEnd: " + updatedCashBalanceAtMonthEnd);
   // 集計結果明細を出力対象シートに貼り付ける
-  pasteDailyCalcResultByEachMonth(targetYear, targetMonth, cashBalanceByDates, "calc_dcb"); // TODO: 直書き回避
+  pasteDailyCalcResultByEachMonth(
+    targetYear,
+    targetMonth,
+    cashBalanceByDates,
+    getCalcDcbImportSheetPrefix(),
+    getCalcDcbImportAddrBeforeClosingDay(),
+    getCalcDcbImportAddrAfterClosingDay());
   console.log("end calcAndExportDailyBalanceCash");
 }
 
 // 日次集計結果を、早い月分と遅い月分に振り分け、それぞれを結果シートに貼り付ける
-function pasteDailyCalcResultByEachMonth(targetYear, targetMonth, dailyCalcResults, targetSheetPrefix){
+function pasteDailyCalcResultByEachMonth(targetYear, targetMonth, dailyCalcResults, targetSheetPrefix, pasteAddrBeforeClosingDay, pasteAddrAfterClosingDay){
   // 集計した明細を、早い月分と遅い月分に振り分ける
   const earlierYearMonth = targetYear + "/" + targetMonth;
   const earlierMonthDailyCalcResults = dailyCalcResults.filter(s => s.date.indexOf(earlierYearMonth) == 0);
@@ -113,7 +131,7 @@ function pasteDailyCalcResultByEachMonth(targetYear, targetMonth, dailyCalcResul
   // 早い月分
   if(earlierMonthDailyCalcResults.length > 0){
     console.log("start to paste earlierMonthDailyCalcResults: earlierMonthDailyCalcResults.length: " + earlierMonthDailyCalcResults.length);
-    pasteDailyCalcResult(earlierMonthDailyCalcResults, targetYear, targetMonth, true, targetSheetPrefix);
+    pasteDailyCalcResult(earlierMonthDailyCalcResults, targetYear, targetMonth, targetSheetPrefix, pasteAddrAfterClosingDay);
   } else {
     console.log("pasting earlierMonthDailyCalcResults was skipped");
   }
@@ -121,14 +139,14 @@ function pasteDailyCalcResultByEachMonth(targetYear, targetMonth, dailyCalcResul
   if(laterMonthDailyCalcResults.length > 0){
     console.log("start to paste laterMonthDailyCalcResults: laterMonthDailyCalcResults.length: " + laterMonthDailyCalcResults.length);
     const {nextMonthYyyy, nextMonthMm} = getNextYearMonth(targetYear, targetMonth);
-    pasteDailyCalcResult(laterMonthDailyCalcResults, nextMonthYyyy, nextMonthMm, false, targetSheetPrefix);
+    pasteDailyCalcResult(laterMonthDailyCalcResults, nextMonthYyyy, nextMonthMm, targetSheetPrefix, pasteAddrBeforeClosingDay);
   } else {
     console.log("pasting laterMonthDailyCalcResults was skipped");
   }
 }
 
 // 対象月の末残高レコードを更新する
-function updateTargetMonthEndBalance(accumulatedBalanceByDates, previousMonthEndBalance, targetYear, targetMonth, targetRangeName){
+function updateTargetMonthEndBalance(accumulatedBalanceByDates, previousMonthEndBalance, targetYear, targetMonth, targetRange){
   // 対象月の末残高を取得
   const balanceAtMonthEnd = accumulatedBalanceByDates.length == 0
     ? previousMonthEndBalance
@@ -138,7 +156,7 @@ function updateTargetMonthEndBalance(accumulatedBalanceByDates, previousMonthEnd
     .map(b => b.calcYear + "/" + b.calcMonth)
     .indexOf(targetYear + "/" + targetMonth);
   // 該当 cell を取得し、更新する
-  getSettingSheet().getRange(targetRangeName)
+  targetRange
     .getCell(targetMonthIndexAtEndBalances + 2, 1) // getCell は 1 始まりなので +1, また該当 range にはヘッダー行が含まれるのでその分も +1
     .setValue(balanceAtMonthEnd);
 
@@ -225,8 +243,8 @@ function extractSortedDatesFromDetails(targetDetails) {
 // 集計対象月の明細データを取得し、 hash の配列に parse したものを返す
 function fetchAggregatedDetails(targetYear, targetMonth) {
   return fetchDetailsFromCell(
-    "ag_" + targetYear + targetMonth, // TODO: 直書き回避
-    "V2", // TODO: 直書き回避
+    getAggreExportSheetPrefix() + "_" + targetYear + targetMonth,
+    getAggreExportAddr(),
     rowElems => {
       return {
         isCalcTarget:       rowElems[0], // 計算対象
@@ -245,15 +263,16 @@ function fetchAggregatedDetails(targetYear, targetMonth) {
 }
 
 // 日次集計結果の calc シートへの貼り付けを行う
-function pasteDailyCalcResult(summaryByDates, targetYear, targetMonth, isEarlier, sheetPrefix){
-  console.log("pasteDailyCalcResult: start: targetYear, targetMonth, isEarlier: " + [targetYear, targetMonth, isEarlier].join(", "));
+function pasteDailyCalcResult(summaryByDates, targetYear, targetMonth, sheetPrefix, pasteAddr){
+  console.log("pasteDailyCalcResult: start: targetYear, targetMonth: " + [targetYear, targetMonth].join(", "));
 
   // 集計結果の明細を区切り文字で結合し、貼り付け用に一つの文字列にする
   const mergedSummaryByDatesValue = summaryByDates.map(s => Object.values(s).join("#&#")).join("¥n");
 
   // 貼り付け対象のセルを取得
-  const targetCalcSheet = getThisSpreadSheet().getSheetByName(sheetPrefix + "_" + targetYear + targetMonth);
-  const pasteTargetCell = targetCalcSheet.getRange(isEarlier ? "A3" : "A2"); // TODO: アドレス直書きの廃止
+  const pasteTargetCell = getThisSpreadSheet()
+    .getSheetByName(sheetPrefix + "_" + targetYear + targetMonth)
+    .getRange(pasteAddr);
 
   // 対象データにつき、更新がなければ、貼り付けをスキップして終了
   const currentValue = pasteTargetCell.getValue();
