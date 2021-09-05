@@ -14,7 +14,7 @@ function executeCheckSheetMaintenanceStatus(){
 function doCheckSheetMaintenanceStatus(){
   // 休日カレンダーのメンテナンス要否を確認する
   // (現状数年分作っているが、時期が来て足さないといけなくなったタイミングで通知を飛ばす ※祝日のフラグを手入力する以外は関数の拡張のみ)
-  const isCalenderNeedsMaintenance = getSettingSheet().getRange("is_calender_needs_maitenance").getValue() == 1; // TODO: typo
+  const isCalenderNeedsMaintenance = getSettingSheet().getRange("is_calender_needs_maintenance").getValue() == 1;
   if(isCalenderNeedsMaintenance){
     postConsoleAndSlackWarning("isCalenderNeedsMaintenance: true", true);
   } else {
