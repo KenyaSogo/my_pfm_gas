@@ -112,6 +112,20 @@ function getCalcDabExportAddr(){
   return calcDabExportAddr;
 }
 
+let isCalenderNeedsMaintenance;
+function getIsCalenderNeedsMaintenance(){
+  if(isCalenderNeedsMaintenance) return isCalenderNeedsMaintenance;
+  isCalenderNeedsMaintenance = getSettingSheet().getRange("is_calender_needs_maintenance").getValue();
+  return isCalenderNeedsMaintenance;
+}
+
+let isMonthlyStartDayInvalid;
+function getIsMonthlyStartDayInvalid(){
+  if(isMonthlyStartDayInvalid) return isMonthlyStartDayInvalid;
+  isMonthlyStartDayInvalid = getSettingSheet().getRange("is_monthly_start_day_invalid").getValue();
+  return isMonthlyStartDayInvalid;
+}
+
 let createTargetSheetConfigs;
 function getCreateTargetSheetConfigs(){
   if(createTargetSheetConfigs) return createTargetSheetConfigs;
