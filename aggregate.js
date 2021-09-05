@@ -30,7 +30,7 @@ function aggregateByMonth(monthsAgo) {
   
   // aggregate 対象 pfm アカウントの id / pass リストを取得
   const {aggregateIdStack, aggregatePassStack} = getAggregateIdPasses();
-  const aggregateSheet = getThisSpreadSheet().getSheetByName("ag_" + targetYear + targetMonth); // TODO: 直書き回避
+  const aggregateSheet = getThisSpreadSheet().getSheetByName(getAggreImportSheetPrefix() + "_" + targetYear + targetMonth);
   // 各 pfm アカウント毎に入出金明細をスクレイピング
   getIntRangeFromZero(aggregateIdStack.length).forEach(
     i => {
@@ -49,7 +49,7 @@ function aggregateByMonth(monthsAgo) {
       console.log("validateRawData: done");
 
       // 月別に用意された貼り付け対象シートに raw データを貼り付ける
-      const pasteTargetCell = aggregateSheet.getRange("A" + (i + 2)); // TODO: 列アドレスの直書きを回避
+      const pasteTargetCell = aggregateSheet.getRange(getAggreImportAddrCol() + (i + 2));
       // raw データの更新有無を判定し、更新有りなら貼り付ける
       if(isUpdatedRawData(rawData, pasteTargetCell)){
         pasteTargetCell.setValue(rawData);
@@ -79,9 +79,8 @@ function isUpdatedRawData(rawData, pasteTargetCell){
 
 // rawData が想定通りのパターンかを validate する
 function validateRawData(rawData){
-  const rawDataHeadPattern = getSettingSheet().getRange("raw_data_head_pattern").getValue(); // TODO: 直書き回避
   // rawData の先頭文字列が rawDataHeadPattern に合致しているなら valid (= true)
-  return rawData.indexOf(rawDataHeadPattern) == 0;
+  return rawData.indexOf(getRawDataHeadPattern()) == 0;
 }
 
 // aggregate する対象の id と pass を stack させた配列を返す TODO: config 移管、他との方式の平仄

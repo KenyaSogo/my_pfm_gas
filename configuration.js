@@ -14,11 +14,18 @@ function getSettingSheet(){
   return settingSheet;
 }
 
-let phantomJsKey
+let phantomJsKey;
 function getPhantomJsKey(){
   if(phantomJsKey) return phantomJsKey;
   phantomJsKey = getSettingSheet().getRange("phantom_js_key").getValue();
   return phantomJsKey;
+}
+
+let rawDataHeadPattern;
+function getRawDataHeadPattern(){
+  if(rawDataHeadPattern) return rawDataHeadPattern;
+  rawDataHeadPattern = getSettingSheet().getRange("raw_data_head_pattern").getValue();
+  return rawDataHeadPattern;
 }
 
 let slackReportingBotWebhookUrl;
@@ -110,6 +117,20 @@ function getCalcDabExportAddr(){
   if(calcDabExportAddr) return calcDabExportAddr;
   calcDabExportAddr = getSettingSheet().getRange("calc_dab_export_addr").getValue();
   return calcDabExportAddr;
+}
+
+let aggreImportSheetPrefix;
+function getAggreImportSheetPrefix(){
+  if(aggreImportSheetPrefix) return aggreImportSheetPrefix;
+  aggreImportSheetPrefix = getSettingSheet().getRange("aggre_import_sheet_prefix").getValue();
+  return aggreImportSheetPrefix;
+}
+
+let aggreImportAddrCol;
+function getAggreImportAddrCol(){
+  if(aggreImportAddrCol) return aggreImportAddrCol;
+  aggreImportAddrCol = getSettingSheet().getRange("aggre_import_addr_col").getValue();
+  return aggreImportAddrCol;
 }
 
 let isCalenderNeedsMaintenance;
