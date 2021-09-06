@@ -43,7 +43,7 @@ function aggregateByMonth(monthsAgo) {
 
       // rawData が想定通り取得出来ているかを確認する TODO: 月初の0件明細エラー対応
       if(!validateRawData(rawData)){
-        postConsoleAndSlackWarning("failed to validateRawData: rawData: " + rawData, false);
+        postConsoleAndSlackWarning("failed to validateRawData: rawData: " + rawData.substring(0, 150), false);
         return;
       }
       console.log("validateRawData: done");
