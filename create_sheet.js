@@ -14,11 +14,10 @@ function executeCreateSheetByMonth(){
 function doCreateSheetByMonth(){
   // 現在の日付を設定
   const currentDate = getCurrent_yyyy_MM_dd();
-  getSettingSheet().getRange("today_for_calender").setValue(currentDate); // TODO: 直書き回避
+  getTodayForCalenderRange().setValue(currentDate);
 
   // 本日が月初めの日の前日か否かを判定
-  const isTomorrowMonthlyStart = getSettingSheet().getRange("is_tomorrow_monthly_start").getValue() == 1; // TODO: 直書き回避
-  if(!isTomorrowMonthlyStart){
+  if(getIsTomorrowMonthlyStart() != 1){
     postConsoleAndSlackJobEnd("execute create sheet by month: isTomorrowMonthlyStart: false: sheet create skipped");
     return;
   }
@@ -61,7 +60,7 @@ function createSheetAtTargetMonth(targetYearMonth, sheetPrefix){
   // コピー未済の場合、当月分のシートをコピーして追加
   console.log("newSheet is not created yet");
 
-  const tmpSheet = getThisSpreadSheet().getSheetByName(sheetPrefix + "_tmp"); // TODO: 直書き回避
+  const tmpSheet = getThisSpreadSheet().getSheetByName(sheetPrefix + "_" + getTemplateSheetSuffix());
   const copiedNewSheet = tmpSheet.copyTo(getThisSpreadSheet());
   copiedNewSheet.setName(newSheetName);
   console.log("newSheet is created: sheet name: " + newSheetName);

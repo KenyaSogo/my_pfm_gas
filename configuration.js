@@ -210,6 +210,20 @@ function getAggreExportAddr(){
   return aggreExportAddr;
 }
 
+let templateSheetSuffix;
+function getTemplateSheetSuffix(){
+  if(templateSheetSuffix) return templateSheetSuffix;
+  templateSheetSuffix = getSettingSheet().getRange("template_sheet_suffix").getValue();
+  return templateSheetSuffix;
+}
+
+let todayForCalenderRange;
+function getTodayForCalenderRange(){
+  if(todayForCalenderRange) return todayForCalenderRange;
+  todayForCalenderRange = getSettingSheet().getRange("today_for_calender");
+  return todayForCalenderRange;
+}
+
 let isCalenderNeedsMaintenance;
 function getIsCalenderNeedsMaintenance(){
   if(isCalenderNeedsMaintenance) return isCalenderNeedsMaintenance;
@@ -222,6 +236,13 @@ function getIsMonthlyStartDayInvalid(){
   if(isMonthlyStartDayInvalid) return isMonthlyStartDayInvalid;
   isMonthlyStartDayInvalid = getSettingSheet().getRange("is_monthly_start_day_invalid").getValue();
   return isMonthlyStartDayInvalid;
+}
+
+let isTomorrowMonthlyStart;
+function getIsTomorrowMonthlyStart(){
+  if(isTomorrowMonthlyStart) return isTomorrowMonthlyStart;
+  isTomorrowMonthlyStart = getSettingSheet().getRange("is_tomorrow_monthly_start").getValue();
+  return isTomorrowMonthlyStart;
 }
 
 let assetTotalEndBalanceRange;
