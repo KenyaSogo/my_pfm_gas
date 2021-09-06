@@ -139,12 +139,18 @@ function postSlackTo(webHookUrl, message){
 }
 
 // console と slack に job 開始メッセージをポストする
+let jobProcessStartTime;
 function postConsoleAndSlackJobStart(message){
+  jobProcessStartTime = Date.now();
   postConsoleAndSlackJobStartOrEnd("start", message);
 }
 
 // console と slack に job 終了メッセージをポストする
 function postConsoleAndSlackJobEnd(message){
+  if(jobProcessStartTime){
+    const processingTime = Date.now() - jobProcessStartTime;
+    message += " (" + processingTime/1000 + " sec)";
+  }
   postConsoleAndSlackJobStartOrEnd("end", message);
 }
 
