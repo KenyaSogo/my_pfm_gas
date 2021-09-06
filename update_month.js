@@ -14,12 +14,10 @@ function executeUpdateAggregateYearMonthList(){
 function doUpdateAggregateYearMonthList(){
   // 現在の日付を設定
   const currentDate = getCurrent_yyyy_MM_dd();
-  getSettingSheet().getRange("today_for_calender").setValue(currentDate);
+  getTodayForCalenderRange().setValue(currentDate);
 
   // 本日が月初めの日か否かを判定
-  const isTodayMonthlyStart = getSettingSheet().getRange("is_today_monthly_start").getValue() == 1; // TODO: 直書き回避
-  if(!isTodayMonthlyStart){
-    console.log("isTodayMonthlyStart: false: push skipped");
+  if(getIsTodayMonthlyStart() != 1){
     postConsoleAndSlackJobEnd("execute update aggregate year month list: isTodayMonthlyStart: false: push skipped");
     return;
   }
@@ -29,10 +27,10 @@ function doUpdateAggregateYearMonthList(){
 
   // リスト末尾のセル、およびその一つ後ろのセル (= push する対象のセル) を取得しておく
   const {aggregateMonthStack} = fetchAggregateYearMonths();
-  const lastCellYear = getSettingSheet().getRange("aggregate_year").getCell(aggregateMonthStack.length + 1, 1); // TODO: 直書き回避
-  const lastCellMonth = getSettingSheet().getRange("aggregate_month").getCell(aggregateMonthStack.length + 1, 1);
-  const pushTargetCellYear = getSettingSheet().getRange("aggregate_year").getCell(aggregateMonthStack.length + 2, 1);
-  const pushTargetCellMonth = getSettingSheet().getRange("aggregate_month").getCell(aggregateMonthStack.length + 2, 1);
+  const lastCellYear = getAggregateYearRange().getCell(aggregateMonthStack.length + 1, 1);
+  const lastCellMonth = getAggregateMonthRange().getCell(aggregateMonthStack.length + 1, 1);
+  const pushTargetCellYear = getAggregateYearRange().getCell(aggregateMonthStack.length + 2, 1);
+  const pushTargetCellMonth = getAggregateMonthRange().getCell(aggregateMonthStack.length + 2, 1);
 
   // 本日の月日が追加未済であるかを確認する
   const currentYear = getCurrentYyyy();

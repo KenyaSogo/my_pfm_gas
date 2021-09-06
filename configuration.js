@@ -217,11 +217,32 @@ function getTemplateSheetSuffix(){
   return templateSheetSuffix;
 }
 
+let aggregateYearRange;
+function getAggregateYearRange(){
+  if(aggregateYearRange) return aggregateYearRange;
+  aggregateYearRange = getSettingSheet().getRange("aggregate_year");
+  return aggregateYearRange;
+}
+
+let aggregateMonthRange;
+function getAggregateMonthRange(){
+  if(aggregateMonthRange) return aggregateMonthRange;
+  aggregateMonthRange = getSettingSheet().getRange("aggregate_month");
+  return aggregateMonthRange;
+}
+
 let todayForCalenderRange;
 function getTodayForCalenderRange(){
   if(todayForCalenderRange) return todayForCalenderRange;
   todayForCalenderRange = getSettingSheet().getRange("today_for_calender");
   return todayForCalenderRange;
+}
+
+let isTodayMonthlyStart;
+function getIsTodayMonthlyStart(){
+  if(isTodayMonthlyStart) return isTodayMonthlyStart;
+  isTodayMonthlyStart = getSettingSheet().getRange("is_today_monthly_start").getValue();
+  return isTodayMonthlyStart;
 }
 
 let isCalenderNeedsMaintenance;
