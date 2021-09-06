@@ -26,11 +26,11 @@ function doUpdateAggregateYearMonthList(){
   console.log("isTodayMonthlyStart: true");
 
   // リスト末尾のセル、およびその一つ後ろのセル (= push する対象のセル) を取得しておく
-  const {aggregateMonthStack} = fetchAggregateYearMonths();
-  const lastCellYear = getAggregateYearRange().getCell(aggregateMonthStack.length + 1, 1);
-  const lastCellMonth = getAggregateMonthRange().getCell(aggregateMonthStack.length + 1, 1);
-  const pushTargetCellYear = getAggregateYearRange().getCell(aggregateMonthStack.length + 2, 1);
-  const pushTargetCellMonth = getAggregateMonthRange().getCell(aggregateMonthStack.length + 2, 1);
+  const aggregateYearMonthConfigsLength = getAggregateYearMonthConfigs().length;
+  const lastCellYear = getAggregateYearRange().getCell(aggregateYearMonthConfigsLength + 1, 1);
+  const lastCellMonth = getAggregateMonthRange().getCell(aggregateYearMonthConfigsLength + 1, 1);
+  const pushTargetCellYear = getAggregateYearRange().getCell(aggregateYearMonthConfigsLength + 2, 1);
+  const pushTargetCellMonth = getAggregateMonthRange().getCell(aggregateYearMonthConfigsLength + 2, 1);
 
   // 本日の月日が追加未済であるかを確認する
   const currentYear = getCurrentYyyy();

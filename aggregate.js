@@ -29,14 +29,14 @@ function aggregateByMonth(monthsAgo) {
   console.log("targetYear, targetMonth: " + targetYear + ", " + targetMonth);
   
   // aggregate 対象 pfm アカウントの id / pass リストを取得
-  const {aggregateIdStack, aggregatePassStack} = getAggregateIdPasses();
+  const pfmAccountConfigs = getPfmAccountConfigs();
   const aggregateSheet = getThisSpreadSheet().getSheetByName(getAggreImportSheetPrefix() + "_" + targetYear + targetMonth);
   // 各 pfm アカウント毎に入出金明細をスクレイピング
-  getIntRangeFromZero(aggregateIdStack.length).forEach(
+  getIntRangeFromZero(pfmAccountConfigs.length).forEach(
     i => {
       // スクレイピング job をキックする
-      const targetId = aggregateIdStack[i];
-      const targetPass = aggregatePassStack[i];
+      const targetId = pfmAccountConfigs[i].pfmId;
+      const targetPass = pfmAccountConfigs[i].pfmPass;
       console.log("scrapeCashFlowDataDetail: start: targetId: " + targetId);
       const rawData = scrapeCashFlowDataDetail(targetId, targetPass, targetYear, targetMonth);
       console.log("scrapeCashFlowDataDetail: done");
@@ -61,11 +61,12 @@ function aggregateByMonth(monthsAgo) {
   );
 }
 
-// aggregate 対象の year (yyyy) おもよ month (MM) を取得する
+// aggregate 対象の year (yyyy) および month (MM) を取得する
 function getAggregateTargetYearAndMonth(monthsAgo){
-  const {aggregateYearStack, aggregateMonthStack} = fetchAggregateYearMonths();
-  const targetYear = aggregateYearStack[aggregateMonthStack.length - 1 - monthsAgo];
-  const targetMonth = aggregateMonthStack[aggregateMonthStack.length - 1 - monthsAgo];
+  const aggregateYearMonthConfigs = getAggregateYearMonthConfigs();
+  const targetYearMonthConfig = aggregateYearMonthConfigs[aggregateYearMonthConfigs.length - 1 - monthsAgo];
+  const targetYear = targetYearMonthConfig.aggregateYear;
+  const targetMonth = targetYearMonthConfig.aggregateMonth;
 
   return {targetYear, targetMonth};
 }
@@ -81,22 +82,6 @@ function isUpdatedRawData(rawData, pasteTargetCell){
 function validateRawData(rawData){
   // rawData の先頭文字列が rawDataHeadPattern に合致しているなら valid (= true)
   return rawData.indexOf(getRawDataHeadPattern()) == 0;
-}
-
-// aggregate する対象の id と pass を stack させた配列を返す TODO: config 移管、他との方式の平仄
-function getAggregateIdPasses(){
-  const aggregateIdStack = getTrimmedColumnValues(getSettingSheet(), "pfm_id");
-  const aggregatePassStack = getTrimmedColumnValues(getSettingSheet(), "pfm_pass");
-
-  return {aggregateIdStack, aggregatePassStack};
-}
-
-// aggregate する対象の year と month を stack させた配列を返す TODO: config 移管、他との方式の平仄
-function fetchAggregateYearMonths(){
-  const aggregateYearStack = getTrimmedColumnValues(getSettingSheet(), "aggregate_year");
-  const aggregateMonthStack = getTrimmedColumnValues(getSettingSheet(), "aggregate_month");
-
-  return {aggregateYearStack, aggregateMonthStack};
 }
 
 // 指定された id/pass に紐づく pfm アカウントの、指定月の明細を取得して返す

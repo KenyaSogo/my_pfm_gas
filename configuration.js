@@ -280,6 +280,36 @@ function getCashEndBalanceRange(){
   return cashEndBalanceRange;
 }
 
+let pfmAccountConfigs;
+function getPfmAccountConfigs(){
+  if(pfmAccountConfigs) return pfmAccountConfigs;
+  pfmAccountConfigs = fetchDetailsFromColumns(
+    ["pfm_id", "pfm_pass"],
+    (colValueArrays, i) => {
+      return {
+        pfmId:   colValueArrays[0][i],
+        pfmPass: colValueArrays[1][i],
+      };
+    }
+  );
+  return pfmAccountConfigs;
+}
+
+let aggregateYearMonthConfigs;
+function getAggregateYearMonthConfigs(){
+  if(aggregateYearMonthConfigs) return aggregateYearMonthConfigs;
+  aggregateYearMonthConfigs = fetchDetailsFromColumns(
+    ["aggregate_year", "aggregate_month"],
+    (colValueArrays, i) => {
+      return {
+        aggregateYear:  colValueArrays[0][i],
+        aggregateMonth: colValueArrays[1][i],
+      };
+    }
+  );
+  return aggregateYearMonthConfigs;
+}
+
 let createTargetSheetConfigs;
 function getCreateTargetSheetConfigs(){
   if(createTargetSheetConfigs) return createTargetSheetConfigs;
