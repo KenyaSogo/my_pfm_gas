@@ -255,3 +255,32 @@ function fetchDetailsFromColumns(columnRangeNames, parseDetailFunc){
   }
   return getIntRangeFromZero(rowCount).map(i => parseDetailFunc(colValueArrays, i));
 }
+
+// 配列から空白項目を除外して返す
+function omitBlankElemFromArray(array){
+  return array.filter(r => r);
+}
+
+// 結果明細を export 対象シートに貼り付ける
+function exportResultDetails(resultDetails, targetYear, targetMonth, sheetPrefix, pasteAddr){
+  console.log("exportResultDetails: start: targetYear, targetMonth: " + [targetYear, targetMonth].join(", "));
+
+  // 集計結果の明細を区切り文字で結合し、貼り付け用に一つの文字列にする
+  const mergedResultDetails = resultDetails.map(s => Object.values(s).join("#&#")).join("¥n");
+
+  // 貼り付け対象のセルを取得
+  const pasteTargetCell = getThisSpreadSheet()
+    .getSheetByName(sheetPrefix + "_" + targetYear + targetMonth)
+    .getRange(pasteAddr);
+
+  // 対象データにつき、更新がなければ、貼り付けをスキップして終了
+  const currentValue = pasteTargetCell.getValue();
+  if(mergedResultDetails == currentValue){
+    console.log("result details has no update: update skipped");
+    return;
+  }
+
+  // データを対象セルに貼り付ける
+  pasteTargetCell.setValue(mergedResultDetails);
+  console.log("export target cell was updated");
+}

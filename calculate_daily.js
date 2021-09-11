@@ -131,7 +131,7 @@ function pasteDailyCalcResultByEachMonth(targetYear, targetMonth, dailyCalcResul
   // 早い月分
   if(earlierMonthDailyCalcResults.length > 0){
     console.log("start to paste earlierMonthDailyCalcResults: earlierMonthDailyCalcResults.length: " + earlierMonthDailyCalcResults.length);
-    pasteDailyCalcResult(earlierMonthDailyCalcResults, targetYear, targetMonth, targetSheetPrefix, pasteAddrAfterClosingDay);
+    exportResultDetails(earlierMonthDailyCalcResults, targetYear, targetMonth, targetSheetPrefix, pasteAddrAfterClosingDay);
   } else {
     console.log("pasting earlierMonthDailyCalcResults was skipped");
   }
@@ -139,7 +139,7 @@ function pasteDailyCalcResultByEachMonth(targetYear, targetMonth, dailyCalcResul
   if(laterMonthDailyCalcResults.length > 0){
     console.log("start to paste laterMonthDailyCalcResults: laterMonthDailyCalcResults.length: " + laterMonthDailyCalcResults.length);
     const {nextMonthYyyy, nextMonthMm} = getNextYearMonth(targetYear, targetMonth);
-    pasteDailyCalcResult(laterMonthDailyCalcResults, nextMonthYyyy, nextMonthMm, targetSheetPrefix, pasteAddrBeforeClosingDay);
+    exportResultDetails(laterMonthDailyCalcResults, nextMonthYyyy, nextMonthMm, targetSheetPrefix, pasteAddrBeforeClosingDay);
   } else {
     console.log("pasting laterMonthDailyCalcResults was skipped");
   }
@@ -260,28 +260,4 @@ function fetchAggregatedDetails(targetYear, targetMonth) {
       };
     }
   );
-}
-
-// 日次集計結果の calc シートへの貼り付けを行う
-function pasteDailyCalcResult(summaryByDates, targetYear, targetMonth, sheetPrefix, pasteAddr){
-  console.log("pasteDailyCalcResult: start: targetYear, targetMonth: " + [targetYear, targetMonth].join(", "));
-
-  // 集計結果の明細を区切り文字で結合し、貼り付け用に一つの文字列にする
-  const mergedSummaryByDatesValue = summaryByDates.map(s => Object.values(s).join("#&#")).join("¥n");
-
-  // 貼り付け対象のセルを取得
-  const pasteTargetCell = getThisSpreadSheet()
-    .getSheetByName(sheetPrefix + "_" + targetYear + targetMonth)
-    .getRange(pasteAddr);
-
-  // 対象データにつき、更新がなければ、貼り付けをスキップして終了
-  const currentValue = pasteTargetCell.getValue();
-  if(mergedSummaryByDatesValue == currentValue){
-    console.log("calc result has no update: update skipped");
-    return;
-  }
-
-  // データを対象セルに貼り付ける
-  pasteTargetCell.setValue(mergedSummaryByDatesValue);
-  console.log("calc result was updated");
 }
