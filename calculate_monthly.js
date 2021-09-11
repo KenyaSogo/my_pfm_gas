@@ -66,8 +66,10 @@ function validateCalcMonthlySummaryResult(reSummaryForAllCategories, summaryByCa
   const calculatedTotalAmount = reSummaryForAllCategories.find(s => s.largeCategoryName == "全体").amount;
   const expectedTotalAmount = sumAmountFromDetails(summaryByCategories);
   if(calculatedTotalAmount != expectedTotalAmount){
-    console.error("failed to validate calculatedTotalAmount: expected, got: " + expectedTotalAmount + ", " + calculatedTotalAmount);
-    throw new Error("failed to validate calculatedTotalAmount"); // TODO: unexpectedError
+    throw new PfmUnexpectedError(
+      "failed to validate calculatedTotalAmount: expected, got: " + expectedTotalAmount + ", " + calculatedTotalAmount,
+      true
+    );
   }
   console.log("valid: calculatedTotalAmount");
 }
