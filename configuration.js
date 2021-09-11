@@ -283,7 +283,7 @@ function getCashEndBalanceRange(){
 let pfmAccountConfigs;
 function getPfmAccountConfigs(){
   if(pfmAccountConfigs) return pfmAccountConfigs;
-  pfmAccountConfigs = fetchDetailsFromColumns(
+  pfmAccountConfigs = fetchSettingDetailsFromColumns(
     ["pfm_id", "pfm_pass"],
     (colValueArrays, i) => {
       return {
@@ -298,7 +298,7 @@ function getPfmAccountConfigs(){
 let aggregateYearMonthConfigs;
 function getAggregateYearMonthConfigs(){
   if(aggregateYearMonthConfigs) return aggregateYearMonthConfigs;
-  aggregateYearMonthConfigs = fetchDetailsFromColumns(
+  aggregateYearMonthConfigs = fetchSettingDetailsFromColumns(
     ["aggregate_year", "aggregate_month"],
     (colValueArrays, i) => {
       return {
@@ -313,7 +313,7 @@ function getAggregateYearMonthConfigs(){
 let createTargetSheetConfigs;
 function getCreateTargetSheetConfigs(){
   if(createTargetSheetConfigs) return createTargetSheetConfigs;
-  createTargetSheetConfigs = fetchDetailsFromColumns(
+  createTargetSheetConfigs = fetchSettingDetailsFromColumns(
     ["create_target_sheet_prefix", "needs_next_month"],
     (colValueArrays, i) => {
       return {
@@ -328,7 +328,7 @@ function getCreateTargetSheetConfigs(){
 let assetConfigs;
 function getAssetConfigs(){
   if(assetConfigs) return assetConfigs;
-  assetConfigs = fetchDetailsFromColumns(
+  assetConfigs = fetchSettingDetailsFromColumns(
     ["asset_name", "is_cash"],
     (colValueArrays, i) => {
       return {
@@ -343,7 +343,7 @@ function getAssetConfigs(){
 let endBalances;
 function getEndBalances(){
   if(endBalances) return endBalances;
-  endBalances = fetchDetailsFromColumns(
+  endBalances = fetchSettingDetailsFromColumns(
     ["calc_year", "calc_month", "cash_end_balance", "asset_total_end_balance"],
     (colValueArrays, i) => {
       return {
@@ -360,7 +360,7 @@ function getEndBalances(){
 let orderedCategoryConfigs;
 function getOrderedCategoryConfigs(){
   if(orderedCategoryConfigs) return orderedCategoryConfigs;
-  orderedCategoryConfigs = fetchDetailsFromColumns(
+  orderedCategoryConfigs = fetchSettingDetailsFromColumns(
     ["ordered_large_category", "ordered_middle_category", "category_large_class", "category_middle_class"],
     (colValueArrays, i) => {
       return {

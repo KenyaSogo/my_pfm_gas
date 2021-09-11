@@ -245,10 +245,15 @@ function fetchDetailsFromCell(targetSheetName, targetRangeName, parseDetailFunc)
   );
 }
 
+// setting sheet における表 (含まれる各列の名前を指定) を明細 object の配列に parse して返す
+function fetchSettingDetailsFromColumns(columnRangeNames, parseDetailFunc){
+  return fetchDetailsFromColumns(getSettingSheet(), columnRangeNames, parseDetailFunc);
+}
+
 // 表の各列の名前から明細を取得して明細 object の配列に parse して返す
 // (各列において空白行を trim するので、終端までの行において空白行を含む列を許容しない)
-function fetchDetailsFromColumns(columnRangeNames, parseDetailFunc){
-  const colValueArrays = columnRangeNames.map(colName => getTrimmedColumnValues(getSettingSheet(), colName)); // TODO: setting sheet 決め打ちになっちゃってる
+function fetchDetailsFromColumns(targetSheet, columnRangeNames, parseDetailFunc){
+  const colValueArrays = columnRangeNames.map(colName => getTrimmedColumnValues(targetSheet, colName));
   const rowCount = colValueArrays[0].length;
   if(rowCount == 0){
     return null;
