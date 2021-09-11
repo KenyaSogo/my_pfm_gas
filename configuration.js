@@ -28,6 +28,13 @@ function getRawDataHeadPattern(){
   return rawDataHeadPattern;
 }
 
+let rawDataNoDetailValue;
+function getRawDataNoDetailValue(){
+  if(rawDataNoDetailValue) return rawDataNoDetailValue;
+  rawDataNoDetailValue = getSettingSheet().getRange("raw_data_no_detail_value").getValue();
+  return rawDataNoDetailValue;
+}
+
 let slackReportingBotWebhookUrl;
 function getSlackReportingBotWebhookUrl(){
   if(slackReportingBotWebhookUrl) return slackReportingBotWebhookUrl;

@@ -41,8 +41,14 @@ function aggregateByMonth(monthsAgo) {
       const rawData = scrapeCashFlowDataDetail(targetId, targetPass, targetYear, targetMonth);
       console.log("scrapeCashFlowDataDetail: done");
 
-      // rawData が想定通り取得出来ているかを確認する TODO: 月初の0件明細エラー対応
+      // rawData が想定通り取得出来ているかを確認する
       if(!validateRawData(rawData)){
+        // 月初のまだ明細が0件の場合は、ワーニング扱いとせず、skip する
+        if(rawData == getRawDataNoDetailValue()){
+          console.log("validateRawData: raw data contains no detail: skip");
+          return;
+        }
+        // invalid ならワーニングを出力して以降の処理を skip する
         postConsoleAndSlackWarning("failed to validateRawData: rawData: " + rawData.substring(0, 150), false);
         return;
       }
