@@ -149,6 +149,10 @@ function postConsoleAndSlackJobStart(message){
 function postConsoleAndSlackJobEnd(message){
   if(jobProcessStartTime){
     const processingTime = Date.now() - jobProcessStartTime;
+    // 処理時間が90秒を超えた場合には warning を出しておく
+    if(processingTime > 90000){
+      postConsoleAndSlackWarning("job processing time exceeded 90 sec", true);
+    }
     message += " (" + processingTime/1000 + " sec)";
   }
   postConsoleAndSlackJobStartOrEnd("end", message);
