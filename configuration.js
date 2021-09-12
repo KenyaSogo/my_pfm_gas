@@ -388,3 +388,27 @@ function getTestAggreRawDataDetail(){
   testAggreRawDataDetail = getSettingSheet().getRange("test_aggre_raw_data_detail").getValue();
   return testAggreRawDataDetail;
 }
+
+let testAggreResultGot1;
+function getTestAggreResultGot1(){
+  if(!getIsTestEnv()) return null;
+  if(testAggreResultGot1) return testAggreResultGot1;
+  testAggreResultGot1 = getSettingSheet().getRange("test_aggre_result_got_1").getValue();
+  return testAggreResultGot1;
+}
+
+let testAggreResultGot2;
+function getTestAggreResultGot2(){
+  if(!getIsTestEnv()) return null;
+  if(testAggreResultGot2) return testAggreResultGot2;
+  testAggreResultGot2 = getSettingSheet().getRange("test_aggre_result_got_2").getValue();
+  return testAggreResultGot2;
+}
+
+let testAggreResultExpected;
+function getTestAggreResultExpected(){
+  if(!getIsTestEnv()) return null;
+  if(testAggreResultExpected) return testAggreResultExpected;
+  testAggreResultExpected = getSettingSheet().getRange("test_aggre_result_expected").getValue();
+  return testAggreResultExpected;
+}

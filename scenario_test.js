@@ -29,6 +29,19 @@ function doScenarioTest(){
 // aggregate.js のテスト
 function testAggregate(){
   console.log("start: testAggregate");
+
   aggregateByMonth(0);
+
+  if(getTestAggreResultGot1() != getTestAggreResultExpected()){
+    throw new PfmUnexpectedError(
+      "test aggregate failed: pfm account 1: expected, got: " + getTestAggreResultExpected() + ", " + getTestAggreResultGot1(),
+      true);
+  }
+  if(getTestAggreResultGot2() != getTestAggreResultExpected()){
+    throw new PfmUnexpectedError(
+      "test aggregate failed: pfm account 2: expected, got: " + getTestAggreResultExpected() + ", " + getTestAggreResultGot2(),
+      true);
+  }
+
   console.log("end: testAggregate");
 }
