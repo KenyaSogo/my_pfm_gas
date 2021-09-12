@@ -1,16 +1,5 @@
 {
-  "name": "my_pfm_gas",
-  "version": "1.0.0",
-  "main": "index.js",
-  "repository": "https://github.com/KenyaSogo/my_pfm_gas.git",
-  "author": "KenyaSogo <kenyasogo.dev@gmail.com>",
-  "license": "MIT",
   "devDependencies": {
-    "@types/google-apps-script": "^1.0.37",
-    "@types/jest": "^27.0.1",
-    "jest": "^27.1.1"
-  },
-  "scripts": {
-    "test": "jest"
+    "@types/google-apps-script": "^1.0.37"
   }
 }
