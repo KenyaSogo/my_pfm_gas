@@ -126,11 +126,7 @@ function scrapeCashFlowDataDetail(loginId, loginPassword, targetYear, targetMont
     "method": 'post',
     "payload": JSON.stringify(payloadDetail),
   };
-  
   let urlDetail = 'https://PhantomJsCloud.com/api/browser/v2/'+ getPhantomJsKey() +'/';
-  let responseDetail = JSON.parse(UrlFetchApp.fetch(urlDetail, options).getContentText('UTF-8'));
   
-  let rawDataDetail = JSON.stringify(responseDetail.content.data).trim().replace(/\\/g, '').replace(/\" \"/g, '\"\\n\"');
-  
-  return rawDataDetail;
+  return fetchRawDataDetailFromUrl(urlDetail, options);
 }

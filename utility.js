@@ -293,3 +293,16 @@ function exportResultDetails(resultDetails, targetYear, targetMonth, sheetPrefix
   pasteTargetCell.setValue(mergedResultDetails);
   console.log("export target cell was updated");
 }
+
+// URL を叩いて rawData を取得する
+function fetchRawDataDetailFromUrl(urlDetail, options){
+  if(getIsTestEnv()) return getTestAggreRawDataDetail();
+
+  const responseDetail = JSON.parse(
+    UrlFetchApp.fetch(urlDetail, options)
+      .getContentText('UTF-8'));
+  return JSON.stringify(responseDetail.content.data)
+    .trim()
+    .replace(/\\/g, '')
+    .replace(/\" \"/g, '\"\\n\"');
+}

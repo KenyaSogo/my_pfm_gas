@@ -10,14 +10,14 @@ function getThisSpreadSheet(){
 let settingSheet;
 function getSettingSheet(){
   if(settingSheet) return settingSheet;
-  settingSheet = getThisSpreadSheet().getSheetByName("settings");
+  settingSheet = getThisSpreadSheet().getSheetByName(getIsTestEnv() ? "test_settings" : "settings");
   return settingSheet;
 }
 
 let phantomJsKey;
 function getPhantomJsKey(){
   if(phantomJsKey) return phantomJsKey;
-  phantomJsKey = getSettingSheet().getRange("phantom_js_key").getValue();
+  phantomJsKey = getSettingSheet().getRange(getIsTestEnv() ? "phantom_js_key_t" : "phantom_js_key").getValue();
   return phantomJsKey;
 }
 
@@ -129,14 +129,14 @@ function getCalcDabExportAddr(){
 let aggreImportSheetPrefix;
 function getAggreImportSheetPrefix(){
   if(aggreImportSheetPrefix) return aggreImportSheetPrefix;
-  aggreImportSheetPrefix = getSettingSheet().getRange("aggre_import_sheet_prefix").getValue();
+  aggreImportSheetPrefix = getSettingSheet().getRange(getIsTestEnv() ? "aggre_import_sheet_prefix_t" : "aggre_import_sheet_prefix").getValue();
   return aggreImportSheetPrefix;
 }
 
 let aggreImportAddrCol;
 function getAggreImportAddrCol(){
   if(aggreImportAddrCol) return aggreImportAddrCol;
-  aggreImportAddrCol = getSettingSheet().getRange("aggre_import_addr_col").getValue();
+  aggreImportAddrCol = getSettingSheet().getRange(getIsTestEnv() ? "aggre_import_addr_col_t" : "aggre_import_addr_col").getValue();
   return aggreImportAddrCol;
 }
 
@@ -291,7 +291,7 @@ let pfmAccountConfigs;
 function getPfmAccountConfigs(){
   if(pfmAccountConfigs) return pfmAccountConfigs;
   pfmAccountConfigs = fetchSettingDetailsFromColumns(
-    ["pfm_id", "pfm_pass"],
+    getIsTestEnv() ? ["pfm_id_t", "pfm_pass_t"] : ["pfm_id", "pfm_pass"],
     (colValueArrays, i) => {
       return {
         pfmId:   colValueArrays[0][i],
@@ -306,7 +306,7 @@ let aggregateYearMonthConfigs;
 function getAggregateYearMonthConfigs(){
   if(aggregateYearMonthConfigs) return aggregateYearMonthConfigs;
   aggregateYearMonthConfigs = fetchSettingDetailsFromColumns(
-    ["aggregate_year", "aggregate_month"],
+    getIsTestEnv() ? ["aggregate_year_t", "aggregate_month_t"] : ["aggregate_year", "aggregate_month"],
     (colValueArrays, i) => {
       return {
         aggregateYear:  colValueArrays[0][i],
@@ -379,4 +379,12 @@ function getOrderedCategoryConfigs(){
     }
   );
   return orderedCategoryConfigs;
+}
+
+let testAggreRawDataDetail;
+function getTestAggreRawDataDetail(){
+  if(!getIsTestEnv()) return null;
+  if(testAggreRawDataDetail) return testAggreRawDataDetail;
+  testAggreRawDataDetail = getSettingSheet().getRange("test_aggre_raw_data_detail");
+  return testAggreRawDataDetail;
 }
