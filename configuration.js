@@ -385,6 +385,6 @@ let testAggreRawDataDetail;
 function getTestAggreRawDataDetail(){
   if(!getIsTestEnv()) return null;
   if(testAggreRawDataDetail) return testAggreRawDataDetail;
-  testAggreRawDataDetail = getSettingSheet().getRange("test_aggre_raw_data_detail");
+  testAggreRawDataDetail = getSettingSheet().getRange("test_aggre_raw_data_detail").getValue();
   return testAggreRawDataDetail;
 }
