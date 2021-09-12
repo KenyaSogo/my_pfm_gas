@@ -21,9 +21,9 @@ function getPhantomJsKeyHoge(){
   return phantomJsKeyHoge;
 }
 
-module.exports = function testGetPhantomJsKeyHoge(){
-  return getPhantomJsKeyHoge();
-}
+// module.exports = function testGetPhantomJsKeyHoge(){
+//   return getPhantomJsKeyHoge();
+// }
 
 function consoleTestGetPhantomJsKeyHoge(){
   console.log(getPhantomJsKeyHoge());
