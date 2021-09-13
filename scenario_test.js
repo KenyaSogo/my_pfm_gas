@@ -32,14 +32,14 @@ function testAggregate(){
 
   aggregateByMonth(0);
 
-  if(getTestAggreResultGot1() != getTestAggreResultExpected()){
+  if(getTestAggreResultGot1() != getTestAggreResultExpected1()){
     throw new PfmUnexpectedError(
-      "test aggregate failed: pfm account 1: expected, got: " + getTestAggreResultExpected() + ", " + getTestAggreResultGot1(),
+      "test aggregate failed: pfm account 1: expected, got: " + getTestAggreResultExpected1() + ", " + getTestAggreResultGot1(),
       true);
   }
-  if(getTestAggreResultGot2() != getTestAggreResultExpected()){
+  if(getTestAggreResultGot2() != getTestAggreResultExpected2()){
     throw new PfmUnexpectedError(
-      "test aggregate failed: pfm account 2: expected, got: " + getTestAggreResultExpected() + ", " + getTestAggreResultGot2(),
+      "test aggregate failed: pfm account 2: expected, got: " + getTestAggreResultExpected1() + ", " + getTestAggreResultGot2(),
       true);
   }
 

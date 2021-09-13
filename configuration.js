@@ -381,15 +381,15 @@ function getOrderedCategoryConfigs(){
   return orderedCategoryConfigs;
 }
 
-let testAggreRawDataDetail;
+let testAggreRawDataDetailGetCount = 0;
 function getTestAggreRawDataDetail(){
   if(!getIsTestEnv()) return null;
-  if(testAggreRawDataDetail) return testAggreRawDataDetail;
-  testAggreRawDataDetail = getSettingSheet().getRange("test_aggre_raw_data_detail").getValue();
-  return testAggreRawDataDetail;
+  testAggreRawDataDetailGetCount++;
+  const targetRangeName = testAggreRawDataDetailGetCount == 1 ? "test_aggre_raw_data_detail_1" : "test_aggre_raw_data_detail_2";
+  return getSettingSheet().getRange(targetRangeName).getValue();
 }
 
-let testAggreResultGot1;
+let testAggreResultGot1; // TODO: シート関数使わずに result を取得 (シートとロジックの分離 (シート=DBに))
 function getTestAggreResultGot1(){
   if(!getIsTestEnv()) return null;
   if(testAggreResultGot1) return testAggreResultGot1;
@@ -405,10 +405,18 @@ function getTestAggreResultGot2(){
   return testAggreResultGot2;
 }
 
-let testAggreResultExpected;
-function getTestAggreResultExpected(){
+let testAggreResultExpected1;
+function getTestAggreResultExpected1(){
   if(!getIsTestEnv()) return null;
-  if(testAggreResultExpected) return testAggreResultExpected;
-  testAggreResultExpected = getSettingSheet().getRange("test_aggre_result_expected").getValue();
-  return testAggreResultExpected;
+  if(testAggreResultExpected1) return testAggreResultExpected1;
+  testAggreResultExpected1 = getSettingSheet().getRange("test_aggre_result_expected_1").getValue();
+  return testAggreResultExpected1;
+}
+
+let testAggreResultExpected2;
+function getTestAggreResultExpected2(){
+  if(!getIsTestEnv()) return null;
+  if(testAggreResultExpected2) return testAggreResultExpected2;
+  testAggreResultExpected2 = getSettingSheet().getRange("test_aggre_result_expected_2").getValue();
+  return testAggreResultExpected2;
 }
