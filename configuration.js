@@ -17,7 +17,7 @@ function getSettingSheet(){
 let phantomJsKey;
 function getPhantomJsKey(){
   if(phantomJsKey) return phantomJsKey;
-  phantomJsKey = getSettingSheet().getRange(getIsTestEnv() ? "phantom_js_key_t" : "phantom_js_key").getValue();
+  phantomJsKey = getRangeValueFrom(getSettingSheet(), "phantom_js_key");
   return phantomJsKey;
 }
 
@@ -129,84 +129,84 @@ function getCalcDabExportAddr(){
 let aggreImportSheetPrefix;
 function getAggreImportSheetPrefix(){
   if(aggreImportSheetPrefix) return aggreImportSheetPrefix;
-  aggreImportSheetPrefix = getSettingSheet().getRange(getIsTestEnv() ? "aggre_import_sheet_prefix_t" : "aggre_import_sheet_prefix").getValue();
+  aggreImportSheetPrefix = getRangeValueFrom(getSettingSheet(), "aggre_import_sheet_prefix");
   return aggreImportSheetPrefix;
 }
 
 let aggreImportAddrCol;
 function getAggreImportAddrCol(){
   if(aggreImportAddrCol) return aggreImportAddrCol;
-  aggreImportAddrCol = getSettingSheet().getRange(getIsTestEnv() ? "aggre_import_addr_col_t" : "aggre_import_addr_col").getValue();
+  aggreImportAddrCol = getRangeValueFrom(getSettingSheet(), "aggre_import_addr_col");
   return aggreImportAddrCol;
 }
 
 let calcDcImportSheetPrefix;
 function getCalcDcImportSheetPrefix(){
   if(calcDcImportSheetPrefix) return calcDcImportSheetPrefix;
-  calcDcImportSheetPrefix = getSettingSheet().getRange("calc_dc_import_sheet_prefix").getValue();
+  calcDcImportSheetPrefix = getRangeValueFrom(getSettingSheet(), "calc_dc_import_sheet_prefix");
   return calcDcImportSheetPrefix;
 }
 
 let calcDcImportAddrBeforeClosingDay;
 function getCalcDcImportAddrBeforeClosingDay(){
   if(calcDcImportAddrBeforeClosingDay) return calcDcImportAddrBeforeClosingDay;
-  calcDcImportAddrBeforeClosingDay = getSettingSheet().getRange("calc_dc_import_addr_before_closing_day").getValue();
+  calcDcImportAddrBeforeClosingDay = getRangeValueFrom(getSettingSheet(), "calc_dc_import_addr_before_closing_day");
   return calcDcImportAddrBeforeClosingDay;
 }
 
 let calcDcImportAddrAfterClosingDay;
 function getCalcDcImportAddrAfterClosingDay(){
   if(calcDcImportAddrAfterClosingDay) return calcDcImportAddrAfterClosingDay;
-  calcDcImportAddrAfterClosingDay = getSettingSheet().getRange("calc_dc_import_addr_after_closing_day").getValue();
+  calcDcImportAddrAfterClosingDay = getRangeValueFrom(getSettingSheet(), "calc_dc_import_addr_after_closing_day");
   return calcDcImportAddrAfterClosingDay;
 }
 
 let calcDabImportSheetPrefix;
 function getCalcDabImportSheetPrefix(){
   if(calcDabImportSheetPrefix) return calcDabImportSheetPrefix;
-  calcDabImportSheetPrefix = getSettingSheet().getRange("calc_dab_import_sheet_prefix").getValue();
+  calcDabImportSheetPrefix = getRangeValueFrom(getSettingSheet(), "calc_dab_import_sheet_prefix");
   return calcDabImportSheetPrefix;
 }
 
 let calcDabImportAddrBeforeClosingDay;
 function getCalcDabImportAddrBeforeClosingDay(){
   if(calcDabImportAddrBeforeClosingDay) return calcDabImportAddrBeforeClosingDay;
-  calcDabImportAddrBeforeClosingDay = getSettingSheet().getRange("calc_dab_import_addr_before_closing_day").getValue();
+  calcDabImportAddrBeforeClosingDay = getRangeValueFrom(getSettingSheet(), "calc_dab_import_addr_before_closing_day");
   return calcDabImportAddrBeforeClosingDay;
 }
 
 let calcDabImportAddrAfterClosingDay;
 function getCalcDabImportAddrAfterClosingDay(){
   if(calcDabImportAddrAfterClosingDay) return calcDabImportAddrAfterClosingDay;
-  calcDabImportAddrAfterClosingDay = getSettingSheet().getRange("calc_dab_import_addr_after_closing_day").getValue();
+  calcDabImportAddrAfterClosingDay = getRangeValueFrom(getSettingSheet(), "calc_dab_import_addr_after_closing_day");
   return calcDabImportAddrAfterClosingDay;
 }
 
 let calcDcbImportSheetPrefix;
 function getCalcDcbImportSheetPrefix(){
   if(calcDcbImportSheetPrefix) return calcDcbImportSheetPrefix;
-  calcDcbImportSheetPrefix = getSettingSheet().getRange("calc_dcb_import_sheet_prefix").getValue();
+  calcDcbImportSheetPrefix = getRangeValueFrom(getSettingSheet(), "calc_dcb_import_sheet_prefix");
   return calcDcbImportSheetPrefix;
 }
 
 let calcDcbImportAddrBeforeClosingDay;
 function getCalcDcbImportAddrBeforeClosingDay(){
   if(calcDcbImportAddrBeforeClosingDay) return calcDcbImportAddrBeforeClosingDay;
-  calcDcbImportAddrBeforeClosingDay = getSettingSheet().getRange("calc_dcb_import_addr_before_closing_day").getValue();
+  calcDcbImportAddrBeforeClosingDay = getRangeValueFrom(getSettingSheet(), "calc_dcb_import_addr_before_closing_day");
   return calcDcbImportAddrBeforeClosingDay;
 }
 
 let calcDcbImportAddrAfterClosingDay;
 function getCalcDcbImportAddrAfterClosingDay(){
   if(calcDcbImportAddrAfterClosingDay) return calcDcbImportAddrAfterClosingDay;
-  calcDcbImportAddrAfterClosingDay = getSettingSheet().getRange("calc_dcb_import_addr_after_closing_day").getValue();
+  calcDcbImportAddrAfterClosingDay = getRangeValueFrom(getSettingSheet(), "calc_dcb_import_addr_after_closing_day");
   return calcDcbImportAddrAfterClosingDay;
 }
 
 let aggreExportSheetPrefix;
 function getAggreExportSheetPrefix(){
   if(aggreExportSheetPrefix) return aggreExportSheetPrefix;
-  aggreExportSheetPrefix = getSettingSheet().getRange("aggre_export_sheet_prefix").getValue();
+  aggreExportSheetPrefix = getRangeValueFrom(getSettingSheet(), "aggre_export_sheet_prefix");
   return aggreExportSheetPrefix;
 }
 
@@ -276,14 +276,14 @@ function getIsTomorrowMonthlyStart(){
 let assetTotalEndBalanceRange;
 function getAssetTotalEndBalanceRange(){
   if(assetTotalEndBalanceRange) return assetTotalEndBalanceRange;
-  assetTotalEndBalanceRange = getSettingSheet().getRange("asset_total_end_balance");
+  assetTotalEndBalanceRange = getRangeFrom(getSettingSheet(), "asset_total_end_balance");
   return assetTotalEndBalanceRange;
 }
 
 let cashEndBalanceRange;
 function getCashEndBalanceRange(){
   if(cashEndBalanceRange) return cashEndBalanceRange;
-  cashEndBalanceRange = getSettingSheet().getRange("cash_end_balance");
+  cashEndBalanceRange = getRangeFrom(getSettingSheet(), "cash_end_balance");
   return cashEndBalanceRange;
 }
 
@@ -291,7 +291,7 @@ let pfmAccountConfigs;
 function getPfmAccountConfigs(){
   if(pfmAccountConfigs) return pfmAccountConfigs;
   pfmAccountConfigs = fetchSettingDetailsFromColumns(
-    getIsTestEnv() ? ["pfm_id_t", "pfm_pass_t"] : ["pfm_id", "pfm_pass"],
+    getColumnRangeNames(["pfm_id", "pfm_pass"]),
     (colValueArrays, i) => {
       return {
         pfmId:   colValueArrays[0][i],
@@ -306,7 +306,7 @@ let aggregateYearMonthConfigs;
 function getAggregateYearMonthConfigs(){
   if(aggregateYearMonthConfigs) return aggregateYearMonthConfigs;
   aggregateYearMonthConfigs = fetchSettingDetailsFromColumns(
-    getIsTestEnv() ? ["aggregate_year_t", "aggregate_month_t"] : ["aggregate_year", "aggregate_month"],
+    getColumnRangeNames(["aggregate_year", "aggregate_month"]),
     (colValueArrays, i) => {
       return {
         aggregateYear:  colValueArrays[0][i],
@@ -336,7 +336,7 @@ let assetConfigs;
 function getAssetConfigs(){
   if(assetConfigs) return assetConfigs;
   assetConfigs = fetchSettingDetailsFromColumns(
-    ["asset_name", "is_cash"],
+    getColumnRangeNames(["asset_name", "is_cash"]),
     (colValueArrays, i) => {
       return {
         assetName: colValueArrays[0][i],
@@ -351,7 +351,7 @@ let endBalances;
 function getEndBalances(){
   if(endBalances) return endBalances;
   endBalances = fetchSettingDetailsFromColumns(
-    ["calc_year", "calc_month", "cash_end_balance", "asset_total_end_balance"],
+    getColumnRangeNames(["calc_year", "calc_month", "cash_end_balance", "asset_total_end_balance"]),
     (colValueArrays, i) => {
       return {
         calcYear:             colValueArrays[0][i],

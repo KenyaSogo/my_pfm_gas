@@ -306,3 +306,18 @@ function fetchRawDataDetailFromUrl(urlDetail, options){
     .replace(/\\/g, '')
     .replace(/\" \"/g, '\"\\n\"');
 }
+
+// Range の Value を取得する
+function getRangeValueFrom(targetSheet, TargetRangeName){
+  return getRangeFrom(targetSheet, TargetRangeName).getValue();
+}
+
+// Range を取得する
+function getRangeFrom(targetSheet, TargetRangeName){
+  return targetSheet.getRange(getIsTestEnv() ? TargetRangeName + "_t" : TargetRangeName);
+}
+
+// 列の name の配列を取得する
+function getColumnRangeNames(names){
+  return names.map(n => getIsTestEnv() ? n + "_t" : n);
+}

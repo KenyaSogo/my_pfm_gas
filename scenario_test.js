@@ -24,6 +24,18 @@ function doScenarioTest(){
 
   // aggregate をテスト
   testAggregate();
+
+  // calculate_daily をテスト
+  testCalculateDaily();
+}
+
+// calculate_daily.js のテスト
+function testCalculateDaily(){
+  console.log("start: testCalculateDaily");
+
+  calcDailySummary(0);
+
+  console.log("end: testCalculateDaily");
 }
 
 // aggregate.js のテスト
