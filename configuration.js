@@ -213,7 +213,7 @@ function getAggreExportSheetPrefix(){
 let aggreExportAddr;
 function getAggreExportAddr(){
   if(aggreExportAddr) return aggreExportAddr;
-  aggreExportAddr = getSettingSheet().getRange("aggre_export_addr").getValue();
+  aggreExportAddr = getRangeValueFrom(getSettingSheet(), "aggre_export_addr");
   return aggreExportAddr;
 }
 
