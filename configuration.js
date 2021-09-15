@@ -420,3 +420,99 @@ function getTestAggreResultExpected2(){
   testAggreResultExpected2 = getSettingSheet().getRange("test_aggre_result_expected_2").getValue();
   return testAggreResultExpected2;
 }
+
+let testCalcDcbResultGotEarlier;
+function getTestCalcDcbResultGotEarlier(){
+  if(!getIsTestEnv()) return null;
+  if(testCalcDcbResultGotEarlier) return testCalcDcbResultGotEarlier;
+  testCalcDcbResultGotEarlier = getSettingSheet().getRange("test_calc_dcb_result_got_earlier").getValue();
+  return testCalcDcbResultGotEarlier;
+}
+
+let testCalcDcbResultGotLater;
+function getTestCalcDcbResultGotLater(){
+  if(!getIsTestEnv()) return null;
+  if(testCalcDcbResultGotLater) return testCalcDcbResultGotLater;
+  testCalcDcbResultGotLater = getSettingSheet().getRange("test_calc_dcb_result_got_later").getValue();
+  return testCalcDcbResultGotLater;
+}
+
+let testCalcDcbResultExpectedEarlier;
+function getTestCalcDcbResultExpectedEarlier(){
+  if(!getIsTestEnv()) return null;
+  if(testCalcDcbResultExpectedEarlier) return testCalcDcbResultExpectedEarlier;
+  testCalcDcbResultExpectedEarlier = getSettingSheet().getRange("test_calc_dcb_result_expected_earlier").getValue();
+  return testCalcDcbResultExpectedEarlier;
+}
+
+let testCalcDcbResultExpectedLater;
+function getTestCalcDcbResultExpectedLater(){
+  if(!getIsTestEnv()) return null;
+  if(testCalcDcbResultExpectedLater) return testCalcDcbResultExpectedLater;
+  testCalcDcbResultExpectedLater = getSettingSheet().getRange("test_calc_dcb_result_expected_later").getValue();
+  return testCalcDcbResultExpectedLater;
+}
+
+let testCalcDabResultGotEarlier;
+function getTestCalcDabResultGotEarlier(){
+  if(!getIsTestEnv()) return null;
+  if(testCalcDabResultGotEarlier) return testCalcDabResultGotEarlier;
+  testCalcDabResultGotEarlier = getSettingSheet().getRange("test_calc_dab_result_got_earlier").getValue();
+  return testCalcDabResultGotEarlier;
+}
+
+let testCalcDabResultGotLater;
+function getTestCalcDabResultGotLater(){
+  if(!getIsTestEnv()) return null;
+  if(testCalcDabResultGotLater) return testCalcDabResultGotLater;
+  testCalcDabResultGotLater = getSettingSheet().getRange("test_calc_dab_result_got_later").getValue();
+  return testCalcDabResultGotLater;
+}
+
+let testCalcDabResultExpectedEarlier;
+function getTestCalcDabResultExpectedEarlier(){
+  if(!getIsTestEnv()) return null;
+  if(testCalcDabResultExpectedEarlier) return testCalcDabResultExpectedEarlier;
+  testCalcDabResultExpectedEarlier = getSettingSheet().getRange("test_calc_dab_result_expected_earlier").getValue();
+  return testCalcDabResultExpectedEarlier;
+}
+
+let testCalcDabResultExpectedLater;
+function getTestCalcDabResultExpectedLater(){
+  if(!getIsTestEnv()) return null;
+  if(testCalcDabResultExpectedLater) return testCalcDabResultExpectedLater;
+  testCalcDabResultExpectedLater = getSettingSheet().getRange("test_calc_dab_result_expected_later").getValue();
+  return testCalcDabResultExpectedLater;
+}
+
+let testCalcDcResultGotEarlier;
+function getTestCalcDcResultGotEarlier(){
+  if(!getIsTestEnv()) return null;
+  if(testCalcDcResultGotEarlier) return testCalcDcResultGotEarlier;
+  testCalcDcResultGotEarlier = getSettingSheet().getRange("test_calc_dc_result_got_earlier").getValue();
+  return testCalcDcResultGotEarlier;
+}
+
+let testCalcDcResultGotLater;
+function getTestCalcDcResultGotLater(){
+  if(!getIsTestEnv()) return null;
+  if(testCalcDcResultGotLater) return testCalcDcResultGotLater;
+  testCalcDcResultGotLater = getSettingSheet().getRange("test_calc_dc_result_got_later").getValue();
+  return testCalcDcResultGotLater;
+}
+
+let testCalcDcResultExpectedEarlier;
+function getTestCalcDcResultExpectedEarlier(){
+  if(!getIsTestEnv()) return null;
+  if(testCalcDcResultExpectedEarlier) return testCalcDcResultExpectedEarlier;
+  testCalcDcResultExpectedEarlier = getSettingSheet().getRange("test_calc_dc_result_expected_earlier").getValue();
+  return testCalcDcResultExpectedEarlier;
+}
+
+let testCalcDcResultExpectedLater;
+function getTestCalcDcResultExpectedLater(){
+  if(!getIsTestEnv()) return null;
+  if(testCalcDcResultExpectedLater) return testCalcDcResultExpectedLater;
+  testCalcDcResultExpectedLater = getSettingSheet().getRange("test_calc_dc_result_expected_later").getValue();
+  return testCalcDcResultExpectedLater;
+}

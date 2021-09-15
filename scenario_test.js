@@ -33,7 +33,18 @@ function doScenarioTest(){
 function testCalculateDaily(){
   console.log("start: testCalculateDaily");
 
+  // 検証対象の処理を実行
   calcDailySummary(0);
+
+  // 結果検証
+  [
+    ["calc daily: cash balance", "earlier month", getTestCalcDcbResultExpectedEarlier, getTestCalcDcbResultGotEarlier],
+    ["calc daily: cash balance", "later month", getTestCalcDcbResultExpectedLater, getTestCalcDcbResultGotLater],
+    ["calc daily: asset balance", "earlier month", getTestCalcDabResultExpectedEarlier, getTestCalcDabResultGotEarlier],
+    ["calc daily: asset balance", "later month", getTestCalcDabResultExpectedLater, getTestCalcDabResultGotLater],
+    ["calc daily: category summary", "earlier month", getTestCalcDcResultExpectedEarlier, getTestCalcDcResultGotEarlier],
+    ["calc daily: category summary", "later month", getTestCalcDcResultExpectedLater, getTestCalcDcResultGotLater],
+  ].forEach(t => validateScenarioResult(...t));
 
   console.log("end: testCalculateDaily");
 }
@@ -42,18 +53,23 @@ function testCalculateDaily(){
 function testAggregate(){
   console.log("start: testAggregate");
 
+  // 検証対象の処理を実行
   aggregateByMonth(0);
 
-  if(getTestAggreResultGot1() != getTestAggreResultExpected1()){
-    throw new PfmUnexpectedError(
-      "test aggregate failed: pfm account 1: expected, got: " + getTestAggreResultExpected1() + ", " + getTestAggreResultGot1(),
-      true);
-  }
-  if(getTestAggreResultGot2() != getTestAggreResultExpected2()){
-    throw new PfmUnexpectedError(
-      "test aggregate failed: pfm account 2: expected, got: " + getTestAggreResultExpected1() + ", " + getTestAggreResultGot2(),
-      true);
-  }
+  // 結果検証
+  [
+    ["test aggregate", "pfm account 1", getTestAggreResultExpected1, getTestAggreResultGot1],
+    ["test aggregate", "pfm account 2", getTestAggreResultExpected2, getTestAggreResultGot2],
+  ].forEach(t => validateScenarioResult(...t));
 
   console.log("end: testAggregate");
+}
+
+// 結果の検証 (期待値と実際の結果の突き合わせ) を行う
+function validateScenarioResult(testCaseCategoryName, testCaseName, expectedValueGetFunc, gotValueGetFunc){
+  if(gotValueGetFunc() != expectedValueGetFunc()){
+    throw new PfmUnexpectedError(
+      testCaseCategoryName + " failed: " + testCaseName + ": expected, got: " + expectedValueGetFunc() + ", " + gotValueGetFunc(),
+      true);
+  }
 }
