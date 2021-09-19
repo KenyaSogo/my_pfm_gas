@@ -32,9 +32,24 @@ function doScenarioTest(){
   testCalculateMonthly();
 
   // report をテスト
-  // TODO: 実装
+  testReport();
 
   // check_maintenance, create_sheet, update_month のテストは skip
+}
+
+// report.js のテスト
+function testReport(){
+  console.log("start: testReport");
+
+  // 検証対象の処理を実行
+  doReport();
+
+  // 結果検証
+  [
+    ["test report", "main scenario", getTestReportResultExpected, getTestReportResultGot],
+  ].forEach(t => validateScenarioResult(...t));
+
+  console.log("end: testReport");
 }
 
 // calculate_monthly.js のテスト
@@ -46,7 +61,7 @@ function testCalculateMonthly(){
 
   // 結果検証
   [
-    ["calc monthly", "category summary", getTestCalcMcResultExpected, getTestCalcMcResultGot],
+    ["test calc monthly: category summary", "main scenario", getTestCalcMcResultExpected, getTestCalcMcResultGot],
   ].forEach(t => validateScenarioResult(...t));
 
   console.log("end: testCalculateMonthly");
@@ -61,12 +76,12 @@ function testCalculateDaily(){
 
   // 結果検証
   [
-    ["calc daily: cash balance", "earlier month", getTestCalcDcbResultExpectedEarlier, getTestCalcDcbResultGotEarlier],
-    ["calc daily: cash balance", "later month", getTestCalcDcbResultExpectedLater, getTestCalcDcbResultGotLater],
-    ["calc daily: asset balance", "earlier month", getTestCalcDabResultExpectedEarlier, getTestCalcDabResultGotEarlier],
-    ["calc daily: asset balance", "later month", getTestCalcDabResultExpectedLater, getTestCalcDabResultGotLater],
-    ["calc daily: category summary", "earlier month", getTestCalcDcResultExpectedEarlier, getTestCalcDcResultGotEarlier],
-    ["calc daily: category summary", "later month", getTestCalcDcResultExpectedLater, getTestCalcDcResultGotLater],
+    ["test calc daily: cash balance", "earlier month", getTestCalcDcbResultExpectedEarlier, getTestCalcDcbResultGotEarlier],
+    ["test calc daily: cash balance", "later month", getTestCalcDcbResultExpectedLater, getTestCalcDcbResultGotLater],
+    ["test calc daily: asset balance", "earlier month", getTestCalcDabResultExpectedEarlier, getTestCalcDabResultGotEarlier],
+    ["test calc daily: asset balance", "later month", getTestCalcDabResultExpectedLater, getTestCalcDabResultGotLater],
+    ["test calc daily: category summary", "earlier month", getTestCalcDcResultExpectedEarlier, getTestCalcDcResultGotEarlier],
+    ["test calc daily: category summary", "later month", getTestCalcDcResultExpectedLater, getTestCalcDcResultGotLater],
   ].forEach(t => validateScenarioResult(...t));
 
   console.log("end: testCalculateDaily");

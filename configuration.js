@@ -87,42 +87,42 @@ function getCalcMcImportAddr(){
 let calcMcExportSheetPrefix;
 function getCalcMcExportSheetPrefix(){
   if(calcMcExportSheetPrefix) return calcMcExportSheetPrefix;
-  calcMcExportSheetPrefix = getSettingSheet().getRange("calc_mc_export_sheet_prefix").getValue();
+  calcMcExportSheetPrefix = getRangeValueFrom(getSettingSheet(), "calc_mc_export_sheet_prefix");
   return calcMcExportSheetPrefix;
 }
 
 let calcMcExportAddr;
 function getCalcMcExportAddr(){
   if(calcMcExportAddr) return calcMcExportAddr;
-  calcMcExportAddr = getSettingSheet().getRange("calc_mc_export_addr").getValue();
+  calcMcExportAddr = getRangeValueFrom(getSettingSheet(), "calc_mc_export_addr");
   return calcMcExportAddr;
 }
 
 let calcDcbExportSheetPrefix;
 function getCalcDcbExportSheetPrefix(){
   if(calcDcbExportSheetPrefix) return calcDcbExportSheetPrefix;
-  calcDcbExportSheetPrefix = getSettingSheet().getRange("calc_dcb_export_sheet_prefix").getValue();
+  calcDcbExportSheetPrefix = getRangeValueFrom(getSettingSheet(), "calc_dcb_export_sheet_prefix");
   return calcDcbExportSheetPrefix;
 }
 
 let calcDcbExportAddr;
 function getCalcDcbExportAddr(){
   if(calcDcbExportAddr) return calcDcbExportAddr;
-  calcDcbExportAddr = getSettingSheet().getRange("calc_dcb_export_addr").getValue();
+  calcDcbExportAddr = getRangeValueFrom(getSettingSheet(), "calc_dcb_export_addr");
   return calcDcbExportAddr;
 }
 
 let calcDabExportSheetPrefix;
 function getCalcDabExportSheetPrefix(){
   if(calcDabExportSheetPrefix) return calcDabExportSheetPrefix;
-  calcDabExportSheetPrefix = getSettingSheet().getRange("calc_dab_export_sheet_prefix").getValue();
+  calcDabExportSheetPrefix = getRangeValueFrom(getSettingSheet(), "calc_dab_export_sheet_prefix");
   return calcDabExportSheetPrefix;
 }
 
 let calcDabExportAddr;
 function getCalcDabExportAddr(){
   if(calcDabExportAddr) return calcDabExportAddr;
-  calcDabExportAddr = getSettingSheet().getRange("calc_dab_export_addr").getValue();
+  calcDabExportAddr = getRangeValueFrom(getSettingSheet(), "calc_dab_export_addr");
   return calcDabExportAddr;
 }
 
@@ -416,7 +416,7 @@ function getTestCalenderDate(){
 let testAggreRawDataDetailGetCount = 0;
 function getTestAggreRawDataDetail(){
   if(!getIsTestEnv()) return null;
-  testAggreRawDataDetailGetCount++;
+  testAggreRawDataDetailGetCount++; // TODO: config ではなく util で制御する
   const targetRangeName = testAggreRawDataDetailGetCount == 1 ? "test_aggre_raw_data_detail_1" : "test_aggre_raw_data_detail_2";
   return getSettingSheet().getRange(targetRangeName).getValue();
 }
@@ -563,4 +563,28 @@ function getTestCalcMcResultExpected(){
   if(testCalcMcResultExpected) return testCalcMcResultExpected;
   testCalcMcResultExpected = getSettingSheet().getRange("test_calc_mc_result_expected").getValue();
   return testCalcMcResultExpected;
+}
+
+let testReportResultGotRange;
+function getTestReportResultGotRange(){
+  if(!getIsTestEnv()) return null;
+  if(testReportResultGotRange) return testReportResultGotRange;
+  testReportResultGotRange = getSettingSheet().getRange("test_report_result_got");
+  return testReportResultGotRange;
+}
+
+let testReportResultGot;
+function getTestReportResultGot(){
+  if(!getIsTestEnv()) return null;
+  if(testReportResultGot) return testReportResultGot;
+  testReportResultGot = getTestReportResultGotRange().getValue();
+  return testReportResultGot;
+}
+
+let testReportResultExpected;
+function getTestReportResultExpected(){
+  if(!getIsTestEnv()) return null;
+  if(testReportResultExpected) return testReportResultExpected;
+  testReportResultExpected = getSettingSheet().getRange("test_report_result_expected").getValue();
+  return testReportResultExpected;
 }

@@ -107,6 +107,10 @@ function formatNumStr(numStr){
 
 // slack の my-pfm-report チャンネルにポストする
 function postSlackReportingChannel(message){
+  if(getIsTestEnv()){
+    getTestReportResultGotRange().setValue(message);
+    return;
+  }
   postSlackTo(getSlackReportingBotWebhookUrl(), convertSlackCodeFormatMessage(message));
 }
 

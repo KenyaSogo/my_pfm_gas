@@ -26,10 +26,9 @@ function doReport(){
   const {lastTotalAssetBalanceAtPreviousMonth} = getLastDateAndTotalAssetBalancePreviousMonthFrom(targetYear, targetMonth);
 
   // 対象月の項目別月次集計結果を取得する
-  const summaryByCategoryAtCurrentMonth = extractReportInfoFromSummaryByCategory(fetchMonthlySummaryByCategory(targetYear, targetMonth));
+  const summaryByCategoryAtCurrentMonth = getSummaryByCategoryForReportAt(targetYear, targetMonth);
   // 対象月の先月分の項目別月次集計結果を取得する
-  const {previousMonthYyyy, previousMonthMm} = getPreviousYearMonth(targetYear, targetMonth);
-  const summaryByCategoryAtPreviousMonth = extractReportInfoFromSummaryByCategory(fetchMonthlySummaryByCategory(previousMonthYyyy, previousMonthMm));
+  const summaryByCategoryAtPreviousMonth = getSummaryByCategoryForReportPreviousMonthFrom(targetYear, targetMonth);
 
   // レポートをまとめて、slack に通知する
   postSlackReportingChannel(
@@ -108,6 +107,17 @@ function fetchMonthlySummaryByCategory(targetYear, targetMonth){
       };
     }
   );
+}
+
+// 指定月の前月の、項目別月次集計結果を取得する
+function getSummaryByCategoryForReportPreviousMonthFrom(targetYear, targetMonth){
+  const {previousMonthYyyy, previousMonthMm} = getPreviousYearMonth(targetYear, targetMonth);
+  return getSummaryByCategoryForReportAt(previousMonthYyyy, previousMonthMm);
+}
+
+// 指定月の、項目別月次集計結果を取得する
+function getSummaryByCategoryForReportAt(targetYear, targetMonth){
+  return extractReportInfoFromSummaryByCategory(fetchMonthlySummaryByCategory(targetYear, targetMonth));
 }
 
 // 指定月の前月末の、総資産残高推移の基準日と残高を取得して返す
