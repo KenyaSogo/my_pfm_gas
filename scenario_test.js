@@ -27,6 +27,29 @@ function doScenarioTest(){
 
   // calculate_daily をテスト
   testCalculateDaily();
+
+  // calculate_monthly をテスト
+  testCalculateMonthly();
+
+  // report をテスト
+  // TODO: 実装
+
+  // check_maintenance, create_sheet, update_month のテストは skip
+}
+
+// calculate_monthly.js のテスト
+function testCalculateMonthly(){
+  console.log("start: testCalculateMonthly");
+
+  // 検証対象の処理を実行
+  calcMonthlySummary(0);
+
+  // 結果検証
+  [
+    ["calc monthly", "category summary", getTestCalcMcResultExpected, getTestCalcMcResultGot],
+  ].forEach(t => validateScenarioResult(...t));
+
+  console.log("end: testCalculateMonthly");
 }
 
 // calculate_daily.js のテスト

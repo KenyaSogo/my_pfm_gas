@@ -12,12 +12,12 @@ function getCurrent_yyyy_mm_dd_hh_mm_ss(){
 
 // 現在の日付の年 (yyyy 形式) を返す
 function getCurrentYyyy(){
-  return getYyyyFrom(new Date());
+  return getYyyyFrom(getIsTestEnv() ? getTestCalenderDate() : Date.now());
 }
 
 // 現在の日付の月 (MM 形式) を返す
 function getCurrentMm(){
-  return getMmFrom(new Date());
+  return getMmFrom(getIsTestEnv() ? getTestCalenderDate() : Date.now());
 }
 
 // Date を yyyy 形式の文字列にして返す

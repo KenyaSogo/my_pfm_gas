@@ -59,28 +59,28 @@ function getSlackAlertBotWebhookUrl(){
 let calcDcExportSheetPrefix;
 function getCalcDcExportSheetPrefix(){
   if(calcDcExportSheetPrefix) return calcDcExportSheetPrefix;
-  calcDcExportSheetPrefix = getSettingSheet().getRange("calc_dc_export_sheet_prefix").getValue();
+  calcDcExportSheetPrefix = getRangeValueFrom(getSettingSheet(), "calc_dc_export_sheet_prefix");
   return calcDcExportSheetPrefix;
 }
 
 let calcDcExportAddr;
 function getCalcDcExportAddr(){
   if(calcDcExportAddr) return calcDcExportAddr;
-  calcDcExportAddr = getSettingSheet().getRange("calc_dc_export_addr").getValue();
+  calcDcExportAddr = getRangeValueFrom(getSettingSheet(), "calc_dc_export_addr");
   return calcDcExportAddr;
 }
 
 let calcMcImportSheetPrefix;
 function getCalcMcImportSheetPrefix(){
   if(calcMcImportSheetPrefix) return calcMcImportSheetPrefix;
-  calcMcImportSheetPrefix = getSettingSheet().getRange("calc_mc_import_sheet_prefix").getValue();
+  calcMcImportSheetPrefix = getRangeValueFrom(getSettingSheet(), "calc_mc_import_sheet_prefix");
   return calcMcImportSheetPrefix;
 }
 
 let calcMcImportAddr;
 function getCalcMcImportAddr(){
   if(calcMcImportAddr) return calcMcImportAddr;
-  calcMcImportAddr = getSettingSheet().getRange("calc_mc_import_addr").getValue();
+  calcMcImportAddr = getRangeValueFrom(getSettingSheet(), "calc_mc_import_addr");
   return calcMcImportAddr;
 }
 
@@ -368,7 +368,7 @@ let orderedCategoryConfigs;
 function getOrderedCategoryConfigs(){
   if(orderedCategoryConfigs) return orderedCategoryConfigs;
   orderedCategoryConfigs = fetchSettingDetailsFromColumns(
-    ["ordered_large_category", "ordered_middle_category", "category_large_class", "category_middle_class"],
+    getColumnRangeNames(["ordered_large_category", "ordered_middle_category", "category_large_class", "category_middle_class"]),
     (colValueArrays, i) => {
       return {
         largeCategoryName:       colValueArrays[0][i],
@@ -379,6 +379,38 @@ function getOrderedCategoryConfigs(){
     }
   );
   return orderedCategoryConfigs;
+}
+
+let testCalenderDateYear;
+function getTestCalenderDateYear(){
+  if(!getIsTestEnv()) return null;
+  if(testCalenderDateYear) return testCalenderDateYear;
+  testCalenderDateYear = getSettingSheet().getRange("test_calender_date_year").getValue();
+  return testCalenderDateYear;
+}
+
+let testCalenderDateMonth;
+function getTestCalenderDateMonth(){
+  if(!getIsTestEnv()) return null;
+  if(testCalenderDateMonth) return testCalenderDateMonth;
+  testCalenderDateMonth = getSettingSheet().getRange("test_calender_date_month").getValue();
+  return testCalenderDateMonth;
+}
+
+let testCalenderDateDay;
+function getTestCalenderDateDay(){
+  if(!getIsTestEnv()) return null;
+  if(testCalenderDateDay) return testCalenderDateDay;
+  testCalenderDateDay = getSettingSheet().getRange("test_calender_date_day").getValue();
+  return testCalenderDateDay;
+}
+
+let testCalenderDate;
+function getTestCalenderDate(){
+  if(!getIsTestEnv()) return null;
+  if(testCalenderDate) return testCalenderDate;
+  testCalenderDate = new Date(getTestCalenderDateYear(), getTestCalenderDateMonth(), getTestCalenderDateDay());
+  return testCalenderDate;
 }
 
 let testAggreRawDataDetailGetCount = 0;
@@ -515,4 +547,20 @@ function getTestCalcDcResultExpectedLater(){
   if(testCalcDcResultExpectedLater) return testCalcDcResultExpectedLater;
   testCalcDcResultExpectedLater = getSettingSheet().getRange("test_calc_dc_result_expected_later").getValue();
   return testCalcDcResultExpectedLater;
+}
+
+let testCalcMcResultGot;
+function getTestCalcMcResultGot(){
+  if(!getIsTestEnv()) return null;
+  if(testCalcMcResultGot) return testCalcMcResultGot;
+  testCalcMcResultGot = getSettingSheet().getRange("test_calc_mc_result_got").getValue();
+  return testCalcMcResultGot;
+}
+
+let testCalcMcResultExpected;
+function getTestCalcMcResultExpected(){
+  if(!getIsTestEnv()) return null;
+  if(testCalcMcResultExpected) return testCalcMcResultExpected;
+  testCalcMcResultExpected = getSettingSheet().getRange("test_calc_mc_result_expected").getValue();
+  return testCalcMcResultExpected;
 }
