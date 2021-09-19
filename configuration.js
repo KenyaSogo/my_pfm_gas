@@ -409,7 +409,7 @@ let testCalenderDate;
 function getTestCalenderDate(){
   if(!getIsTestEnv()) return null;
   if(testCalenderDate) return testCalenderDate;
-  testCalenderDate = new Date(getTestCalenderDateYear(), getTestCalenderDateMonth(), getTestCalenderDateDay());
+  testCalenderDate = new Date(getTestCalenderDateYear(), getTestCalenderDateMonth() - 1, getTestCalenderDateDay()); // the month is 0-indexed
   return testCalenderDate;
 }
 
