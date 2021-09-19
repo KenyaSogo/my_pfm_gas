@@ -413,12 +413,20 @@ function getTestCalenderDate(){
   return testCalenderDate;
 }
 
-let testAggreRawDataDetailGetCount = 0;
-function getTestAggreRawDataDetail(){
+let testAggreRawDataDetail1
+function getTestAggreRawDataDetail1(){
   if(!getIsTestEnv()) return null;
-  testAggreRawDataDetailGetCount++; // TODO: config ではなく util で制御する
-  const targetRangeName = testAggreRawDataDetailGetCount == 1 ? "test_aggre_raw_data_detail_1" : "test_aggre_raw_data_detail_2";
-  return getSettingSheet().getRange(targetRangeName).getValue();
+  if(testAggreRawDataDetail1) return testAggreRawDataDetail1;
+  testAggreRawDataDetail1 = getSettingSheet().getRange("test_aggre_raw_data_detail_1").getValue();
+  return testAggreRawDataDetail1;
+}
+
+let testAggreRawDataDetail2
+function getTestAggreRawDataDetail2(){
+  if(!getIsTestEnv()) return null;
+  if(testAggreRawDataDetail2) return testAggreRawDataDetail2;
+  testAggreRawDataDetail2 = getSettingSheet().getRange("test_aggre_raw_data_detail_2").getValue();
+  return testAggreRawDataDetail2;
 }
 
 let testAggreResultGot1; // TODO: シート関数使わずに result を取得 (シートとロジックの分離 (シート=DBに))

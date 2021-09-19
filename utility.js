@@ -299,8 +299,12 @@ function exportResultDetails(resultDetails, targetYear, targetMonth, sheetPrefix
 }
 
 // URL を叩いて rawData を取得する
+let testAggreRawDataDetailGetCount = 0;
 function fetchRawDataDetailFromUrl(urlDetail, options){
-  if(getIsTestEnv()) return getTestAggreRawDataDetail();
+  if(getIsTestEnv()){
+    testAggreRawDataDetailGetCount++;
+    return testAggreRawDataDetailGetCount == 1 ? getTestAggreRawDataDetail1() : getTestAggreRawDataDetail2();
+  }
 
   const responseDetail = JSON.parse(
     UrlFetchApp.fetch(urlDetail, options)
