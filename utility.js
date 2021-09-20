@@ -30,6 +30,11 @@ function getMmFrom(date){
   return Utilities.formatDate(date, "Asia/Tokyo", "MM");
 }
 
+// Date を yyyy/MM/dd 形式の文字列にして返す
+function getYyyyMmDdFrom(date){
+  return Utilities.formatDate(date, "Asia/Tokyo", "yyyy/MM/dd");
+}
+
 // Date の n ヶ月前を返す
 function getDateMonthsAgoFrom(date, agoNum){
   return new Date(date.getFullYear(), date.getMonth() - agoNum, 1);
@@ -45,7 +50,17 @@ function getNextMonthDate(date){
   return new Date(date.getFullYear(), date.getMonth() + 1, 1);
 }
 
-// 指定月日に対して n ヶ月前の月および日を返す
+// Date の当月末を返す
+function getCurrentMonthEndDate(date){
+  return new Date(date.getFullYear(), date.getMonth() + 1, 0);
+}
+
+// Date の n 日後を返す
+function getDateLaterFrom(date, laterNum){
+  return new Date(date.getFullYear(), date.getMonth(), date.getDay() + laterNum);
+}
+
+// 指定年月に対して n ヶ月前の年および月を返す
 function getYearMonthMonthsAgoFrom(targetYear, targetMonth, agoNum){
   const currentMonthDate = new Date([targetYear, targetMonth, "01"].join("/"));
   const dateSomeMonthsAgo = getDateMonthsAgoFrom(currentMonthDate, agoNum);
@@ -55,7 +70,7 @@ function getYearMonthMonthsAgoFrom(targetYear, targetMonth, agoNum){
   return {someMonthsAgoYyyy, someMonthsAgoMm};
 }
 
-// 指定月日に対して前月の月および日を返す
+// 指定年月に対して前月の年および月を返す
 function getPreviousYearMonth(targetYear, targetMonth){
   const currentMonthDate = new Date([targetYear, targetMonth, "01"].join("/"));
   const previousMonthDate = getPreviousMonthDate(currentMonthDate);
@@ -65,7 +80,7 @@ function getPreviousYearMonth(targetYear, targetMonth){
   return {previousMonthYyyy, previousMonthMm};
 }
 
-// 指定月日に対して翌月の月および日を返す
+// 指定年月に対して翌月の年および月を返す
 function getNextYearMonth(targetYear, targetMonth){
   const currentMonthDate = new Date([targetYear, targetMonth, "01"].join("/"));
   const nextMonthDate = getNextMonthDate(currentMonthDate);
@@ -73,6 +88,14 @@ function getNextYearMonth(targetYear, targetMonth){
   const nextMonthMm = getMmFrom(nextMonthDate);
 
   return {nextMonthYyyy, nextMonthMm};
+}
+
+// 指定年月の月初から月末までの date 配列を返す
+function getMonthlyDateArrayAt(targetYear, targetMonth){
+  const currentMonthStartDate = new Date([targetYear, targetMonth, "01"].join("/"));
+  const currentMonthEndDate = getCurrentMonthEndDate(currentMonthStartDate);
+  const dateNum = currentMonthEndDate.getDate() - currentMonthStartDate.getDate() + 1;
+  return getIntRangeFromZero(dateNum).map(i => getDateLaterFrom(currentMonthStartDate, i));
 }
 
 // 指定した列範囲に格納されている値から、ヘッダー行と空白行を除いた配列を返す
