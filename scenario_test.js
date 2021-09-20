@@ -128,4 +128,5 @@ function validateScenarioResult(testCaseCategoryName, testCaseName, expectedValu
       testCaseCategoryName + " failed: " + testCaseName + ": expected, got: " + expectedValueGetFunc() + ", " + gotValueGetFunc(),
       true);
   }
+  console.log(testCaseCategoryName + " succeeded: " + testCaseName);
 }
