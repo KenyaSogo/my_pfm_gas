@@ -30,6 +30,15 @@ function doReport(){
   // 対象月の先月分の項目別月次集計結果を取得する
   const summaryByCategoryAtPreviousMonth = getSummaryByCategoryForReportPreviousMonthFrom(targetYear, targetMonth);
 
+  // グラフ画像URLを用意する
+  const imageUrls = [
+    {
+      title: "daily balance: cash",
+      value: "Daily transition graph of cash and deposit balance.",
+      url: getGraphDcbImageUrl(),
+    },
+  ];
+
   // レポートをまとめて、slack に通知する
   postSlackReportingChannel(
     getReportMessage(
@@ -40,7 +49,8 @@ function doReport(){
       lastTotalAssetBalanceDate,
       lastTotalAssetBalanceAtPreviousMonth,
       summaryByCategoryAtCurrentMonth,
-      summaryByCategoryAtPreviousMonth));
+      summaryByCategoryAtPreviousMonth),
+    imageUrls);
 }
 
 // レポートするメッセージを編集して返す

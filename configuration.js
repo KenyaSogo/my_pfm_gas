@@ -238,6 +238,13 @@ function getGraphDcbImportAddr(){
   return graphDcbImportAddr;
 }
 
+let graphDcbImageUrl;
+function getGraphDcbImageUrl(){
+  if(graphDcbImageUrl) return graphDcbImageUrl;
+  graphDcbImageUrl = getSettingSheet().getRange("graph_dcb_image_url").getValue();
+  return graphDcbImageUrl;
+}
+
 let aggregateYearRange;
 function getAggregateYearRange(){
   if(aggregateYearRange) return aggregateYearRange;

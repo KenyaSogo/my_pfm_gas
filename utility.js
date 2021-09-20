@@ -134,12 +134,12 @@ function formatNumStr(numStr){
 }
 
 // slack の my-pfm-report チャンネルにポストする
-function postSlackReportingChannel(message){
+function postSlackReportingChannel(message, imageUrls){
   if(getIsTestEnv()){
     getTestReportResultGotRange().setValue(message);
     return;
   }
-  postSlackTo(getSlackReportingBotWebhookUrl(), convertSlackCodeFormatMessage(message));
+  postSlackToWithImageUrlAttachments(getSlackReportingBotWebhookUrl(), convertSlackCodeFormatMessage(message), imageUrls);
 }
 
 // slack の my-pfm-dev-notif チャンネルにポストする
@@ -166,6 +166,33 @@ function postSlackTo(webHookUrl, message){
     method:      "post",
     contentType: "application/json",
     payload:     JSON.stringify({text: message}),
+  };
+  UrlFetchApp.fetch(webHookUrl, options);
+}
+
+// slack の webHookUrl に対して、画像URLを添付してポストする
+function postSlackToWithImageUrlAttachments(webHookUrl, message, imageUrls){
+  const payloadObj = {
+    text: message,
+    attachments: imageUrls.map(
+      imageUrl => {
+        return {
+          fields: [
+            {
+              title: imageUrl.title,
+              value: imageUrl.value,
+            }
+          ],
+          image_url: imageUrl.url,
+        };
+      }
+    ),
+  };
+
+  const options = {
+    method:      "post",
+    contentType: "application/json",
+    payload:     JSON.stringify(payloadObj),
   };
   UrlFetchApp.fetch(webHookUrl, options);
 }
