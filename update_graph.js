@@ -15,6 +15,7 @@ function doUpdateGraphSourceData(){
   // グラフの終点となる月を取得する
   const targetEndYear = getCurrentYyyy();
   const targetEndMonth = getCurrentMm();
+  const targetEndDate = getCurrentDate();
   // 対象月のリストを作成する
   const monthNum = 4;
   const targetYearMonths = getIntRangeFromZero(monthNum).map(
@@ -27,7 +28,7 @@ function doUpdateGraphSourceData(){
       };
     }
   );
-  console.log("targetYearMonths: " + targetYearMonths);
+  console.log("targetYearMonths: " + targetYearMonths.map(ym => Object.values(ym).join("/")));
 
   // 現預金残高の集計
   // 集計の始点となる月の末残高を取得する TODO: 空振り対応
@@ -53,7 +54,7 @@ function doUpdateGraphSourceData(){
           } else {
             return {
               date: targetDateStr,
-              balance: lastCashBalance,
+              balance: targetDate.getTime() > targetEndDate.getTime() ? "" : lastCashBalance,
             };
           }
         }

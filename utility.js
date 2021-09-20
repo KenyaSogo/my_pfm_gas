@@ -20,6 +20,11 @@ function getCurrentMm(){
   return getMmFrom(getIsTestEnv() ? getTestCalenderDate() : new Date());
 }
 
+// 現在の日付を返す
+function getCurrentDate(){
+  return getIsTestEnv() ? getTestCalenderDate() : new Date();
+}
+
 // Date を yyyy 形式の文字列にして返す
 function getYyyyFrom(date){
   return Utilities.formatDate(date, "Asia/Tokyo", "yyyy");
@@ -57,7 +62,7 @@ function getCurrentMonthEndDate(date){
 
 // Date の n 日後を返す
 function getDateLaterFrom(date, laterNum){
-  return new Date(date.getFullYear(), date.getMonth(), date.getDay() + laterNum);
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate() + laterNum);
 }
 
 // 指定年月に対して n ヶ月前の年および月を返す
