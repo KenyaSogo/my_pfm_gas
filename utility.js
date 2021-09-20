@@ -302,28 +302,32 @@ function omitBlankElemFromArray(array){
   return array.filter(r => r);
 }
 
+// 結果明細を export 対象シート (月次) に貼り付ける
+function exportMonthlyResultDetails(resultDetails, targetYear, targetMonth, sheetPrefix, pasteAddr){
+  console.log("exportMonthlyResultDetails: targetYear, targetMonth: " + [targetYear, targetMonth].join(", "));
+  exportResultDetails(resultDetails, sheetPrefix + "_" + targetYear + targetMonth, pasteAddr)
+}
+
 // 結果明細を export 対象シートに貼り付ける
-function exportResultDetails(resultDetails, targetYear, targetMonth, sheetPrefix, pasteAddr){
-  console.log("exportResultDetails: start: targetYear, targetMonth: " + [targetYear, targetMonth].join(", "));
+function exportResultDetails(resultDetails, sheetName, pasteAddr){
+  console.log("exportResultDetails: start");
 
   // 集計結果の明細を区切り文字で結合し、貼り付け用に一つの文字列にする
   const mergedResultDetails = resultDetails.map(s => Object.values(s).join("#&#")).join("¥n");
 
   // 貼り付け対象のセルを取得
-  const pasteTargetCell = getThisSpreadSheet()
-    .getSheetByName(sheetPrefix + "_" + targetYear + targetMonth)
-    .getRange(pasteAddr);
+  const pasteTargetCell = getThisSpreadSheet().getSheetByName(sheetName).getRange(pasteAddr);
 
   // 対象データにつき、更新がなければ、貼り付けをスキップして終了
   const currentValue = pasteTargetCell.getValue();
   if(mergedResultDetails == currentValue){
-    console.log("result details has no update: update skipped");
+    console.log("exportResultDetails: end: result details has no update: update skipped");
     return;
   }
 
   // データを対象セルに貼り付ける
   pasteTargetCell.setValue(mergedResultDetails);
-  console.log("export target cell was updated");
+  console.log("exportResultDetails: end: export target cell was updated");
 }
 
 // URL を叩いて rawData を取得する

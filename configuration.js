@@ -224,6 +224,20 @@ function getTemplateSheetSuffix(){
   return templateSheetSuffix;
 }
 
+let graphDcbImportSheetName;
+function getGraphDcbImportSheetName(){
+  if(graphDcbImportSheetName) return graphDcbImportSheetName;
+  graphDcbImportSheetName = getSettingSheet().getRange("graph_dcb_import_sheet_name").getValue();
+  return graphDcbImportSheetName;
+}
+
+let graphDcbImportAddr;
+function getGraphDcbImportAddr(){
+  if(graphDcbImportAddr) return graphDcbImportAddr;
+  graphDcbImportAddr = getSettingSheet().getRange("graph_dcb_import_addr").getValue();
+  return graphDcbImportAddr;
+}
+
 let aggregateYearRange;
 function getAggregateYearRange(){
   if(aggregateYearRange) return aggregateYearRange;

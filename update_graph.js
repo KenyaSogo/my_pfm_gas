@@ -62,6 +62,6 @@ function doUpdateGraphSourceData(){
     }
   ).flat(1);
 
-  // TODO: WIP
-  console.log(graphSourceDailyCashBalances);
+  // 現預金残高の集計結果明細を対象シートに export する
+  exportResultDetails(graphSourceDailyCashBalances, getGraphDcbImportSheetName(), getGraphDcbImportAddr());
 }

@@ -131,7 +131,7 @@ function pasteDailyCalcResultByEachMonth(targetYear, targetMonth, dailyCalcResul
   // 早い月分
   if(earlierMonthDailyCalcResults.length > 0){
     console.log("start to paste earlierMonthDailyCalcResults: earlierMonthDailyCalcResults.length: " + earlierMonthDailyCalcResults.length);
-    exportResultDetails(earlierMonthDailyCalcResults, targetYear, targetMonth, targetSheetPrefix, pasteAddrAfterClosingDay);
+    exportMonthlyResultDetails(earlierMonthDailyCalcResults, targetYear, targetMonth, targetSheetPrefix, pasteAddrAfterClosingDay);
   } else {
     console.log("pasting earlierMonthDailyCalcResults was skipped");
   }
@@ -139,7 +139,7 @@ function pasteDailyCalcResultByEachMonth(targetYear, targetMonth, dailyCalcResul
   if(laterMonthDailyCalcResults.length > 0){
     console.log("start to paste laterMonthDailyCalcResults: laterMonthDailyCalcResults.length: " + laterMonthDailyCalcResults.length);
     const {nextMonthYyyy, nextMonthMm} = getNextYearMonth(targetYear, targetMonth);
-    exportResultDetails(laterMonthDailyCalcResults, nextMonthYyyy, nextMonthMm, targetSheetPrefix, pasteAddrBeforeClosingDay);
+    exportMonthlyResultDetails(laterMonthDailyCalcResults, nextMonthYyyy, nextMonthMm, targetSheetPrefix, pasteAddrBeforeClosingDay);
   } else {
     console.log("pasting laterMonthDailyCalcResults was skipped");
   }

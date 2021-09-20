@@ -56,7 +56,7 @@ function calcMonthlySummary(monthsAgo){
   validateCalcMonthlySummaryResult(reSummaryForAllCategories, summaryByCategories);
 
   // 集計結果を出力対象シートに出力する
-  exportResultDetails(reSummaryForAllCategories, targetYear, targetMonth, getCalcMcImportSheetPrefix(), getCalcMcImportAddr());
+  exportMonthlyResultDetails(reSummaryForAllCategories, targetYear, targetMonth, getCalcMcImportSheetPrefix(), getCalcMcImportAddr());
 
   console.log("end monthly summary by category");
 }
