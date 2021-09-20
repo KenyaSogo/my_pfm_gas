@@ -21,9 +21,28 @@ function doUpdateGraphSourceData(){
   console.log("targetYearMonths: " + targetYearMonths.map(ym => Object.values(ym).join("/")));
 
   // 現預金残高明細を積み上げ直す
-  const graphSourceDailyCashBalances = accumulateGraphSourceBalances(targetYearMonths, fetchDailyCashBalanceDetails, targetEndDate)
-  // 現預金残高の集計結果明細を対象シートに export する
-  exportResultDetails(graphSourceDailyCashBalances, getGraphDcbImportSheetName(), getGraphDcbImportAddr());
+  accumulateGraphSourceBalancesAndExport(
+    targetYearMonths,
+    fetchDailyCashBalanceDetails,
+    targetEndDate,
+    getGraphDcbImportSheetName(),
+    getGraphDcbImportAddr());
+
+  // 総資産残高明細を積み上げ直し export する
+  accumulateGraphSourceBalancesAndExport(
+    targetYearMonths,
+    fetchDailyTotalAssetBalanceDetails,
+    targetEndDate,
+    getGraphDabImportSheetName(),
+    getGraphDabImportAddr());
+}
+
+// 残高明細をグラフ用に積み上げ直し、export する
+function accumulateGraphSourceBalancesAndExport(targetYearMonths, fetchDailyBalanceDetailsFunc, targetEndDate, exportSheetName, exportAddr){
+  // 残高明細を積み上げ直す
+  const graphSourceDailyBalances = accumulateGraphSourceBalances(targetYearMonths, fetchDailyBalanceDetailsFunc, targetEndDate)
+  // 残高の集計結果明細を対象シートに export する
+  exportResultDetails(graphSourceDailyBalances, exportSheetName, exportAddr);
 }
 
 // 残高明細をグラフ用に積み上げ直したものを返す

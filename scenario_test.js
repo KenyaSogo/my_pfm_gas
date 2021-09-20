@@ -65,6 +65,7 @@ function testUpdateGraph(){
   // 結果検証
   [
     ["test update graph: daily balance: cash", "main scenario", getTestUpdateGraphDcbResultExpected, getTestUpdateGraphDcbResultGot],
+    // TODO: WIP
   ].forEach(t => validateScenarioResult(...t));
 
   console.log("end: testUpdateGraph");

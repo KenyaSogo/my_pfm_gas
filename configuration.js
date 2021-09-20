@@ -245,6 +245,27 @@ function getGraphDcbImageUrl(){
   return graphDcbImageUrl;
 }
 
+let graphDabImportSheetName;
+function getGraphDabImportSheetName(){
+  if(graphDabImportSheetName) return graphDabImportSheetName;
+  graphDabImportSheetName = getRangeValueFrom(getSettingSheet(), "graph_dab_import_sheet_name");
+  return graphDabImportSheetName;
+}
+
+let graphDabImportAddr;
+function getGraphDabImportAddr(){
+  if(graphDabImportAddr) return graphDabImportAddr;
+  graphDabImportAddr = getRangeValueFrom(getSettingSheet(), "graph_dab_import_addr");
+  return graphDabImportAddr;
+}
+
+let graphDabImageUrl;
+function getGraphDabImageUrl(){
+  if(graphDabImageUrl) return graphDabImageUrl;
+  graphDabImageUrl = getSettingSheet().getRange("graph_dab_image_url").getValue();
+  return graphDabImageUrl;
+}
+
 let aggregateYearRange;
 function getAggregateYearRange(){
   if(aggregateYearRange) return aggregateYearRange;
@@ -632,4 +653,20 @@ function getTestUpdateGraphDcbResultExpected(){
   if(testUpdateGraphDcbResultExpected) return testUpdateGraphDcbResultExpected;
   testUpdateGraphDcbResultExpected = getSettingSheet().getRange("test_update_graph_dcb_result_expected").getValue();
   return testUpdateGraphDcbResultExpected;
+}
+
+let testUpdateGraphDabResultGot;
+function getTestUpdateGraphDabResultGot(){
+  if(!getIsTestEnv()) return null;
+  if(testUpdateGraphDabResultGot) return testUpdateGraphDabResultGot;
+  testUpdateGraphDabResultGot = getSettingSheet().getRange("test_update_graph_dab_result_got").getValue();
+  return testUpdateGraphDabResultGot;
+}
+
+let testUpdateGraphDabResultExpected;
+function getTestUpdateGraphDabResultExpected(){
+  if(!getIsTestEnv()) return null;
+  if(testUpdateGraphDabResultExpected) return testUpdateGraphDabResultExpected;
+  testUpdateGraphDabResultExpected = getSettingSheet().getRange("test_update_graph_dab_result_expected").getValue();
+  return testUpdateGraphDabResultExpected;
 }

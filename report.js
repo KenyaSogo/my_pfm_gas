@@ -37,6 +37,11 @@ function doReport(){
       value: "Daily transition graph of cash and deposit balance.",
       url: getGraphDcbImageUrl(),
     },
+    {
+      title: "daily balance: total asset",
+      value: "Daily transition graph of total asset balance.",
+      url: getGraphDabImageUrl(),
+    },
   ];
 
   // レポートをまとめて、slack に通知する
