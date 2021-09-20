@@ -617,3 +617,19 @@ function getTestReportResultExpected(){
   testReportResultExpected = getSettingSheet().getRange("test_report_result_expected").getValue();
   return testReportResultExpected;
 }
+
+let testUpdateGraphDcbResultGot;
+function getTestUpdateGraphDcbResultGot(){
+  if(!getIsTestEnv()) return null;
+  if(testUpdateGraphDcbResultGot) return testUpdateGraphDcbResultGot;
+  testUpdateGraphDcbResultGot = getSettingSheet().getRange("test_update_graph_dcb_result_got").getValue();
+  return testUpdateGraphDcbResultGot;
+}
+
+let testUpdateGraphDcbResultExpected;
+function getTestUpdateGraphDcbResultExpected(){
+  if(!getIsTestEnv()) return null;
+  if(testUpdateGraphDcbResultExpected) return testUpdateGraphDcbResultExpected;
+  testUpdateGraphDcbResultExpected = getSettingSheet().getRange("test_update_graph_dcb_result_expected").getValue();
+  return testUpdateGraphDcbResultExpected;
+}
