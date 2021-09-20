@@ -31,6 +31,9 @@ function doScenarioTest(){
   // calculate_monthly をテスト
   testCalculateMonthly();
 
+  // update_graph をテスト
+  testUpdateGraph();
+
   // report をテスト
   testReport();
 
@@ -50,6 +53,19 @@ function testReport(){
   ].forEach(t => validateScenarioResult(...t));
 
   console.log("end: testReport");
+}
+
+// update_graph.js のテスト
+function testUpdateGraph(){
+  console.log("start: testUpdateGraph");
+
+  // 検証対象の処理を実行
+  doUpdateGraphSourceData();
+
+  // 結果検証
+  // TODO: WIP
+
+  console.log("end: testUpdateGraph");
 }
 
 // calculate_monthly.js のテスト

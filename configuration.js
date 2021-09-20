@@ -227,14 +227,14 @@ function getTemplateSheetSuffix(){
 let graphDcbImportSheetName;
 function getGraphDcbImportSheetName(){
   if(graphDcbImportSheetName) return graphDcbImportSheetName;
-  graphDcbImportSheetName = getSettingSheet().getRange("graph_dcb_import_sheet_name").getValue();
+  graphDcbImportSheetName = getRangeValueFrom(getSettingSheet(), "graph_dcb_import_sheet_name");
   return graphDcbImportSheetName;
 }
 
 let graphDcbImportAddr;
 function getGraphDcbImportAddr(){
   if(graphDcbImportAddr) return graphDcbImportAddr;
-  graphDcbImportAddr = getSettingSheet().getRange("graph_dcb_import_addr").getValue();
+  graphDcbImportAddr = getRangeValueFrom(getSettingSheet(), "graph_dcb_import_addr");
   return graphDcbImportAddr;
 }
 
