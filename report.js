@@ -181,10 +181,11 @@ function getLastDateAndCashBalanceAt(targetYear, targetMonth){
 // 指定月末の、残高推移の基準日と残高を取得して返す
 function getLastDateAndBalanceAt(targetYear, targetMonth, fetchDetailsFunc){
   const dailyBalanceDetails = fetchDetailsFunc(targetYear, targetMonth);
-  const lastBalanceDetail = dailyBalanceDetails.length == 0 ? null : dailyBalanceDetails[dailyBalanceDetails.length - 1];
-  const lastDate = lastBalanceDetail == null ? null : lastBalanceDetail.date;
-  const lastBalance = lastBalanceDetail == null ? null : lastBalanceDetail.balance;
-  return {lastDate, lastBalance};
+  const lastBalanceDetail = getLastElemFrom(dailyBalanceDetails, {date: null, balance: null});
+  return {
+    lastDate: lastBalanceDetail.date,
+    lastBalance: lastBalanceDetail.balance,
+  };
 }
 
 // 日次現預金残高集計結果を取得して返す

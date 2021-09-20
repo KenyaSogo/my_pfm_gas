@@ -32,8 +32,7 @@ function doUpdateGraphSourceData(){
 
   // 現預金残高の集計
   // 集計の始点となる月の末残高を取得する TODO: 空振り対応
-  const dailyCashBalanceDetailsStartMonth = fetchDailyCashBalanceDetails(targetYearMonths[0].targetYear, targetYearMonths[0].targetMonth);
-  const startCashBalance = dailyCashBalanceDetailsStartMonth[dailyCashBalanceDetailsStartMonth.length - 1].balance
+  const startCashBalance = getLastElemFrom(fetchDailyCashBalanceDetails(targetYearMonths[0].targetYear, targetYearMonths[0].targetMonth), null).balance;
   // 以降の各月の日付x残高リストを作成する
   let lastCashBalance = startCashBalance; // 最初の月の末残高をデフォルトの残高とする
   const graphSourceDailyCashBalances = targetYearMonths.slice(1).map( // 最初の月の翌月以降の月から各月分処理していく

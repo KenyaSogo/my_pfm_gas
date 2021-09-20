@@ -148,9 +148,7 @@ function pasteDailyCalcResultByEachMonth(targetYear, targetMonth, dailyCalcResul
 // 対象月の末残高レコードを更新する
 function updateTargetMonthEndBalance(accumulatedBalanceByDates, previousMonthEndBalance, targetYear, targetMonth, targetRange){
   // 対象月の末残高を取得
-  const balanceAtMonthEnd = accumulatedBalanceByDates.length == 0
-    ? previousMonthEndBalance
-    : accumulatedBalanceByDates[accumulatedBalanceByDates.length - 1].balance;
+  const balanceAtMonthEnd = getLastElemFrom(accumulatedBalanceByDates, {balance: previousMonthEndBalance}).balance;
   // 対象月の末残高表における index を取得
   const targetMonthIndexAtEndBalances = getEndBalances()
     .map(b => b.calcYear + "/" + b.calcMonth)

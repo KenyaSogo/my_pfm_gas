@@ -121,6 +121,11 @@ function getUniqueArrayFrom(array){
   return Array.from(new Set(array));
 }
 
+// 配列の最後の要素を取得して返す
+function getLastElemFrom(array, defaultValue){
+  return array.length == 0 ? defaultValue : array[array.length - 1];
+}
+
 // 各明細の金額を合計して返す ※details における金額項目の key は amount である必要がある
 function sumAmountFromDetails(targetDetails){
   return targetDetails
