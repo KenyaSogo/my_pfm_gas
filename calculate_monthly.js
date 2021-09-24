@@ -243,7 +243,7 @@ function calcSummaryByLargeCategories(summaryByCategories, targetYear, targetMon
 function calcTargetMonthSummaryByCategories(targetYear, targetMonth){
   // 集計対象月の明細データを取得する
   const targetDetails = fetchDailySummaryByCategoryDetails(targetYear, targetMonth);
-  if(targetDetails == null) return null;
+  if(targetDetails.length == 0) return null;
 
   // 明細データから項目を収集する
   const targetCategories = getUniqueArrayFrom(targetDetails.map(d => d.category));

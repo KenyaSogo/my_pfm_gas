@@ -129,14 +129,14 @@ function pasteDailyCalcResultByEachMonth(targetYear, targetMonth, dailyCalcResul
   // 集計結果を各月分の結果シートに貼り付け
   console.log("start to paste dailyCalcResultByEachMonth: targetSheetPrefix: " + targetSheetPrefix);
   // 早い月分
-  if(earlierMonthDailyCalcResults.length > 0){
+  if(earlierMonthDailyCalcResults.length > 0){ // TODO: n件 -> 0件に更新された場合に反映されない問題
     console.log("start to paste earlierMonthDailyCalcResults: earlierMonthDailyCalcResults.length: " + earlierMonthDailyCalcResults.length);
     exportMonthlyResultDetails(earlierMonthDailyCalcResults, targetYear, targetMonth, targetSheetPrefix, pasteAddrAfterClosingDay);
   } else {
     console.log("pasting earlierMonthDailyCalcResults was skipped");
   }
   // 遅い月分
-  if(laterMonthDailyCalcResults.length > 0){
+  if(laterMonthDailyCalcResults.length > 0){ // TODO: n件 -> 0件に更新された場合に反映されない問題
     console.log("start to paste laterMonthDailyCalcResults: laterMonthDailyCalcResults.length: " + laterMonthDailyCalcResults.length);
     const {nextMonthYyyy, nextMonthMm} = getNextYearMonth(targetYear, targetMonth);
     exportMonthlyResultDetails(laterMonthDailyCalcResults, nextMonthYyyy, nextMonthMm, targetSheetPrefix, pasteAddrBeforeClosingDay);

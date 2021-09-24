@@ -302,7 +302,7 @@ function getPrintErrorMessage(error){
 function fetchDetailsFromCell(targetSheetName, targetRangeName, parseDetailFunc){
   const rawDetailsValue = getThisSpreadSheet().getSheetByName(targetSheetName).getRange(targetRangeName).getValue();
   if(rawDetailsValue == ""){
-    return null;
+    return [];
   }
 
   return rawDetailsValue.split("¥n").map(
