@@ -290,7 +290,7 @@ function getCurrentTimeForExecTriggerRange(){
 let execGroupNames;
 function getExecGroupNames(){
   if(execGroupNames) return execGroupNames;
-  execGroupNames = getSettingSheet().getRange("exec_group_names").getValue();
+  execGroupNames = getSettingSheet().getRange("exec_group_names").getValue().split(",");
   return execGroupNames;
 }
 
