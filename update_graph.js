@@ -50,7 +50,7 @@ function accumulateGraphSourceBalancesAndExport(targetYearMonths, fetchDailyBala
 //  が、グラフ描画用にはその間の日の分も埋めておく必要がある。
 //  この関数では、間の日分も前日の残高を横置きする形で埋めた明細を作成して返す)
 function accumulateGraphSourceBalances(targetYearMonths, fetchDailyBalanceDetailsFunc, targetEndDate){
-  // 集計の始点となる月の末残高を取得する TODO: 空振り対応
+  // 集計の始点となる月の末残高を取得する TODO: 空振り対応 ~ 半年に拡げる対応
   const startBalance = getLastElemFrom(fetchDailyBalanceDetailsFunc(targetYearMonths[0].targetYear, targetYearMonths[0].targetMonth), null).balance;
   // 以降の各月の日付x残高リストを作成する
   let lastBalance = startBalance; // 最初の月の末残高をデフォルトの残高とする
