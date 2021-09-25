@@ -2,6 +2,15 @@
 
 function executeControl(){
   console.log("start executeControl");
+  try {
+    doControl();
+  } catch(error){
+    handleError(error);
+  }
+  console.log("end executeControl");
+}
+
+function doControl(){
   // exec group の trigger 判定用の現在時刻セルに値をセットする
   const currentTime = getCurrent_yyyy_mm_dd_hh_mm_ss();
   getCurrentTimeForExecTriggerRange().setValue(currentTime);
@@ -64,7 +73,6 @@ function executeControl(){
       );
     }
   );
-  console.log("end executeControl");
 }
 
 // exec group の activate trigger を処理する
