@@ -232,7 +232,7 @@ function getBalanceCashTargetDetails(aggregatedDetails){
 
 // 明細から日付 (一意かつ昇順) を収集する
 function extractSortedDatesFromDetails(targetDetails) {
-  const dates = getUniqueArrayFrom(targetDetails.map(d => d.date)); // TODO: 日が飛び飛びになる場合に間の残高を横置きで埋める考慮
+  const dates = getUniqueArrayFrom(targetDetails.map(d => d.date));
   dates.sort(); // 昇順にソート
 
   return dates;
