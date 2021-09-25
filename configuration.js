@@ -297,7 +297,7 @@ function getExecGroupNames(){
 let execGroupTriggerFlags;
 function getExecGroupTriggerFlags(){
   if(execGroupTriggerFlags) return execGroupTriggerFlags;
-  execGroupTriggerFlags = getExecGroupNames().split(",").map(
+  execGroupTriggerFlags = getExecGroupNames().map(
     execGroupName => {
       return {
         execGroupName: execGroupName,
@@ -309,7 +309,7 @@ function getExecGroupTriggerFlags(){
 }
 
 function getGroupExecNamesFrom(execGroupName){
-  return getSettingSheet().getRange(execGroupName + "_gr_head_exec_name").getValue().split(",");
+  return getSettingSheet().getRange(execGroupName + "_exec_gr_exec_names").getValue().split(",");
 }
 
 function getExecGrActivatedAtRangeFrom(execGroupName){
