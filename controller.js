@@ -6,7 +6,7 @@ function executeControl(){
   const currentTime = getCurrent_yyyy_mm_dd_hh_mm_ss();
   getCurrentTimeForExecTriggerRange().setValue(currentTime);
   // 各 exec group の activate trigger を処理する
-  handleExecGroupTriggers(currentTime);
+  handleExecGroupTriggers(currentTime); // TODO: sheet io 系 memo 化による高速化
 
   // 実行中の処理がある場合は終了する
   if(getRunningExecExists()){
@@ -76,7 +76,7 @@ function handleExecGroupTriggers(currentTime){
         // exec group を activated する
         activateExecOrExecGroup(getExecGrActivatedAtRangeFrom(triggerFlag.execGroupName), currentTime);
         // exec group の先頭の exec を activated する
-        activateExecOrExecGroup(getGroupExecNamesFrom(triggerFlag.execGroupName)[0], currentTime);
+        activateExecOrExecGroup(getExecGrActivatedAtRangeFrom(getGroupExecNamesFrom(triggerFlag.execGroupName)[0]), currentTime);
       }
     }
   );
