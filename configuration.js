@@ -280,6 +280,69 @@ function getAggregateMonthRange(){
   return aggregateMonthRange;
 }
 
+let currentTimeForExecTriggerRange;
+function getCurrentTimeForExecTriggerRange(){
+  if(currentTimeForExecTriggerRange) return currentTimeForExecTriggerRange;
+  currentTimeForExecTriggerRange = getSettingSheet().getRange("current_time_for_exec_trigger");
+  return currentTimeForExecTriggerRange;
+}
+
+let execGroupNames;
+function getExecGroupNames(){
+  if(execGroupNames) return execGroupNames;
+  execGroupNames = getSettingSheet().getRange("exec_group_names").getValue();
+  return execGroupNames;
+}
+
+let execGroupTriggerFlags;
+function getExecGroupTriggerFlags(){
+  if(execGroupTriggerFlags) return execGroupTriggerFlags;
+  execGroupTriggerFlags = getExecGroupNames().split(",").map(
+    execGroupName => {
+      return {
+        execGroupName: execGroupName,
+        isTriggerOn: getSettingSheet().getRange(execGroupName + "_exec_gr_trigger").getValue(),
+      };
+    }
+  );
+  return execGroupTriggerFlags;
+}
+
+function getGroupExecNamesFrom(execGroupName){
+  return getSettingSheet().getRange(execGroupName + "_gr_head_exec_name").getValue().split(",");
+}
+
+function getExecGrActivatedAtRangeFrom(execGroupName){
+  return getSettingSheet().getRange(execGroupName + "_exec_gr_activated_at");
+}
+
+function getExecActivatedAtRangeFrom(execName){
+  return getSettingSheet().getRange(execName + "_activated_at");
+}
+
+function getExecFuncNameFrom(execName){
+  return getSettingSheet().getRange(execName + "_func_name");
+}
+
+const execStatusRunning = "running";
+const execStatusFailed = "failed";
+const execStatusSucceededAndExecGroupFinished = "succeeded and Finished";
+const execStatusSucceededAndNextExecPreparing = "succeeded and next preparing";
+
+let runningExecNameRange;
+function getRunningExecNameRange(){
+  if(runningExecNameRange) return runningExecNameRange;
+  runningExecNameRange = getSettingSheet().getRange("running_exec_name");
+  return runningExecNameRange;
+}
+
+let runningExecStatusRange;
+function getRunningExecStatusRange(){
+  if(runningExecStatusRange) return runningExecStatusRange;
+  runningExecStatusRange = getSettingSheet().getRange("running_exec_status");
+  return runningExecStatusRange;
+}
+
 let todayForCalenderRange;
 function getTodayForCalenderRange(){
   if(todayForCalenderRange) return todayForCalenderRange;

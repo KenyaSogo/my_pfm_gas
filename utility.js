@@ -393,3 +393,8 @@ function getRangeFrom(targetSheet, TargetRangeName){
 function getColumnRangeNames(names){
   return names.map(n => getIsTestEnv() ? n + "_t" : n);
 }
+
+// exec name から func name を取得し、その関数を実行する
+function execFuncFrom(execName){
+  Function(getExecFuncNameFrom(execName) + "()")();
+}
