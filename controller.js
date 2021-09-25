@@ -76,7 +76,7 @@ function handleExecGroupTriggers(currentTime){
         // exec group を activated する
         activateExecOrExecGroup(getExecGrActivatedAtRangeFrom(triggerFlag.execGroupName), currentTime);
         // exec group の先頭の exec を activated する
-        activateExecOrExecGroup(getExecGrActivatedAtRangeFrom(getGroupExecNamesFrom(triggerFlag.execGroupName)[0]), currentTime);
+        activateExecOrExecGroup(getExecActivatedAtRangeFrom(getGroupExecNamesFrom(triggerFlag.execGroupName)[0]), currentTime);
       }
     }
   );
