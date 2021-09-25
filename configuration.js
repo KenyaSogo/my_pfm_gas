@@ -321,7 +321,7 @@ function getExecActivatedAtRangeFrom(execName){
 }
 
 function getExecFuncNameFrom(execName){
-  return getSettingSheet().getRange(execName + "_func_name");
+  return getSettingSheet().getRange(execName + "_func_name").getValue();
 }
 
 const execStatusRunning = "running";
