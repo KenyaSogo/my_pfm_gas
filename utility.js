@@ -5,9 +5,9 @@ function getCurrent_yyyy_MM_dd(){
   return Utilities.formatDate(new Date(), "Asia/Tokyo", "yyyy/MM/dd");
 }
 
-// 現在の時刻 (yyyy/MM/dd hh:mm:ss 形式) を返す
+// 現在の時刻 (yyyy/MM/dd HH:mm:ss 形式) を返す
 function getCurrent_yyyy_mm_dd_hh_mm_ss(){
-  return Utilities.formatDate(new Date(), "Asia/Tokyo", "yyyy/MM/dd hh:mm:ss");
+  return Utilities.formatDate(new Date(), "Asia/Tokyo", "yyyy/MM/dd HH:mm:ss");
 }
 
 // 現在の日付の年 (yyyy 形式) を返す
