@@ -287,11 +287,21 @@ function getCurrentTimeForExecTriggerRange(){
   return currentTimeForExecTriggerRange;
 }
 
-let execGroupNames;
+const execGroupNameCreateSheet = "create_sheet";
+const execGroupNameUpdateMonth = "update_month";
+const execGroupNameAggrePrev = "aggre_prev";
+const execGroupNameAggreCurr = "aggre_curr";
+const execGroupNameReport = "report";
+const execGroupNameCheckMaintenance = "check_maintenance";
 function getExecGroupNames(){
-  if(execGroupNames) return execGroupNames;
-  execGroupNames = getSettingSheet().getRange("exec_group_names").getValue().split(",");
-  return execGroupNames;
+  return [
+    execGroupNameCreateSheet,
+    execGroupNameUpdateMonth,
+    execGroupNameAggrePrev,
+    execGroupNameAggreCurr,
+    execGroupNameReport,
+    execGroupNameCheckMaintenance,
+  ];
 }
 
 let execGroupTriggerFlags;
@@ -306,41 +316,6 @@ function getExecGroupTriggerFlags(){
     }
   );
   return execGroupTriggerFlags;
-}
-
-function getGroupExecNamesFrom(execGroupName){
-  return getSettingSheet().getRange(execGroupName + "_exec_gr_exec_names").getValue().split(",");
-}
-
-function getExecGrActivatedAtRangeFrom(execGroupName){
-  return getSettingSheet().getRange(execGroupName + "_exec_gr_activated_at");
-}
-
-function getExecActivatedAtRangeFrom(execName){
-  return getSettingSheet().getRange(execName + "_activated_at");
-}
-
-function getExecFuncNameFrom(execName){
-  return getSettingSheet().getRange(execName + "_func_name").getValue();
-}
-
-const execStatusRunning = "running";
-const execStatusFailed = "failed";
-const execStatusSucceededAndExecGroupFinished = "succeeded and Finished";
-const execStatusSucceededAndNextExecPreparing = "succeeded and next preparing";
-
-let runningExecNameRange;
-function getRunningExecNameRange(){
-  if(runningExecNameRange) return runningExecNameRange;
-  runningExecNameRange = getSettingSheet().getRange("running_exec_name");
-  return runningExecNameRange;
-}
-
-let runningExecStatusRange;
-function getRunningExecStatusRange(){
-  if(runningExecStatusRange) return runningExecStatusRange;
-  runningExecStatusRange = getSettingSheet().getRange("running_exec_status");
-  return runningExecStatusRange;
 }
 
 let todayForCalenderRange;
