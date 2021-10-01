@@ -100,14 +100,14 @@ function scrapeCashFlowDataDetail(loginId, loginPassword, targetYear, targetMont
     "outputAsJson": true,
     "overseerScript": "let _user='" + loginId + "';" +
                       "let _pass='" + loginPassword + "';" +
-                      "await page.waitForSelector('a._2YH0UDm8.ssoLink');" +
-                      "page.click('a._2YH0UDm8.ssoLink');" +
-                      "await page.waitForSelector('input._2mGdHllU.inputItem');" +
-                      "await page.type('input._2mGdHllU.inputItem', _user, {delay:100});" +
-                      "page.click('input.zNNfb322.submitBtn.homeDomain');" +
-                      "await page.waitForSelector('input._1vBc2gjI.inputItem');" +
-                      "await page.type('input._1vBc2gjI.inputItem', _pass, {delay:100});" +
-                      "page.click('input.zNNfb322.submitBtn.homeDomain');" +
+                      "await page.waitForSelector('a._11ZPO93b.ssoLink');" +
+                      "page.click('a._11ZPO93b.ssoLink');" +
+                      "await page.waitForSelector('input._3RA2JEwp.inputItem');" +
+                      "await page.type('input._3RA2JEwp.inputItem', _user, {delay:100});" +
+                      "page.click('input._3ZRZ5sbE.submitBtn.homeDomain');" +
+                      "await page.waitForSelector('input._1NxPqTKD.inputItem');" +
+                      "await page.type('input._1NxPqTKD.inputItem', _pass, {delay:100});" +
+                      "page.click('input._3ZRZ5sbE.submitBtn.homeDomain');" +
                       "await page.waitForSelector('#page-transaction');" +
                       "await page.evaluate(" +
                         "()=>{" +
