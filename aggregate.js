@@ -131,7 +131,7 @@ function scrapeCashFlowDataDetail(loginId, loginPassword, targetYear, targetMont
   };
   let options = {
     method: "post",
-    payload: payloadDetail,
+    payload: JSON.stringify(payloadDetail),
   };
   let urlDetail = "https://PhantomJsCloud.com/api/browser/v2/" + getPhantomJsKey() + "/";
   
