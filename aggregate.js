@@ -107,14 +107,14 @@ function scrapeCashFlowDataDetail(loginId, loginPassword, targetYear, targetMont
     outputAsJson: true,
     overseerScript: `let _user="${loginId}";
                      let _pass="${loginPassword}";
-                     await page.waitForSelector("a._11ZPO93b.ssoLink");
-                     page.click("a._11ZPO93b.ssoLink");
-                     await page.waitForSelector("input._3RA2JEwp.inputItem");
-                     await page.type("input._3RA2JEwp.inputItem", _user, {delay:100});
-                     page.click("input._3ZRZ5sbE.submitBtn.homeDomain");
-                     await page.waitForSelector("input._1NxPqTKD.inputItem");
-                     await page.type("input._1NxPqTKD.inputItem", _pass, {delay:100});
-                     page.click("input._3ZRZ5sbE.submitBtn.homeDomain");
+                     await page.waitForSelector("a[href^='/sign_in/email?']");
+                     page.click("a[href^='/sign_in/email?']");
+                     await page.waitForSelector("input[name='mfid_user[email]']");
+                     await page.type("input[name='mfid_user[email]']", _user, {delay:100});
+                     page.click("input[class$='submitBtn homeDomain']");
+                     await page.waitForSelector("input[name='mfid_user[password]']");
+                     await page.type("input[name='mfid_user[password]']", _pass, {delay:100});
+                     page.click("input[class$='submitBtn homeDomain']");
                      await page.waitForSelector("#page-transaction");
                      await page.evaluate(
                        ()=>{
