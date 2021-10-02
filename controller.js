@@ -18,7 +18,6 @@ function doControl(){
   // trigger が on になっている exec group を起動する
   getExecGroupTriggerFlags().filter(t => t.isTriggerOn == 1).forEach(
     trigger => {
-      let isUpdatedAggregateResult = false;
       switch(trigger.execGroupName){
         case execGroupNameCreateSheet:
           executeCreateSheetByMonth();
@@ -27,8 +26,7 @@ function doControl(){
           executeUpdateAggregateYearMonthList();
           break;
         case execGroupNameAggrePrev:
-          isUpdatedAggregateResult = executeAggregatePreviousMonth();
-          if(!isUpdatedAggregateResult){
+          if(!executeAggregatePreviousMonth()){
             postConsoleAndSlackInfoMessage("aggregate result has no update: following exec was skipped");
             break;
           }
@@ -37,8 +35,7 @@ function doControl(){
           executeUpdateGraphSourceData();
           break;
         case execGroupNameAggreCurr:
-          isUpdatedAggregateResult = executeAggregateCurrentMonth();
-          if(!isUpdatedAggregateResult){
+          if(!executeAggregateCurrentMonth()){
             postConsoleAndSlackInfoMessage("aggregate result has no update: following exec was skipped");
             break;
           }
