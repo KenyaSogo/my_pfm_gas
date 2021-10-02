@@ -1,11 +1,21 @@
 /** @OnlyCurrentDoc */
 
 function executeControl(){
+  const processStartTime = Date.now();
   console.log("start executeControl");
+
   try {
     doControl();
   } catch(error){
     handleError(error);
+  }
+
+  // トータルの処理時間を出力
+  const processingTime = Date.now() - processStartTime;
+  postConsoleAndSlackInfoMessage("execute escalation was finished (" + processingTime/1000 + " sec)");
+  // 処理時間がトータル 300 (60*5) 秒を超えた場合には warning を出しておく
+  if(processingTime > 300000){
+    postConsoleAndSlackWarning("total job processing time exceeded 5 min", true);
   }
   console.log("end executeControl");
 }
