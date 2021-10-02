@@ -11,13 +11,10 @@ function doControl(){
   const currentTime = getCurrent_yyyy_mm_dd_hh_mm_ss();
   getCurrentTimeForExecTriggerRange().setValue(currentTime);
 
-  // 各 exec group を activate trigger に従って処理する
-  getExecGroupTriggerFlags().forEach(
-    flag => {
-      if(flag.isTriggerOn != 1){
-        return;
-      }
-      switch(flag.execGroupName){
+  // trigger が on になっている exec group を起動する
+  getExecGroupTriggerFlags().filter(t => t.isTriggerOn == 1).forEach(
+    trigger => {
+      switch(trigger.execGroupName){
         case execGroupNameCreateSheet:
           executeCreateSheetByMonth();
           break;
@@ -25,8 +22,8 @@ function doControl(){
           executeUpdateAggregateYearMonthList();
           break;
         case execGroupNameAggrePrev:
-          executeAggregatePreviousMonth();
-          executeCalcDailySummaryPreviousMonth(); // TODO: update なしの場合に skip
+          executeAggregatePreviousMonth(); // TODO: update なしの場合に skip
+          executeCalcDailySummaryPreviousMonth();
           executeCalcMonthlySummaryPreviousMonth();
           executeUpdateGraphSourceData();
           break;
