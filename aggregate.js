@@ -102,38 +102,38 @@ function scrapeCashFlowDataDetail(loginId, loginPassword, targetYear, targetMont
   let scrapeUrl = "https://moneyforward.com/cf/csv?from=" + targetYear + "%2F" + targetMonth + "%2F25&month=" + targetMonth + "&year=" + targetYear;
 
   let payloadDetail = {
-    "url": 'https://moneyforward.com/cf',
-    "renderType": 'plainText',
-    "outputAsJson": true,
-    "overseerScript": "let _user='" + loginId + "';" +
-                      "let _pass='" + loginPassword + "';" +
-                      "await page.waitForSelector('a._11ZPO93b.ssoLink');" +
-                      "page.click('a._11ZPO93b.ssoLink');" +
-                      "await page.waitForSelector('input._3RA2JEwp.inputItem');" +
-                      "await page.type('input._3RA2JEwp.inputItem', _user, {delay:100});" +
-                      "page.click('input._3ZRZ5sbE.submitBtn.homeDomain');" +
-                      "await page.waitForSelector('input._1NxPqTKD.inputItem');" +
-                      "await page.type('input._1NxPqTKD.inputItem', _pass, {delay:100});" +
-                      "page.click('input._3ZRZ5sbE.submitBtn.homeDomain');" +
-                      "await page.waitForSelector('#page-transaction');" +
-                      "await page.evaluate(" +
-                        "()=>{" +
-                          "var xhr = new XMLHttpRequest();" +
-                          "xhr.open('GET', '" + scrapeUrl + "');" +
-                          "xhr.overrideMimeType('text/plain; charset=Shift_JIS');" +
-                          "xhr.send();" +
-                          "xhr.onload = function(e) {" +
-                            "$('#page-transaction').text(xhr.responseText);" +
-                          "};" +
-                        "}" +
-                      ");" +
-                      "page.done();",
+    url: "https://moneyforward.com/cf",
+    renderType: "plainText",
+    outputAsJson: true,
+    overseerScript: `let _user="${loginId}";
+                     let _pass="${loginPassword}";
+                     await page.waitForSelector("a._11ZPO93b.ssoLink");
+                     page.click("a._11ZPO93b.ssoLink");
+                     await page.waitForSelector("input._3RA2JEwp.inputItem");
+                     await page.type("input._3RA2JEwp.inputItem", _user, {delay:100});
+                     page.click("input._3ZRZ5sbE.submitBtn.homeDomain");
+                     await page.waitForSelector("input._1NxPqTKD.inputItem");
+                     await page.type("input._1NxPqTKD.inputItem", _pass, {delay:100});
+                     page.click("input._3ZRZ5sbE.submitBtn.homeDomain");
+                     await page.waitForSelector("#page-transaction");
+                     await page.evaluate(
+                       ()=>{
+                         var xhr = new XMLHttpRequest();
+                         xhr.open("GET", "${scrapeUrl}");
+                         xhr.overrideMimeType("text/plain; charset=Shift_JIS");
+                         xhr.send();
+                         xhr.onload = function(e) {
+                           $("#page-transaction").text(xhr.responseText);
+                         };
+                       }
+                     );
+                     page.done();`,
   };
   let options = {
-    "method": 'post',
-    "payload": JSON.stringify(payloadDetail),
+    method: "post",
+    payload: payloadDetail,
   };
-  let urlDetail = 'https://PhantomJsCloud.com/api/browser/v2/'+ getPhantomJsKey() +'/';
+  let urlDetail = "https://PhantomJsCloud.com/api/browser/v2/" + getPhantomJsKey() + "/";
   
   return fetchRawDataDetailFromUrl(urlDetail, options);
 }
