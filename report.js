@@ -34,12 +34,12 @@ function doReport(){
   const imageUrls = [
     {
       title: "daily balance: cash",
-      value: "Daily transition graph of cash and deposit balance.",
+      value: "Daily transition graph of cash and deposit balance. <" + getGraphDcbImageUrl() + "|link>",
       url: getGraphDcbImageUrl(),
     },
     {
       title: "daily balance: total asset",
-      value: "Daily transition graph of total asset balance.",
+      value: "Daily transition graph of total asset balance. <" + getGraphDabImageUrl() + "|link>",
       url: getGraphDabImageUrl(),
     },
   ];
