@@ -3,23 +3,27 @@
 // 最新月分の明細を取得する
 function executeAggregateCurrentMonth() {
   postConsoleAndSlackJobStart("execute aggregate current month");
+  let isUpdatedAggregateResult = false;
   try {
-    aggregateByMonth(0);
+    isUpdatedAggregateResult = aggregateByMonth(0);
   } catch(error){
     handleError(error);
   }
   postConsoleAndSlackJobEnd("execute aggregate current month");
+  return isUpdatedAggregateResult;
 }
 
 // 最新月の前月分の明細を取得する
 function executeAggregatePreviousMonth() {
   postConsoleAndSlackJobStart("execute aggregate previous month");
+  let isUpdatedAggregateResult = false;
   try {
-    aggregateByMonth(1);
+    isUpdatedAggregateResult = aggregateByMonth(1);
   } catch(error){
     handleError(error);
   }
   postConsoleAndSlackJobEnd("execute aggregate previous month");
+  return isUpdatedAggregateResult;
 }
 
 // 指定月の入出金明細を取得し、対象シートに貼り付ける
@@ -32,6 +36,7 @@ function aggregateByMonth(monthsAgo) {
   const pfmAccountConfigs = getPfmAccountConfigs();
   const aggregateSheet = getThisSpreadSheet().getSheetByName(getAggreImportSheetPrefix() + "_" + targetYear + targetMonth);
   // 各 pfm アカウント毎に入出金明細をスクレイピング
+  let isUpdatedAggregateResult = false;
   getIntRangeFromZero(pfmAccountConfigs.length).forEach(
     i => {
       // スクレイピング job をキックする
@@ -59,12 +64,14 @@ function aggregateByMonth(monthsAgo) {
       // raw データの更新有無を判定し、更新有りなら貼り付ける
       if(isUpdatedRawData(rawData, pasteTargetCell)){
         pasteTargetCell.setValue(rawData);
+        isUpdatedAggregateResult = true;
         console.log("rawData is updated");
       } else {
         console.log("rawData is not updated");
       }
     }
   );
+  return isUpdatedAggregateResult;
 }
 
 // aggregate 対象の year (yyyy) および month (MM) を取得する

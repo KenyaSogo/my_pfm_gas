@@ -14,6 +14,7 @@ function doControl(){
   // trigger が on になっている exec group を起動する
   getExecGroupTriggerFlags().filter(t => t.isTriggerOn == 1).forEach(
     trigger => {
+      let isUpdatedAggregateResult = false;
       switch(trigger.execGroupName){
         case execGroupNameCreateSheet:
           executeCreateSheetByMonth();
@@ -22,13 +23,19 @@ function doControl(){
           executeUpdateAggregateYearMonthList();
           break;
         case execGroupNameAggrePrev:
-          executeAggregatePreviousMonth(); // TODO: update なしの場合に skip
+          isUpdatedAggregateResult = executeAggregatePreviousMonth();
+          if(!isUpdatedAggregateResult){
+            break;
+          }
           executeCalcDailySummaryPreviousMonth();
           executeCalcMonthlySummaryPreviousMonth();
           executeUpdateGraphSourceData();
           break;
         case execGroupNameAggreCurr:
-          executeAggregateCurrentMonth();
+          isUpdatedAggregateResult = executeAggregateCurrentMonth();
+          if(!isUpdatedAggregateResult){
+            break;
+          }
           executeCalcDailySummaryCurrentMonth();
           executeCalcMonthlySummaryCurrentMonth();
           executeUpdateGraphSourceData();
