@@ -5,6 +5,7 @@ function doPost(e){
     return getSlackCommandPlainResponse("my pfm: execute scenario test was kicked");
   }
 
+  console.log(e);
   return getSlackCommandPlainResponse("my pfm: command not found: " + e.command);
 }
 
