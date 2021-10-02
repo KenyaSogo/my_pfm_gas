@@ -6,7 +6,7 @@ function executeCheckSheetMaintenanceStatus(){
   try {
     doCheckSheetMaintenanceStatus();
   } catch(error){
-    handleError(error);
+    handleExpectedError(error);
   }
   postConsoleAndSlackJobEnd("execute check sheet maintenance status");
 }

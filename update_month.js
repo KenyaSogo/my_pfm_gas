@@ -6,7 +6,7 @@ function executeUpdateAggregateYearMonthList(){
   try {
     doUpdateAggregateYearMonthList();
   } catch(error){
-    handleError(error);
+    handleExpectedError(error);
   }
   postConsoleAndSlackJobEnd("execute update aggregate year month list: updated");
 }

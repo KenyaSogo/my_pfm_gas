@@ -6,7 +6,7 @@ function executeCalcMonthlySummaryCurrentMonth(){
   try {
     calcMonthlySummary(0);
   } catch(error){
-    handleError(error);
+    handleExpectedError(error);
   }
   postConsoleAndSlackJobEnd("execute calc monthly summary current month");
 }
@@ -17,7 +17,7 @@ function executeCalcMonthlySummaryPreviousMonth(){
   try {
     calcMonthlySummary(1);
   } catch(error){
-    handleError(error);
+    handleExpectedError(error);
   }
   postConsoleAndSlackJobEnd("execute calc monthly summary previous month");
 }

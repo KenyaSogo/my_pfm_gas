@@ -6,7 +6,7 @@ function executeCreateSheetByMonth(){
   try {
     doCreateSheetByMonth();
   } catch(error){
-    handleError(error);
+    handleExpectedError(error);
   }
   postConsoleAndSlackJobEnd("execute create sheet by month");
 }

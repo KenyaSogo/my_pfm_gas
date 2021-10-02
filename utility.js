@@ -261,6 +261,18 @@ class PfmUnexpectedError extends Error {
   }
 }
 
+// 想定エラーをハンドリングする
+function handleExpectedError(error){
+  // 想定エラーの場合、メッセージをポストした後そのまま抜ける
+  if(error instanceof PfmExpectedError){
+    postConsoleAndSlackExpectedError(error, error.needsMention);
+    return;
+  }
+
+  // 想定外エラーの場合、そのまま error を throw して異常終了させる (より上流のハンドラにハンドリングを委ねる)
+  throw error;
+}
+
 // エラーをハンドリングする
 function handleError(error){
   // 想定エラーの場合、メッセージをポストした後そのまま抜ける

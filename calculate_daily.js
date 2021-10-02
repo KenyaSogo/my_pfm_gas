@@ -6,7 +6,7 @@ function executeCalcDailySummaryCurrentMonth(){
   try {
     calcDailySummary(0);
   } catch(error){
-    handleError(error);
+    handleExpectedError(error);
   }
   postConsoleAndSlackJobEnd("execute calc daily summary current month");
 }
@@ -18,7 +18,7 @@ function executeCalcDailySummaryPreviousMonth(){
     calcDailySummary(1);
     calcDailySummary(0); // 最新月分も洗い替えておく
   } catch(error){
-    handleError(error);
+    handleExpectedError(error);
   }
   postConsoleAndSlackJobEnd("execute calc daily summary previous month");
 }

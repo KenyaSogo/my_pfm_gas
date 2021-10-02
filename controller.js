@@ -2,7 +2,11 @@
 
 function executeControl(){
   console.log("start executeControl");
-  doControl();
+  try {
+    doControl();
+  } catch(error){
+    handleError(error);
+  }
   console.log("end executeControl");
 }
 

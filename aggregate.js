@@ -7,7 +7,7 @@ function executeAggregateCurrentMonth() {
   try {
     isUpdatedAggregateResult = aggregateByMonth(0);
   } catch(error){
-    handleError(error);
+    handleExpectedError(error);
   }
   postConsoleAndSlackJobEnd("execute aggregate current month");
   return isUpdatedAggregateResult;
@@ -20,7 +20,7 @@ function executeAggregatePreviousMonth() {
   try {
     isUpdatedAggregateResult = aggregateByMonth(1);
   } catch(error){
-    handleError(error);
+    handleExpectedError(error);
   }
   postConsoleAndSlackJobEnd("execute aggregate previous month");
   return isUpdatedAggregateResult;

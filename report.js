@@ -5,7 +5,7 @@ function executeReport(){
   try {
     doReport();
   } catch(error){
-    handleError(error);
+    handleExpectedError(error);
   }
   postConsoleAndSlackJobEnd("execute report");
 }

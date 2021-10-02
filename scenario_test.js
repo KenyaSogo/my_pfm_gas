@@ -13,7 +13,7 @@ function executeScenarioTest(){
   try {
     doScenarioTest();
   } catch(error){
-    handleError(error);
+    handleExpectedError(error);
   }
   postConsoleAndSlackJobEnd("execute scenario test");
 }

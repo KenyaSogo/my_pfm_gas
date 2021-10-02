@@ -6,7 +6,7 @@ function executeUpdateGraphSourceData(){
   try {
     doUpdateGraphSourceData();
   } catch(error){
-    handleError(error);
+    handleExpectedError(error);
   }
   postConsoleAndSlackJobEnd("execute update graph source data");
 }
