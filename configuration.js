@@ -266,6 +266,13 @@ function getGraphDabImageUrl(){
   return graphDabImageUrl;
 }
 
+let myPfmSlackAppVerificationToken;
+function getMyPfmSlackAppVerificationToken(){
+  if(myPfmSlackAppVerificationToken) return myPfmSlackAppVerificationToken;
+  myPfmSlackAppVerificationToken = getSettingSheet().getRange("my_pfm_slack_app_verification_token").getValue();
+  return myPfmSlackAppVerificationToken;
+}
+
 let aggregateYearRange;
 function getAggregateYearRange(){
   if(aggregateYearRange) return aggregateYearRange;
