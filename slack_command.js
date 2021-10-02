@@ -1,7 +1,6 @@
 // slack command からの post リクエストを処理する
 function doPost(e){
   console.log("start: do post");
-  console.log("e: " + e);
 
   // token を検証する
   if(e.parameter.token != getMyPfmSlackAppVerificationToken()){
@@ -9,17 +8,16 @@ function doPost(e){
     return getSlackCommandPlainResponse("my pfm: error: invalid token");
   }
 
-  // scenario test をトリガーするコマンドが指定されていた場合
+  // コマンドに紐付く func のトリガーを発火させる
   const commandFromParam = e.parameter.command;
-  const testPfmCommand = "/test-pfm";
-  if(commandFromParam == testPfmCommand){
-    // scenario test のトリガーを発火させる
-    const testPfmFuncName = "executeScenarioTest";
-    triggerJobExecutionAsynchronously(testPfmFuncName);
-    postConsoleAndSlackInfoMessage(`job execution was triggered: slack command, job: ${commandFromParam}, ${testPfmFuncName}`);
+  const matchedCommandConfig = getSlackCommandConfigs().find(c => c.command == commandFromParam);
+  if(matchedCommandConfig){
+    // トリガー発火
+    triggerJobExecutionAsynchronously(matchedCommandConfig.funcName);
+    postConsoleAndSlackInfoMessage(`job execution was triggered: slack command, func: ${matchedCommandConfig.command}, ${matchedCommandConfig.funcName}`);
 
     console.log("end: do post");
-    return getSlackCommandPlainResponse("my pfm: execute scenario test was kicked");
+    return getSlackCommandPlainResponse(`my pfm: ${matchedCommandConfig.funcName} was triggered`);
   }
 
   // 未知のコマンドだった場合は not found コメントを返して終わる

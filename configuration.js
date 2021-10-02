@@ -273,6 +273,24 @@ function getMyPfmSlackAppVerificationToken(){
   return myPfmSlackAppVerificationToken;
 }
 
+const testPfmCommand = "/test-pfm";
+const testPfmFuncName = "executeScenarioTest";
+const reportPfmCommand = "/report-pfm";
+const reportPfmFuncName = "executeReport";
+function getSlackCommandConfigs(){
+  return [
+    [testPfmCommand, testPfmFuncName],
+    [reportPfmCommand, reportPfmFuncName],
+  ].map(
+    r => {
+      return {
+        command: r[0],
+        funcName: r[1],
+      };
+    }
+  );
+}
+
 let aggregateYearRange;
 function getAggregateYearRange(){
   if(aggregateYearRange) return aggregateYearRange;
