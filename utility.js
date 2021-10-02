@@ -224,9 +224,14 @@ function postConsoleAndSlackJobEnd(message){
 
 // console と slack に job 開始もしくは終了メッセージをポストする
 function postConsoleAndSlackJobStartOrEnd(startOrEndString, message){
-  const postMessageConsole = startOrEndString + ": " + message;
-  const postMessageSlack = getCurrent_yyyy_mm_dd_hh_mm_ss() + ": " + postMessageConsole;
-  console.log(postMessageConsole);
+  const infoMessage = startOrEndString + ": " + message;
+  postConsoleAndSlackInfoMessage(infoMessage);
+}
+
+// console と slack (logging channel) に info メッセージをポストする
+function postConsoleAndSlackInfoMessage(message){
+  console.log(message);
+  const postMessageSlack = getCurrent_yyyy_mm_dd_hh_mm_ss() + ": " + message;
   postSlackLoggingChannel(postMessageSlack);
 }
 

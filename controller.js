@@ -25,6 +25,7 @@ function doControl(){
         case execGroupNameAggrePrev:
           isUpdatedAggregateResult = executeAggregatePreviousMonth();
           if(!isUpdatedAggregateResult){
+            postConsoleAndSlackInfoMessage("aggregate result has no update: following exec was skipped");
             break;
           }
           executeCalcDailySummaryPreviousMonth();
@@ -34,6 +35,7 @@ function doControl(){
         case execGroupNameAggreCurr:
           isUpdatedAggregateResult = executeAggregateCurrentMonth();
           if(!isUpdatedAggregateResult){
+            postConsoleAndSlackInfoMessage("aggregate result has no update: following exec was skipped");
             break;
           }
           executeCalcDailySummaryCurrentMonth();
