@@ -65,6 +65,11 @@ function getDateLaterFrom(date, laterNum){
   return new Date(date.getFullYear(), date.getMonth(), date.getDate() + laterNum);
 }
 
+// Date の n 日前を返す
+function getDateAgoFrom(date, agoNum){
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate() - agoNum);
+}
+
 // 指定年月に対して n ヶ月前の年および月を返す
 function getYearMonthMonthsAgoFrom(targetYear, targetMonth, agoNum){
   const currentMonthDate = new Date([targetYear, targetMonth, "01"].join("/"));
