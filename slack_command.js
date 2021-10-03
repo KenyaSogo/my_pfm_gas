@@ -2,7 +2,7 @@
 function doPost(e){
   console.log("start: do post");
 
-  // token を検証する
+  // 認証する (token を検証する)
   if(e.parameter.token != getMyPfmSlackAppVerificationToken()){
     postConsoleAndSlackWarning("doPost: invalid token", true);
     return getSlackCommandPlainResponse("my pfm: error: invalid token");
