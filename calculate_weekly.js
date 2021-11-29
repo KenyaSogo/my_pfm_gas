@@ -41,7 +41,23 @@ function calcWeeklySummary(weeksAgo){
   // 収支合計を集計する
   const reSummaryForAllCategories = calcWeeklySummaryForAllCategories(reSummaryWithUndefinedLargeCategories, targetWeekStartDateStr);
 
+  // 金額を検算する
+  validateCalcWeeklySummaryResult(reSummaryForAllCategories, targetWeekSummaryByCategories);
+
   console.log(reSummaryForAllCategories);
+}
+
+// 集計結果を検算する TODO: calc monthly との項目別集計ロジック共通化
+function validateCalcWeeklySummaryResult(reSummaryForAllCategories, summaryByCategories){
+  const calculatedTotalAmount = reSummaryForAllCategories.find(s => s.largeCategoryName == "全体").amount;
+  const expectedTotalAmount = sumAmountFromDetails(summaryByCategories);
+  if(calculatedTotalAmount != expectedTotalAmount){
+    throw new PfmUnexpectedError(
+      "failed to validate calculatedTotalAmount: expected, got: " + expectedTotalAmount + ", " + calculatedTotalAmount,
+      true
+    );
+  }
+  console.log("valid: calculatedTotalAmount");
 }
 
 // 収支合計を集計する TODO: calc monthly との項目別集計ロジック共通化
