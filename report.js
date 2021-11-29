@@ -68,7 +68,7 @@ function getReportMessage(
   lastTotalAssetBalanceAtPreviousMonth,
   summaryByCategoryAtCurrentMonth,
   summaryByCategoryAtPreviousMonth){
-  let reportMessage = "";
+  let reportMessage = ""; // TODO: ヒアドキュメント化
   reportMessage += "# 残高の概要\n";
   reportMessage += ("- 直近現預金残高: " + formatNumStr(lastCashBalance) + "\n");
   reportMessage += ("  - (日付: " + lastCashBalanceDate + ")\n");
