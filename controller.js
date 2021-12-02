@@ -42,6 +42,7 @@ function doControl(){
           }
           executeCalcDailySummaryPreviousMonth();
           executeCalcMonthlySummaryPreviousMonth();
+          executeCalcWeeklySummaryLast3Weeks();
           executeUpdateGraphSourceData();
           break;
         case execGroupNameAggreCurr:
@@ -51,6 +52,7 @@ function doControl(){
           }
           executeCalcDailySummaryCurrentMonth();
           executeCalcMonthlySummaryCurrentMonth();
+          executeCalcWeeklySummaryLast3Weeks();
           executeUpdateGraphSourceData();
           break;
         case execGroupNameReport:

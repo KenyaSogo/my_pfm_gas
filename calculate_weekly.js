@@ -1,10 +1,16 @@
 /** @OnlyCurrentDoc */
 
-// TODO: delete
-function testCalcWeeklySummary(){
-  calcWeeklySummary(0);
-  calcWeeklySummary(1);
-  calcWeeklySummary(2);
+// 直近3週間分の週次集計を行う
+function executeCalcWeeklySummaryLast3Weeks(){
+  postConsoleAndSlackJobStart("execute calc weekly summary last 3 weeks");
+  try {
+    calcWeeklySummary(2);
+    calcWeeklySummary(1);
+    calcWeeklySummary(0);
+  } catch(error){
+    handleExpectedError(error);
+  }
+  postConsoleAndSlackJobEnd("execute calc weekly summary last 3 weeks");
 }
 
 // 指定週の集計を行う
