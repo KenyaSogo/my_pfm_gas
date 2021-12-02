@@ -3,8 +3,8 @@
 // TODO: delete
 function testCalcWeeklySummary(){
   calcWeeklySummary(0);
-  // calcWeeklySummary(1);
-  // calcWeeklySummary(2);
+  calcWeeklySummary(1);
+  calcWeeklySummary(2);
 }
 
 // 指定週の集計を行う
