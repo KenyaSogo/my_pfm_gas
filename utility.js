@@ -362,6 +362,12 @@ function exportMonthlyResultDetails(resultDetails, targetYear, targetMonth, shee
   exportResultDetails(resultDetails, sheetPrefix + "_" + targetYear + targetMonth, pasteAddr)
 }
 
+// 結果明細を export 対象シート (週次) に貼り付ける
+function exportWeeklyResultDetails(resultDetails, weeksAgo, sheetPrefix, pasteAddr){
+  console.log("exportWeeklyResultDetails: weeksAgo: " + weeksAgo);
+  exportResultDetails(resultDetails, sheetPrefix + "_" + weeksAgo, pasteAddr)
+}
+
 // 結果明細を export 対象シートに貼り付ける
 function exportResultDetails(resultDetails, sheetName, pasteAddr){
   console.log("exportResultDetails: start");

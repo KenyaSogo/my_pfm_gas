@@ -273,6 +273,20 @@ function getMyPfmSlackAppVerificationToken(){
   return myPfmSlackAppVerificationToken;
 }
 
+let calcWcImportSheetPrefix;
+function getCalcWcImportSheetPrefix(){
+  if(calcWcImportSheetPrefix) return calcWcImportSheetPrefix;
+  calcWcImportSheetPrefix = getRangeValueFrom(getSettingSheet(), "calc_wc_import_sheet_prefix");
+  return calcWcImportSheetPrefix;
+}
+
+let calcWcImportAddr;
+function getCalcWcImportAddr(){
+  if(calcWcImportAddr) return calcWcImportAddr;
+  calcWcImportAddr = getRangeValueFrom(getSettingSheet(), "calc_wc_import_addr");
+  return calcWcImportAddr;
+}
+
 const testPfmCommand = "/test-pfm";
 const testPfmFuncName = "executeScenarioTest";
 const reportPfmCommand = "/report-pfm";

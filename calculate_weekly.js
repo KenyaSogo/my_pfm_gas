@@ -44,7 +44,10 @@ function calcWeeklySummary(weeksAgo){
   // 金額を検算する
   validateCalcWeeklySummaryResult(reSummaryForAllCategories, targetWeekSummaryByCategories);
 
-  console.log(reSummaryForAllCategories);
+  // 集計結果を出力対象シートに出力する
+  exportWeeklyResultDetails(reSummaryForAllCategories, weeksAgo, getCalcWcImportSheetPrefix(), getCalcWcImportAddr());
+
+  console.log("end weekly summary by category");
 }
 
 // 集計結果を検算する TODO: calc monthly との項目別集計ロジック共通化
