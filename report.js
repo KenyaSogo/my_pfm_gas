@@ -84,20 +84,20 @@ function getReportMessage(
   reportMessage += "\n";
   reportMessage += "# 収支内訳の概要\n";
   reportMessage += "## 月次\n";
-  reportMessage += getMessageAboutSummaryByCategory(summaryByCategoryAtCurrentMonth, "今月");
-  reportMessage += getMessageAboutSummaryByCategory(summaryByCategoryAtPreviousMonth, "先月");
+  reportMessage += getMessageAboutSummaryByCategory(summaryByCategoryAtCurrentMonth, "今月", summaryByCategoryAtCurrentMonth[0].yearMonth);
+  reportMessage += getMessageAboutSummaryByCategory(summaryByCategoryAtPreviousMonth, "先月", summaryByCategoryAtPreviousMonth[0].yearMonth);
   reportMessage += "## 週次\n";
-  reportMessage += getMessageAboutSummaryByCategory(weeklySummaryByCategories[0], "今週");
-  reportMessage += getMessageAboutSummaryByCategory(weeklySummaryByCategories[1], "先週");
-  reportMessage += getMessageAboutSummaryByCategory(weeklySummaryByCategories[2], "先々週");
+  reportMessage += getMessageAboutSummaryByCategory(weeklySummaryByCategories[0], "今週", weeklySummaryByCategories[0].startDate);
+  reportMessage += getMessageAboutSummaryByCategory(weeklySummaryByCategories[1], "先週", weeklySummaryByCategories[1].startDate);
+  reportMessage += getMessageAboutSummaryByCategory(weeklySummaryByCategories[2], "先々週", weeklySummaryByCategories[2].startDate);
   return reportMessage;
 }
 
 // 収支内訳の概要メッセージを対象月の項目別月次集計結果をもとに編集して返す
-function getMessageAboutSummaryByCategory(summaryByCategory, headerTitle){
+function getMessageAboutSummaryByCategory(summaryByCategory, headerTitle, periodStr){
   let reportMessage = "";
   if(summaryByCategory.length > 0){
-    reportMessage += ("## " + headerTitle + " (" + summaryByCategory[0].yearMonth + ")\n");
+    reportMessage += ("## " + headerTitle + " (" + periodStr + ")\n");
     summaryByCategory.forEach(
       s => {
         if(s.middleCategory == "収支合計"){
