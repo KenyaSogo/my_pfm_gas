@@ -97,7 +97,7 @@ function getReportMessage(
 function getMessageAboutSummaryByCategory(summaryByCategory, headerTitle, periodStr){
   let reportMessage = "";
   if(summaryByCategory.length > 0){
-    reportMessage += ("## " + headerTitle + " (" + periodStr + ")\n");
+    reportMessage += ("### " + headerTitle + " (" + periodStr + ")\n");
     summaryByCategory.forEach(
       s => {
         if(s.middleCategory == "収支合計"){
