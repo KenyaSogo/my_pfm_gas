@@ -289,10 +289,10 @@ function getWeeklySummary(weekStartDateStr, largeCategoryName, middleCategoryNam
 // 空の集計結果明細を返す
 function getBlankWeeklySummary(weekStartDateStr){
   return {
-    startDate:          weekStartDateStr,   // 対象週開始日
-    largeCategoryName:  "",                 // 大項目
-    middleCategoryName: "",                 // 中項目
-    amount:             "",                 // 金額
+    startDate:          weekStartDateStr, // 対象週開始日
+    largeCategoryName:  "全体",           // 大項目
+    middleCategoryName: "収支合計",       // 中項目
+    amount:             0,                // 金額
   };
 }
 
