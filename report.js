@@ -87,9 +87,9 @@ function getReportMessage(
   reportMessage += getMessageAboutSummaryByCategory(summaryByCategoryAtCurrentMonth, "今月", summaryByCategoryAtCurrentMonth[0].yearMonth);
   reportMessage += getMessageAboutSummaryByCategory(summaryByCategoryAtPreviousMonth, "先月", summaryByCategoryAtPreviousMonth[0].yearMonth);
   reportMessage += "## 週次\n";
-  reportMessage += getMessageAboutSummaryByCategory(weeklySummaryByCategories[0], "今週", weeklySummaryByCategories[0].startDate);
-  reportMessage += getMessageAboutSummaryByCategory(weeklySummaryByCategories[1], "先週", weeklySummaryByCategories[1].startDate);
-  reportMessage += getMessageAboutSummaryByCategory(weeklySummaryByCategories[2], "先々週", weeklySummaryByCategories[2].startDate);
+  reportMessage += getMessageAboutSummaryByCategory(weeklySummaryByCategories[0], "今週", weeklySummaryByCategories[0][0].startDate);
+  reportMessage += getMessageAboutSummaryByCategory(weeklySummaryByCategories[1], "先週", weeklySummaryByCategories[1][0].startDate);
+  reportMessage += getMessageAboutSummaryByCategory(weeklySummaryByCategories[2], "先々週", weeklySummaryByCategories[2][0].startDate);
   return reportMessage;
 }
 
