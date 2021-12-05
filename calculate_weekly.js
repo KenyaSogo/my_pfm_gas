@@ -24,13 +24,14 @@ function calcWeeklySummary(weeksAgo){
 
   // 集計対象の週の明細データを取得する
   const targetWeekDetails = getTargetWeekDetails(targetDates);
+  const targetWeekStartDateStr = getYyyyMmDdFrom(targetDates[0]);
   if(targetWeekDetails.length == 0){
-    console.log("end weekly summary by category: skip summary and export: there is no data");
+    exportWeeklyResultDetails([getBlankWeeklySummary(targetWeekStartDateStr)], weeksAgo, getCalcWcImportSheetPrefix(), getCalcWcImportAddr()); // TODO: monthly にも横展開要かも
+    console.log("end weekly summary by category: skip summary and blank exported: there is no data");
     return;
   }
 
   // それらを項目別に集計する TODO: calc monthly との項目別集計ロジック共通化
-  const targetWeekStartDateStr = getYyyyMmDdFrom(targetDates[0]);
   const targetWeekSummaryByCategories = calcWeeklySummaryFromCategory(targetWeekDetails, targetWeekStartDateStr);
 
   // 項目を定められた順番に整えつつ再集計 (= 小計、合計、総合計の集計) する
@@ -282,6 +283,16 @@ function getWeeklySummary(weekStartDateStr, largeCategoryName, middleCategoryNam
     largeCategoryName:  largeCategoryName,  // 大項目
     middleCategoryName: middleCategoryName, // 中項目
     amount:             amount,             // 金額
+  };
+}
+
+// 空の集計結果明細を返す
+function getBlankWeeklySummary(weekStartDateStr){
+  return {
+    startDate:          weekStartDateStr,   // 対象週開始日
+    largeCategoryName:  "",                 // 大項目
+    middleCategoryName: "",                 // 中項目
+    amount:             "",                 // 金額
   };
 }
 
