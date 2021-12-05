@@ -287,6 +287,20 @@ function getCalcWcImportAddr(){
   return calcWcImportAddr;
 }
 
+let calcWcExportSheetPrefix;
+function getCalcWcExportSheetPrefix(){
+  if(calcWcExportSheetPrefix) return calcWcExportSheetPrefix;
+  calcWcExportSheetPrefix = getRangeValueFrom(getSettingSheet(), "calc_wc_export_sheet_prefix");
+  return calcWcExportSheetPrefix;
+}
+
+let calcWcExportAddr;
+function getCalcWcExportAddr(){
+  if(calcWcExportAddr) return calcWcExportAddr;
+  calcWcExportAddr = getRangeValueFrom(getSettingSheet(), "calc_wc_export_addr");
+  return calcWcExportAddr;
+}
+
 const testPfmCommand = "/test-pfm";
 const testPfmFuncName = "executeScenarioTest";
 const reportPfmCommand = "/report-pfm";

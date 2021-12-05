@@ -26,9 +26,12 @@ function doReport(){
   const {lastTotalAssetBalanceAtPreviousMonth} = getLastDateAndTotalAssetBalancePreviousMonthFrom(targetYear, targetMonth);
 
   // 対象月の項目別月次集計結果を取得する
-  const summaryByCategoryAtCurrentMonth = getSummaryByCategoryForReportAt(targetYear, targetMonth);
+  const summaryByCategoryAtCurrentMonth = getMonthlySummaryByCategoryForReportAt(targetYear, targetMonth);
   // 対象月の先月分の項目別月次集計結果を取得する
-  const summaryByCategoryAtPreviousMonth = getSummaryByCategoryForReportPreviousMonthFrom(targetYear, targetMonth);
+  const summaryByCategoryAtPreviousMonth = getMonthlySummaryByCategoryForReportPreviousMonthFrom(targetYear, targetMonth);
+
+  // 対象週(直近3週分)の項目別週次集計結果を取得する
+  const weeklySummaryByCategories = getIntRangeFromZero(3).map(i => getWeeklySummaryByCategoryForReportAt(i));
 
   // グラフ画像URLを用意する
   const imageUrls = [
@@ -54,7 +57,8 @@ function doReport(){
       lastTotalAssetBalanceDate,
       lastTotalAssetBalanceAtPreviousMonth,
       summaryByCategoryAtCurrentMonth,
-      summaryByCategoryAtPreviousMonth),
+      summaryByCategoryAtPreviousMonth,
+      weeklySummaryByCategories),
     imageUrls);
 }
 
@@ -67,7 +71,8 @@ function getReportMessage(
   lastTotalAssetBalanceDate,
   lastTotalAssetBalanceAtPreviousMonth,
   summaryByCategoryAtCurrentMonth,
-  summaryByCategoryAtPreviousMonth){
+  summaryByCategoryAtPreviousMonth,
+  weeklySummaryByCategories){
   let reportMessage = ""; // TODO: ヒアドキュメント化
   reportMessage += "# 残高の概要\n";
   reportMessage += ("- 直近現預金残高: " + formatNumStr(lastCashBalance) + "\n");
@@ -78,8 +83,13 @@ function getReportMessage(
   reportMessage += ("  - (前月末残: " + formatNumStr(lastTotalAssetBalanceAtPreviousMonth) + ")\n");
   reportMessage += "\n";
   reportMessage += "# 収支内訳の概要\n";
+  reportMessage += "## 月次\n";
   reportMessage += getMessageAboutSummaryByCategory(summaryByCategoryAtCurrentMonth, "今月");
   reportMessage += getMessageAboutSummaryByCategory(summaryByCategoryAtPreviousMonth, "先月");
+  reportMessage += "## 週次\n";
+  reportMessage += getMessageAboutSummaryByCategory(weeklySummaryByCategories[0], "今週");
+  reportMessage += getMessageAboutSummaryByCategory(weeklySummaryByCategories[1], "先週");
+  reportMessage += getMessageAboutSummaryByCategory(weeklySummaryByCategories[2], "先々週");
   return reportMessage;
 }
 
@@ -124,15 +134,36 @@ function fetchMonthlySummaryByCategory(targetYear, targetMonth){
   );
 }
 
+// 項目別週次集計結果を取得して返す
+function fetchWeeklySummaryByCategory(weeksAgo){
+  return fetchDetailsFromCell(
+    getCalcWcExportSheetPrefix() + "_" + weeksAgo,
+    getCalcWcExportAddr(),
+    rowElems => {
+      return {
+        startDate:      rowElems[0], // 対象週初日
+        largeCategory:  rowElems[1], // 大項目
+        middleCategory: rowElems[2], // 中項目
+        amount:         rowElems[3], // 金額
+      };
+    }
+  );
+}
+
 // 指定月の前月の、項目別月次集計結果を取得する
-function getSummaryByCategoryForReportPreviousMonthFrom(targetYear, targetMonth){
+function getMonthlySummaryByCategoryForReportPreviousMonthFrom(targetYear, targetMonth){
   const {previousMonthYyyy, previousMonthMm} = getPreviousYearMonth(targetYear, targetMonth);
-  return getSummaryByCategoryForReportAt(previousMonthYyyy, previousMonthMm);
+  return getMonthlySummaryByCategoryForReportAt(previousMonthYyyy, previousMonthMm);
 }
 
 // 指定月の、項目別月次集計結果を取得する
-function getSummaryByCategoryForReportAt(targetYear, targetMonth){
+function getMonthlySummaryByCategoryForReportAt(targetYear, targetMonth){
   return extractReportInfoFromSummaryByCategory(fetchMonthlySummaryByCategory(targetYear, targetMonth));
+}
+
+// 指定週の、項目別週次集計結果を取得する
+function getWeeklySummaryByCategoryForReportAt(weeksAgo){
+  return extractReportInfoFromSummaryByCategory(fetchWeeklySummaryByCategory(weeksAgo));
 }
 
 // 指定月の前月末の、総資産残高推移の基準日と残高を取得して返す
