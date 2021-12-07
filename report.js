@@ -100,13 +100,17 @@ function getMessageAboutSummaryByCategory(summaryByCategory, headerTitle, period
     reportMessage += ("### " + headerTitle + " (" + periodStr + ")\n");
     summaryByCategory.forEach(
       s => {
+        let indentStr = "";
         if(s.middleCategory == "収支合計"){
-          reportMessage += ("- " + s.largeCategory + ": " + formatNumStr(s.amount) + "\n");
-        } else if(s.middleCategory == "総合計"){
-          reportMessage += ("  - " + s.largeCategory + ": " + formatNumStr(s.amount) + "\n");
+          indentStr = "";
+        } else if(s.middleCategory == "総合計") {
+          indentStr = "  ";
+        } else if(s.middleCategory == "合計") {
+          indentStr = "    ";
         } else if(["小計", "未定義(大項目)"].includes(s.middleCategory)){
-          reportMessage += ("    - " + s.largeCategory + ": " + formatNumStr(s.amount) + "\n");
+          indentStr = "      ";
         }
+        reportMessage += (indentStr + "- " + s.largeCategory + ": " + formatNumStr(s.amount) + "\n");
       }
     );
   }
