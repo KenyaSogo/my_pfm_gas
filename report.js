@@ -105,9 +105,9 @@ function getMessageAboutSummaryByCategory(summaryByCategory, headerTitle, period
           indentStr = "";
         } else if(s.middleCategory == "総合計") {
           indentStr = "  ";
-        } else if(s.middleCategory == "合計") {
+        } else if(["合計", "未定義(大項目)"].includes(s.middleCategory)) {
           indentStr = "    ";
-        } else if(["小計", "未定義(大項目)"].includes(s.middleCategory)){
+        } else if(s.middleCategory == "小計"){
           indentStr = "      ";
         } else {
           return;
