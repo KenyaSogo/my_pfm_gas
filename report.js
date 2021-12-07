@@ -109,6 +109,8 @@ function getMessageAboutSummaryByCategory(summaryByCategory, headerTitle, period
           indentStr = "    ";
         } else if(["小計", "未定義(大項目)"].includes(s.middleCategory)){
           indentStr = "      ";
+        } else {
+          return;
         }
         reportMessage += (indentStr + "- " + s.largeCategory + ": " + formatNumStr(s.amount) + "\n");
       }
@@ -119,7 +121,7 @@ function getMessageAboutSummaryByCategory(summaryByCategory, headerTitle, period
 
 // 項目別月次集計結果からレポーティング対象明細を抽出して返す
 function extractReportInfoFromSummaryByCategory(summaryByCategory){
-  return summaryByCategory.filter(s => ["収支合計", "総合計", "小計", "未定義(大項目)"].includes(s.middleCategory));
+  return summaryByCategory.filter(s => ["収支合計", "総合計", "合計", "小計", "未定義(大項目)"].includes(s.middleCategory));
 }
 
 // 項目別月次集計結果を取得して返す
