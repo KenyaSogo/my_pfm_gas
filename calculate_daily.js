@@ -254,7 +254,7 @@ function fetchAggregatedDetails(targetYear, targetMonth) {
         middleCategoryName: rowElems[6], // 中項目
         memo:               rowElems[7], // メモ
         isTransfer:         rowElems[8], // 振替
-        uuid:               rowElems[9], // ID
+        uuid:               rowElems.length == 10 ? rowElems[9] : "", // ID
       };
     }
   );
