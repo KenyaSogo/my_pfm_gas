@@ -301,6 +301,13 @@ function getCalcWcExportAddr(){
   return calcWcExportAddr;
 }
 
+let analyticsMonthlyTableUrl;
+function getAnalyticsMonthlyTableUrl(){
+  if(analyticsMonthlyTableUrl) return analyticsMonthlyTableUrl;
+  analyticsMonthlyTableUrl = getRangeValueFrom(getSettingSheet(), "analytics_monthly_table_url");
+  return analyticsMonthlyTableUrl;
+}
+
 const testPfmCommand = "/test-pfm";
 const testPfmFuncName = "executeScenarioTest";
 const reportPfmCommand = "/report-pfm";

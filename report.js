@@ -45,6 +45,11 @@ function doReport(){
       value: "Daily transition graph of total asset balance. <" + getGraphDabImageUrl() + "|link>",
       url: getGraphDabImageUrl(),
     },
+    {
+      title: "monthly analytics summary",
+      value: "The summary table of monthly analytics. <" + getAnalyticsMonthlyTableUrl() + "|link>",
+      url: getAnalyticsMonthlyTableUrl(),
+    },
   ];
 
   // レポートをまとめて、slack に通知する
